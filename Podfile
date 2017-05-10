@@ -8,5 +8,6 @@ target 'Go!' do
   # Pods for Go!
 
 pod 'Firebase/Core'
+pod 'Firebase/Auth'
 
 end
