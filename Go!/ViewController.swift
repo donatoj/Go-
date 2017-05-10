@@ -8,39 +8,76 @@
 
 import UIKit
 import FBSDKLoginKit
+import Firebase
 
 class ViewController: UIViewController, FBSDKLoginButtonDelegate {
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let loginButton = FBSDKLoginButton()
-        loginButton.center = view.center
-        loginButton.readPermissions = ["public_profile", "email", "user_friends"]
-        view.addSubview(loginButton)
-        
-        loginButton.delegate = self
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+//        if (FBSDKAccessToken.current() != nil) {
+//            // User is logged in, do work such as go to next view controller.
+//            
+//            print("user already signed in fb")
+//            performSegue(withIdentifier: "showMain", sender: self)
+//        } else {
+//            print("access token is nil")
+//            showFBLoginButton()
+//        }
+        showFBLoginButton()
+    }
+    
+    func showFBLoginButton() {
+        let loginButton = FBSDKLoginButton()
+        loginButton.center = self.view.center
+        loginButton.readPermissions = ["public_profile", "email", "user_friends"]
+        loginButton.delegate = self
+        self.view.addSubview(loginButton)
     }
     
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         
         print("user did log out of facebook")
+        let firebaseAuth = FIRAuth.auth()
+        do {
+            try firebaseAuth?.signOut()
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
     }
     
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
         
         if error != nil {
-            print("login error \(error)")
+            print("login error \(error.localizedDescription)")
         } else {
             print("login successful")
+            
+            // handle permissions or cancelled
+            
+            let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+            FIRAuth.auth()?.signIn(with: credential, completion: { (user : FIRUser?, error :Error?) in
+                
+                if error != nil {
+                    if let error = error {
+                        print("firebase credential error \(error.localizedDescription)  ")
+                    }
+                } else {
+                    
+                    print("user name \(String(describing: user!.displayName))")
+                    print("user email \(String(describing: user!.email))")
+                    
+                    self.performSegue(withIdentifier: "showMain", sender: self)
+                }
+            })
         }
     }
-
+    
 }
 
