@@ -9,6 +9,7 @@ target 'Go!' do
 
 pod 'Firebase/Core'
 pod 'Firebase/Auth'
+pod 'Firebase/Database'
 
 pod 'FBSDKCoreKit'
 pod 'FBSDKShareKit'
