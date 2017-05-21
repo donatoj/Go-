@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177E6E871EC2E87C003F017E /* AppDelegate.swift */; };
-		177E6E8A1EC2E87C003F017E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177E6E891EC2E87C003F017E /* ViewController.swift */; };
+		177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177E6E891EC2E87C003F017E /* LoginViewController.swift */; };
 		177E6E8D1EC2E87C003F017E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 177E6E8B1EC2E87C003F017E /* Main.storyboard */; };
 		177E6E8F1EC2E87C003F017E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 177E6E8E1EC2E87C003F017E /* Assets.xcassets */; };
 		177E6E921EC2E87C003F017E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 177E6E901EC2E87C003F017E /* LaunchScreen.storyboard */; };
@@ -21,7 +21,7 @@
 		02AC6BAFC46EA41978B8F2A9 /* Pods-Go!.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Go!.release.xcconfig"; path = "Pods/Target Support Files/Pods-Go!/Pods-Go!.release.xcconfig"; sourceTree = "<group>"; };
 		177E6E841EC2E87C003F017E /* Go!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Go!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		177E6E871EC2E87C003F017E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		177E6E891EC2E87C003F017E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		177E6E891EC2E87C003F017E /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		177E6E8C1EC2E87C003F017E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		177E6E8E1EC2E87C003F017E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		177E6E911EC2E87C003F017E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -66,15 +66,39 @@
 			isa = PBXGroup;
 			children = (
 				177E6E871EC2E87C003F017E /* AppDelegate.swift */,
-				177E6E891EC2E87C003F017E /* ViewController.swift */,
-				177E6E8B1EC2E87C003F017E /* Main.storyboard */,
-				178296531ECC3877008C64BA /* HomeViewController.swift */,
+				178296561ED16691008C64BA /* Storyboards */,
+				178296551ED16662008C64BA /* Controllers */,
+				178296571ED166B5008C64BA /* Plists */,
 				177E6E8E1EC2E87C003F017E /* Assets.xcassets */,
+			);
+			path = "Go!";
+			sourceTree = "<group>";
+		};
+		178296551ED16662008C64BA /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				177E6E891EC2E87C003F017E /* LoginViewController.swift */,
+				178296531ECC3877008C64BA /* HomeViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		178296561ED16691008C64BA /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				177E6E8B1EC2E87C003F017E /* Main.storyboard */,
 				177E6E901EC2E87C003F017E /* LaunchScreen.storyboard */,
+			);
+			name = Storyboards;
+			sourceTree = "<group>";
+		};
+		178296571ED166B5008C64BA /* Plists */ = {
+			isa = PBXGroup;
+			children = (
 				177E6E931EC2E87C003F017E /* Info.plist */,
 				177E6E991EC2E9A7003F017E /* GoogleService-Info.plist */,
 			);
-			path = "Go!";
+			name = Plists;
 			sourceTree = "<group>";
 		};
 		7AD843FE6BF91B562AD50EAA /* Frameworks */ = {
@@ -224,7 +248,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				177E6E8A1EC2E87C003F017E /* ViewController.swift in Sources */,
+				177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */,
 				177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */,
 				178296541ECC3877008C64BA /* HomeViewController.swift in Sources */,
 			);
