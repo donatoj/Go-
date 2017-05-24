@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -28,6 +28,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="67" y="42"/>
         </scene>
         <!--Item 2-->
         <scene sceneID="Hes-0q-Trf">
@@ -73,7 +74,13 @@
                                                 <segue destination="BYZ-38-t0r" kind="show" id="smv-3y-JRI"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="8LI-Tb-tog"/>
+                                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="8LI-Tb-tog">
+                                            <connections>
+                                                <segue destination="oen-nc-jcN" kind="popoverPresentation" popoverAnchorBarButtonItem="8LI-Tb-tog" id="ouh-fn-MQ6">
+                                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                                </segue>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -131,6 +138,79 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OWk-MX-j6p" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1760.8" y="-283.80809595202402"/>
+        </scene>
+        <!--Post View Controller-->
+        <scene sceneID="bun-MI-LXg">
+            <objects>
+                <viewController id="oen-nc-jcN" customClass="PostViewController" customModule="Go_" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="IOD-zA-MbI"/>
+                        <viewControllerLayoutGuide type="bottom" id="khG-cH-qr6"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KNS-Le-uKo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1XS-Nw-U0e">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="64"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="yJK-ZG-uAs"/>
+                                </constraints>
+                                <color key="barTintColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <items>
+                                    <navigationItem title="Post" id="ZR4-4N-fPj">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="trash" id="gSI-6D-PPr">
+                                            <connections>
+                                                <action selector="cancelPressed:" destination="oen-nc-jcN" id="Gpm-4H-ifn"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="u44-9b-d41">
+                                            <connections>
+                                                <action selector="savePressed:" destination="oen-nc-jcN" id="pge-zq-fUR"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Type in amount" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LUX-lP-hkh">
+                                <rect key="frame" x="0.0" y="64" width="414" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="hT3-Wf-Izb"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad" keyboardAppearance="light"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" placeholder="Describe what you need" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="G2T-7E-h5E">
+                                <rect key="frame" x="0.0" y="104" width="414" height="632"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes"/>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="1XS-Nw-U0e" firstAttribute="top" secondItem="KNS-Le-uKo" secondAttribute="top" id="3OV-Sx-6nE"/>
+                            <constraint firstItem="khG-cH-qr6" firstAttribute="top" secondItem="G2T-7E-h5E" secondAttribute="bottom" id="79S-Tz-onp"/>
+                            <constraint firstItem="1XS-Nw-U0e" firstAttribute="leading" secondItem="KNS-Le-uKo" secondAttribute="leading" id="CQW-Cr-vqo"/>
+                            <constraint firstItem="LUX-lP-hkh" firstAttribute="leading" secondItem="KNS-Le-uKo" secondAttribute="leading" id="F0Z-mz-PqI"/>
+                            <constraint firstItem="LUX-lP-hkh" firstAttribute="top" secondItem="1XS-Nw-U0e" secondAttribute="bottom" id="K9D-MZ-uMW"/>
+                            <constraint firstAttribute="trailing" secondItem="LUX-lP-hkh" secondAttribute="trailing" id="L6s-nN-XGU"/>
+                            <constraint firstAttribute="trailing" secondItem="G2T-7E-h5E" secondAttribute="trailing" id="Wzc-xU-kuQ"/>
+                            <constraint firstItem="G2T-7E-h5E" firstAttribute="top" secondItem="LUX-lP-hkh" secondAttribute="bottom" id="aci-uN-Bxf"/>
+                            <constraint firstAttribute="trailing" secondItem="1XS-Nw-U0e" secondAttribute="trailing" id="eIY-2v-s3Y"/>
+                            <constraint firstItem="G2T-7E-h5E" firstAttribute="leading" secondItem="KNS-Le-uKo" secondAttribute="leading" id="fQ9-fw-Iva"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="amountTextField" destination="LUX-lP-hkh" id="ZcW-eq-X9c"/>
+                        <outlet property="descriptionTextField" destination="G2T-7E-h5E" id="fqo-un-kwz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lP3-Mn-wZB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2498.5507246376815" y="-285.32608695652175"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="RKA-0X-an6">

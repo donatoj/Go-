@@ -64,8 +64,9 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             if let listingDict = listing as? [String : String] {
                 
-                cell.textLabel?.text = listingDict["Title"]
-                cell.detailTextLabel?.text = listingDict["Description"]
+                // check for only items not from user
+                cell.textLabel?.text = listingDict["Description"]
+                cell.detailTextLabel?.text = listingDict["Amount"]
             }
         }
         
