@@ -30,10 +30,10 @@
             </objects>
             <point key="canvasLocation" x="67" y="42"/>
         </scene>
-        <!--Item 2-->
+        <!--Profile Vew Controller-->
         <scene sceneID="Hes-0q-Trf">
             <objects>
-                <viewController id="kwL-LA-W8z" sceneMemberID="viewController">
+                <viewController id="kwL-LA-W8z" userLabel="Profile Vew Controller" customClass="ProfileViewController" customModule="Go_" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3c7-sV-BN2"/>
                         <viewControllerLayoutGuide type="bottom" id="aE2-Ic-pAB"/>
@@ -41,13 +41,49 @@
                     <view key="view" contentMode="scaleToFill" id="oq6-My-NSh">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TVQ-hF-WS6">
+                                <rect key="frame" x="157" y="101" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pIP-iF-9XI">
+                                <rect key="frame" x="87" y="209" width="240" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="oDu-Kq-h0d"/>
+                    <tabBarItem key="tabBarItem" systemItem="contacts" id="oDu-Kq-h0d" userLabel="Profile"/>
+                    <navigationItem key="navigationItem" title="Profile" id="IJg-f1-crs"/>
+                    <connections>
+                        <outlet property="profileImageView" destination="TVQ-hF-WS6" id="eHo-PQ-gcL"/>
+                        <outlet property="userNameLabel" destination="pIP-iF-9XI" id="xIH-Ee-qCW"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sGy-g2-KGT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1762" y="370"/>
+            <point key="canvasLocation" x="2498.5507246376815" y="309.78260869565219"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="sQq-6g-oOl">
+            <objects>
+                <navigationController id="GNe-xZ-Mdl" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" systemItem="contacts" id="SfX-HL-DLv"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="G3h-y9-AFs">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="kwL-LA-W8z" kind="relationship" relationship="rootViewController" id="8vN-bh-2jO"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rMT-rq-AJb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1761" y="310"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="kk5-Oi-9cd">
@@ -137,7 +173,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OWk-MX-j6p" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1760.8" y="-283.80809595202402"/>
+            <point key="canvasLocation" x="1761" y="-672"/>
         </scene>
         <!--Post View Controller-->
         <scene sceneID="bun-MI-LXg">
@@ -210,7 +246,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lP3-Mn-wZB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2498.5507246376815" y="-285.32608695652175"/>
+            <point key="canvasLocation" x="2500" y="-673"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="RKA-0X-an6">
@@ -223,7 +259,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="0gY-dL-7rk" kind="relationship" relationship="viewControllers" id="oJC-tF-J80"/>
-                        <segue destination="kwL-LA-W8z" kind="relationship" relationship="viewControllers" id="Hsl-D7-Kty"/>
+                        <segue destination="GNe-xZ-Mdl" kind="relationship" relationship="viewControllers" id="5A0-NV-Dew"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Deg-QI-4rv" userLabel="First Responder" sceneMemberID="firstResponder"/>
