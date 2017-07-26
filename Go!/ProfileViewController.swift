@@ -10,10 +10,8 @@ import UIKit
 import FirebaseAuth
 
 class ProfileViewController: UIViewController {
-    
-    
+        
     @IBOutlet weak var profileImageView: UIImageView!
-
     @IBOutlet weak var userNameLabel: UILabel!
     
     override func viewDidLoad() {
@@ -26,7 +24,7 @@ class ProfileViewController: UIViewController {
         let url = user?.photoURL
         let data = try? Data(contentsOf: url!)
         profileImageView.image = UIImage(data: data!)
-        profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
+        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;
         profileImageView.clipsToBounds = true;
     }
 
