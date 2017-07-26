@@ -12,7 +12,7 @@ import Firebase
 class PostViewController: UIViewController {
 
     @IBOutlet weak var amountTextField: UITextField!
-    @IBOutlet weak var descriptionTextField: UITextField!
+    @IBOutlet weak var descriptionTextView: UITextView!
     
     var ref : FIRDatabaseReference?
     var postDict = [String : String]()
@@ -21,15 +21,18 @@ class PostViewController: UIViewController {
         
         // create alert before canceling
         amountTextField.text = ""
-        descriptionTextField.text = ""
+        descriptionTextView.text = ""
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func savePressed(_ sender: Any) {
         
         //todo check for null fields and create alert with activity bar
-        postDict["Description"] = descriptionTextField.text
+        postDict["Username"] = FIRAuth.auth()?.currentUser?.displayName
+        postDict["ProfileURL"] = FIRAuth.auth()?.currentUser?.photoURL?.absoluteString
+        postDict["Description"] = descriptionTextView.text
         postDict["Amount"] = amountTextField.text
+        
         ref?.child("Listings").childByAutoId().setValue(postDict)
         presentingViewController?.dismiss(animated: true, completion: nil)
     }

@@ -56,7 +56,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PostTableViewCell
         
         let listingItem = listings[indexPath.row]
         
@@ -65,12 +65,22 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             if let listingDict = listing as? [String : String] {
                 
                 // check for only items not from user
-                cell.textLabel?.text = listingDict["Description"]
-                cell.detailTextLabel?.text = listingDict["Amount"]
+                cell.userNameButton.setTitle(listingDict["Username"], for: UIControlState.normal)
+                cell.descriptionLabel.text = listingDict["Description"]
+                cell.amountLabel.text = "$" + listingDict["Amount"]!
+                
+                let urlString = listingDict["ProfileURL"]
+                let url = URL(string: urlString!)
+                let data = try? Data(contentsOf: url!)
+                
+                cell.profileImageView.image = UIImage(data: data!)
+                cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
+                cell.profileImageView.clipsToBounds = true;
+
             }
         }
         
-        return cell
+        return cell 
     }
     /*
      // MARK: - Navigation
