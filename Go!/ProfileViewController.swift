@@ -21,7 +21,7 @@ class ProfileViewController: UIViewController {
         let user = FIRAuth.auth()?.currentUser
         userNameLabel.text = user?.displayName
         
-        let url = user?.photoURL
+        let url = user?.providerData[0].photoURL
         let data = try? Data(contentsOf: url!)
         profileImageView.image = UIImage(data: data!)
         profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;

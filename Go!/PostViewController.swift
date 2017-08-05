@@ -29,7 +29,7 @@ class PostViewController: UIViewController {
         
         //todo check for null fields and create alert with activity bar
         postDict["Username"] = FIRAuth.auth()?.currentUser?.displayName
-        postDict["ProfileURL"] = FIRAuth.auth()?.currentUser?.photoURL?.absoluteString
+        postDict["ProfileURL"] = FIRAuth.auth()?.currentUser?.providerData[0].photoURL?.absoluteString
         postDict["Description"] = descriptionTextView.text
         postDict["Amount"] = amountTextField.text
         

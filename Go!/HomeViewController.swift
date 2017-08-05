@@ -23,6 +23,9 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         // Do any additional setup after loading the view.
         
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 111
+        
         // get reference to database
         ref = FIRDatabase.database().reference()
         
@@ -61,7 +64,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let listingItem = listings[indexPath.row]
         
         for listing in listingItem.values {
-            
+
             if let listingDict = listing as? [String : String] {
                 
                 // check for only items not from user
@@ -71,12 +74,14 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
                 let urlString = listingDict["ProfileURL"]
                 let url = URL(string: urlString!)
-                let data = try? Data(contentsOf: url!)
                 
-                cell.profileImageView.image = UIImage(data: data!)
-                cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
-                cell.profileImageView.clipsToBounds = true;
-
+                URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
+                    
+                    cell.profileImageView.image = UIImage(data: data!)
+                    cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
+                    cell.profileImageView.clipsToBounds = true;
+                    
+                }).resume()
             }
         }
         
