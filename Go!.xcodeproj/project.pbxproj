@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		171BF02E1F366F520048A222 /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171BF02D1F366F520048A222 /* Listing.swift */; };
 		17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */; };
 		176860371F28A126000D9AC8 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176860361F28A126000D9AC8 /* PostTableViewCell.swift */; };
 		177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177E6E871EC2E87C003F017E /* AppDelegate.swift */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		02AC6BAFC46EA41978B8F2A9 /* Pods-Go!.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Go!.release.xcconfig"; path = "Pods/Target Support Files/Pods-Go!/Pods-Go!.release.xcconfig"; sourceTree = "<group>"; };
+		171BF02D1F366F520048A222 /* Listing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Listing.swift; sourceTree = "<group>"; };
 		17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		176860361F28A126000D9AC8 /* PostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		177E6E841EC2E87C003F017E /* Go!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Go!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,6 +52,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		171BF0301F366F930048A222 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				171BF02D1F366F520048A222 /* Listing.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		176860381F28A131000D9AC8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +91,7 @@
 			children = (
 				177E6E871EC2E87C003F017E /* AppDelegate.swift */,
 				178296561ED16691008C64BA /* Storyboards */,
+				171BF0301F366F930048A222 /* Models */,
 				176860381F28A131000D9AC8 /* Views */,
 				178296551ED16662008C64BA /* Controllers */,
 				178296571ED166B5008C64BA /* Plists */,
@@ -266,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				178296591ED17964008C64BA /* PostViewController.swift in Sources */,
+				171BF02E1F366F520048A222 /* Listing.swift in Sources */,
 				177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */,
 				17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */,
 				177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */,

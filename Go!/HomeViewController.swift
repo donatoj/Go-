@@ -16,7 +16,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var ref : FIRDatabaseReference?
     var databaseHandle : FIRDatabaseHandle?
     
-    var listings = [[String : AnyObject]]()
+    var listings = [Listing]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,9 +36,14 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             self.listings.removeAll()
             for listing in listingDict {
-                
                 let dict : [String : AnyObject] = [listing.key : listing.value]
-                self.listings.append(dict)
+                
+                for dictValues in dict.values {
+                    if let listingItem = dictValues as? [String : String] {
+                        let newListing = Listing(userName: listingItem["Username"]!, description: listingItem["Description"]!, amount: listingItem["Amount"]!, photoURL: listingItem["ProfileURL"]!)
+                        self.listings.append(newListing)
+                    }
+                }
             }
             
             print("Updating table view")
@@ -62,28 +67,15 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PostTableViewCell
         
         let listingItem = listings[indexPath.row]
+                
+        // check for only items not from user
+        cell.userNameButton.setTitle(listingItem.userName, for: UIControlState.normal)
+        cell.descriptionLabel.text = listingItem.description
+        cell.amountLabel.text = "$" + listingItem.amount
         
-        for listing in listingItem.values {
-
-            if let listingDict = listing as? [String : String] {
-                
-                // check for only items not from user
-                cell.userNameButton.setTitle(listingDict["Username"], for: UIControlState.normal)
-                cell.descriptionLabel.text = listingDict["Description"]
-                cell.amountLabel.text = "$" + listingDict["Amount"]!
-                
-                let urlString = listingDict["ProfileURL"]
-                let url = URL(string: urlString!)
-                
-                URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
-                    
-                    cell.profileImageView.image = UIImage(data: data!)
-                    cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
-                    cell.profileImageView.clipsToBounds = true;
-                    
-                }).resume()
-            }
-        }
+        cell.profileImageView.image = listingItem.profilePhoto
+        cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
+        cell.profileImageView.clipsToBounds = true;
         
         return cell 
     }
