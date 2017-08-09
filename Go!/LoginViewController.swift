@@ -21,16 +21,16 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
 
-//        if (FBSDKAccessToken.current() != nil) {
-//            // User is logged in, do work such as go to next view controller.
-//            
-//            print("user already signed in fb")
-//            performSegue(withIdentifier: "showMain", sender: self)
-//        } else {
-//            print("access token is nil")
-//            showFBLoginButton()
-//        }
-        showFBLoginButton()
+        if (FBSDKAccessToken.current() != nil) {
+            // User is logged in, do work such as go to next view controller.
+            
+            print("user already signed in fb")
+            performSegue(withIdentifier: "showMain", sender: self)
+        } else {
+            print("access token is nil")
+            showFBLoginButton()
+        }
+        
     }
     
     func showFBLoginButton() {
@@ -38,6 +38,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         loginButton.center = self.view.center
         loginButton.readPermissions = ["public_profile", "email", "user_friends"]
         loginButton.delegate = self
+
         self.view.addSubview(loginButton)
     }
     
@@ -67,6 +68,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 if error != nil {
                     if let error = error {
                         print("firebase credential error \(error.localizedDescription)  ")
+
                     }
                 } else {
                     
@@ -74,9 +76,14 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     print("user email \(String(describing: user!.email))")
                     
                     self.performSegue(withIdentifier: "showMain", sender: self)
+                    
                 }
             })
         }
+    }
+    
+    deinit {
+        print("LoginViewController Deinitialized")
     }
     
 }

@@ -78,6 +78,10 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    deinit {
+        print("PostViewController Deinitialized")
+    }
+    
 
     /*
     // MARK: - Navigation

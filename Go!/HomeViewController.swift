@@ -96,9 +96,11 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.timeAgo.text = listingItem.timeAgoSinceDate(true)
         cell.distance.text = listingItem.getDistanceFromListing(userLocation: userLocation)
         
-        print("distance " + listingItem.getDistanceFromListing(userLocation: userLocation))
-        
         return cell 
+    }
+    
+    deinit {
+        print("HomeViewController Deinitialized")
     }
     /*
      // MARK: - Navigation
