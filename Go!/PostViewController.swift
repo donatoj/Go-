@@ -8,8 +8,9 @@
 
 import UIKit
 import Firebase
+import CoreLocation
 
-class PostViewController: UIViewController {
+class PostViewController: UIViewController, CLLocationManagerDelegate {
 
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
@@ -17,11 +18,17 @@ class PostViewController: UIViewController {
     var ref : FIRDatabaseReference?
     var postDict = [String : String]()
     
+    let manager = CLLocationManager()
+    var userLocation : CLLocationCoordinate2D!
+    
     @IBAction func cancelPressed(_ sender: Any) {
         
         // create alert before canceling
         amountTextField.text = ""
         descriptionTextView.text = ""
+        
+        manager.stopUpdatingLocation()
+        
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
@@ -33,8 +40,21 @@ class PostViewController: UIViewController {
         postDict["Description"] = descriptionTextView.text
         postDict["Amount"] = amountTextField.text
         
+        postDict["DatePosted"] = Date().description
+        postDict["UserLatitude"] = userLocation.latitude.description
+        postDict["UserLongitude"] = userLocation.longitude.description
+        
         ref?.child("Listings").childByAutoId().setValue(postDict)
+        
+        manager.stopUpdatingLocation()
+        
         presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        let location = locations[0]
+        userLocation = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
     }
     
     override func viewDidLoad() {
@@ -42,6 +62,11 @@ class PostViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         ref = FIRDatabase.database().reference()
+        
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.requestWhenInUseAuthorization()
+        manager.startUpdatingLocation()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

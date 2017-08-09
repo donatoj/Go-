@@ -14,6 +14,8 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var amountLabel: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var userNameButton: UIButton!
+    @IBOutlet weak var timeAgo: UILabel!
+    @IBOutlet weak var distance: UILabel!
     
     override func awakeFromNib() {
         

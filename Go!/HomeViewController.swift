@@ -8,8 +8,9 @@
 
 import UIKit
 import FirebaseDatabase
+import CoreLocation
 
-class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -17,6 +18,9 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var databaseHandle : FIRDatabaseHandle?
     
     var listings = [Listing]()
+    
+    let manager = CLLocationManager()
+    var userLocation = CLLocation()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +44,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
                 for dictValues in dict.values {
                     if let listingItem = dictValues as? [String : String] {
-                        let newListing = Listing(userName: listingItem["Username"]!, description: listingItem["Description"]!, amount: listingItem["Amount"]!, photoURL: listingItem["ProfileURL"]!)
+                        let newListing = Listing(userName: listingItem["Username"]!, description: listingItem["Description"]!, amount: listingItem["Amount"]!, photoURL: listingItem["ProfileURL"]!, datePosted: listingItem["DatePosted"]!, latitude: listingItem["UserLatitude"]! as NSString, longitude: listingItem["UserLongitude"]! as NSString)
                         self.listings.append(newListing)
                     }
                 }
@@ -49,12 +53,24 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             print("Updating table view")
             self.tableView.reloadData()
         })
+        
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.requestWhenInUseAuthorization()
+        manager.startUpdatingLocation()
     }
     
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        let location = locations[0]
+        let userLocationCoordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        userLocation = CLLocation(latitude: userLocationCoordinate.latitude, longitude: userLocationCoordinate.longitude)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -76,6 +92,11 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.profileImageView.image = listingItem.profilePhoto
         cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
         cell.profileImageView.clipsToBounds = true;
+        
+        cell.timeAgo.text = listingItem.timeAgoSinceDate(true)
+        cell.distance.text = listingItem.getDistanceFromListing(userLocation: userLocation)
+        
+        print("distance " + listingItem.getDistanceFromListing(userLocation: userLocation))
         
         return cell 
     }
