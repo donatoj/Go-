@@ -96,6 +96,8 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.timeAgo.text = listingItem.timeAgoSinceDate(true)
         cell.distance.text = listingItem.getDistanceFromListing(userLocation: userLocation)
         
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
+        
         return cell 
     }
     

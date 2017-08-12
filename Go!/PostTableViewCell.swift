@@ -16,7 +16,23 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var userNameButton: UIButton!
     @IBOutlet weak var timeAgo: UILabel!
     @IBOutlet weak var distance: UILabel!
+    @IBOutlet weak var requestButton: UIButton!
     
+    var requested : Bool = false
+    
+    @IBAction func OnRequestButtonPressed(_ sender: Any) {
+        
+        if requested {
+            requestButton.alpha = 0.5
+            requestButton.setTitle("Request", for: UIControlState.normal)
+            requested = false
+        }
+        else {
+            requestButton.alpha = 1
+            requestButton.setTitle("Requested", for: UIControlState.normal)
+            requested = true
+        }
+    }
     override func awakeFromNib() {
         
         super.awakeFromNib()
