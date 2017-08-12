@@ -8,20 +8,30 @@
 
 import UIKit
 import FirebaseDatabase
+import Firebase
 import CoreLocation
 
 class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var segmentControl: UISegmentedControl!
     
     var ref : FIRDatabaseReference?
     var databaseHandle : FIRDatabaseHandle?
     
-    var listings = [Listing]()
+    var worldListings = [Listing]()
+    var friendListings = [Listing]()
+    var selfListings = [Listing]()
+    
+    var currentListings = [Listing]()
     
     let manager = CLLocationManager()
     var userLocation = CLLocation()
     
+    @IBAction func OnSegmentValueChanged(_ sender: Any) {
+        
+        updateListings()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -38,26 +48,59 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             let listingDict = snapshot.value as? [String : AnyObject] ?? [:]
             
-            self.listings.removeAll()
+            self.worldListings.removeAll()
+            self.friendListings.removeAll()
+            self.selfListings.removeAll()
+            
             for listing in listingDict {
                 let dict : [String : AnyObject] = [listing.key : listing.value]
                 
                 for dictValues in dict.values {
                     if let listingItem = dictValues as? [String : String] {
-                        let newListing = Listing(userName: listingItem["Username"]!, description: listingItem["Description"]!, amount: listingItem["Amount"]!, photoURL: listingItem["ProfileURL"]!, datePosted: listingItem["DatePosted"]!, latitude: listingItem["UserLatitude"]! as NSString, longitude: listingItem["UserLongitude"]! as NSString)
-                        self.listings.append(newListing)
+                        let newListing = Listing(userName: listingItem["Username"]!, uid: listingItem["UserID"]!, description: listingItem["Description"]!, amount: listingItem["Amount"]!, photoURL: listingItem["ProfileURL"]!, datePosted: listingItem["DatePosted"]!, latitude: listingItem["UserLatitude"]! as NSString, longitude: listingItem["UserLongitude"]! as NSString)
+                        
+                        if FIRAuth.auth()?.currentUser?.uid == newListing.uid {
+                            print("appending listing to self " + newListing.description)
+                            self.selfListings.append(newListing)
+                        } else {
+                            print("appending listing to world and friends " + newListing.description)
+                            self.worldListings.append(newListing)
+                        }
+                        
                     }
                 }
             }
             
             print("Updating table view")
-            self.tableView.reloadData()
+            self.updateListings()
+            
         })
         
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
+    }
+    
+    func updateListings() {
+        
+        switch segmentControl.selectedSegmentIndex {
+        case 0:
+            print("segment 0")
+            currentListings = worldListings
+            break
+        case 1:
+            print("segment 1")
+            currentListings = friendListings
+            break
+        case 2:
+            print("segment 2")
+            currentListings = selfListings
+            break
+        default:
+            break
+        }
+        tableView.reloadData()
     }
     
     
@@ -75,14 +118,14 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return listings.count
+        return currentListings.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PostTableViewCell
         
-        let listingItem = listings[indexPath.row]
+        let listingItem = currentListings[indexPath.row]
                 
         // check for only items not from user
         cell.userNameButton.setTitle(listingItem.userName, for: UIControlState.normal)

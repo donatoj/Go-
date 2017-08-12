@@ -13,6 +13,7 @@ import CoreLocation
 struct Listing {
     
     let userName: String
+    let uid: String
     let description: String
     let amount: String
     let photoURL: String
@@ -22,9 +23,10 @@ struct Listing {
     
     let profilePhoto: UIImage?
     
-    init(userName: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: NSString, longitude: NSString) {
+    init(userName: String, uid: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: NSString, longitude: NSString) {
         
         self.userName = userName
+        self.uid = uid
         self.description = description
         self.amount = amount
         self.photoURL = photoURL

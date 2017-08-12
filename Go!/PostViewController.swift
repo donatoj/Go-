@@ -36,6 +36,7 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         
         //todo check for null fields and create alert with activity bar
         postDict["Username"] = FIRAuth.auth()?.currentUser?.displayName
+        postDict["UserID"] = FIRAuth.auth()?.currentUser?.uid
         postDict["ProfileURL"] = FIRAuth.auth()?.currentUser?.providerData[0].photoURL?.absoluteString
         postDict["Description"] = descriptionTextView.text
         postDict["Amount"] = amountTextField.text
