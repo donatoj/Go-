@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		171BF02E1F366F520048A222 /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171BF02D1F366F520048A222 /* Listing.swift */; };
 		171BF0321F3AF42C0048A222 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 171BF0311F3AF42C0048A222 /* CoreLocation.framework */; };
+		171BF0341F3F0ADA0048A222 /* UserNameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171BF0331F3F0ADA0048A222 /* UserNameButton.swift */; };
 		17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */; };
 		176860371F28A126000D9AC8 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176860361F28A126000D9AC8 /* PostTableViewCell.swift */; };
 		177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177E6E871EC2E87C003F017E /* AppDelegate.swift */; };
@@ -26,6 +27,7 @@
 		02AC6BAFC46EA41978B8F2A9 /* Pods-Go!.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Go!.release.xcconfig"; path = "Pods/Target Support Files/Pods-Go!/Pods-Go!.release.xcconfig"; sourceTree = "<group>"; };
 		171BF02D1F366F520048A222 /* Listing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Listing.swift; sourceTree = "<group>"; };
 		171BF0311F3AF42C0048A222 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		171BF0331F3F0ADA0048A222 /* UserNameButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNameButton.swift; sourceTree = "<group>"; };
 		17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		176860361F28A126000D9AC8 /* PostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		177E6E841EC2E87C003F017E /* Go!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Go!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				176860361F28A126000D9AC8 /* PostTableViewCell.swift */,
+				171BF0331F3F0ADA0048A222 /* UserNameButton.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 				178296591ED17964008C64BA /* PostViewController.swift in Sources */,
 				171BF02E1F366F520048A222 /* Listing.swift in Sources */,
 				177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */,
+				171BF0341F3F0ADA0048A222 /* UserNameButton.swift in Sources */,
 				17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */,
 				177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */,
 				178296541ECC3877008C64BA /* HomeViewController.swift in Sources */,

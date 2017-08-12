@@ -9,14 +9,16 @@
 import UIKit
 import FBSDKLoginKit
 import Firebase
+import FirebaseDatabase
 
 class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     
+    var ref: FIRDatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+        ref = FIRDatabase.database().reference()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -75,8 +77,14 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     print("user name \(String(describing: user!.displayName))")
                     print("user email \(String(describing: user!.email))")
                     
-                    self.performSegue(withIdentifier: "showMain", sender: self)
+                    var userDict = [String : String]()
+                    let user = FIRAuth.auth()?.currentUser
+                    userDict["Username"] = user?.displayName
+                    userDict["ProfileURL"] = user?.providerData[0].photoURL?.absoluteString
                     
+                    self.ref?.child("Users").child((user?.uid)!).setValue(userDict)
+                    
+                    self.performSegue(withIdentifier: "showMain", sender: self)
                 }
             })
         }

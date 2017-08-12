@@ -32,6 +32,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         updateListings()
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -100,7 +101,19 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         default:
             break
         }
+        
         tableView.reloadData()
+        tableView.separatorStyle = .none
+        
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        cell.viewWithTag(1)?.removeFromSuperview()
+        let separatorLine = UIImageView.init(frame: CGRect(x: 61, y: cell.frame.height - 1, width: cell.frame.width - 61, height: 1))
+        separatorLine.backgroundColor = UIColor.lightGray
+        separatorLine.tag = 1
+        cell.addSubview(separatorLine)
     }
     
     
@@ -129,6 +142,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
         // check for only items not from user
         cell.userNameButton.setTitle(listingItem.userName, for: UIControlState.normal)
+        (cell.userNameButton as! UserNameButton).uid = listingItem.uid
         cell.descriptionLabel.text = listingItem.description
         cell.amountLabel.text = "$" + listingItem.amount
         
@@ -147,14 +161,23 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     deinit {
         print("HomeViewController Deinitialized")
     }
-    /*
+    
      // MARK: - Navigation
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
      // Get the new view controller using segue.destinationViewController.
      // Pass the selected object to the new view controller.
+        
+        if let userNameButton = sender as? UserNameButton {
+            print("sender is ui button")
+            let nextScene = segue.destination as! ProfileViewController
+            nextScene.uid = userNameButton.uid
+        }
+        else {
+            print("sender is not a ui button")
+        }
      }
-     */
+ 
     
 }

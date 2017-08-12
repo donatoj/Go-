@@ -9,26 +9,60 @@
 import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
+import FirebaseDatabase
 
 class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
         
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
     
+    var ref : FIRDatabaseReference?
+    var databaseHandle : FIRDatabaseHandle?
+    
+    var uid: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        let user = FIRAuth.auth()?.currentUser
-        userNameLabel.text = user?.displayName
         
-        let url = user?.providerData[0].photoURL
-        let data = try? Data(contentsOf: url!)
+        setUserData()
+    }
+    
+    func setUserData() {
+        // not from UI button
+        if uid == "" || uid == FIRAuth.auth()?.currentUser?.uid{
+            print("UID is self")
+            
+            let user = FIRAuth.auth()?.currentUser
+            userNameLabel.text = user?.displayName
+            
+            let url = (user?.providerData[0].photoURL)!
+            setUserProfilePhoto(url: url)
+            
+            // allow logout
+            showFBLoginButton()
+        } else {
+            print("UID is other")
+            // get reference to database
+            ref = FIRDatabase.database().reference()
+            
+            ref?.child("Users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                
+                let value = snapshot.value as? [String : AnyObject]
+                
+                self.userNameLabel.text = value?["Username"] as? String ?? ""
+                
+                let urlString = value?["ProfileURL"] as? String ?? ""
+                let url = URL(string: urlString)
+                self.setUserProfilePhoto(url: url!)
+            })
+        }
+    }
+    
+    func setUserProfilePhoto(url : URL) {
+        let data = try? Data(contentsOf: url)
         profileImageView.image = UIImage(data: data!)
         profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;
         profileImageView.clipsToBounds = true;
-        
-        showFBLoginButton()
     }
 
     override func didReceiveMemoryWarning() {
