@@ -41,12 +41,12 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
             var followDict = [String : Bool]()
             followDict[uid] = true
             
-            self.ref?.child("Users").child((user?.uid)!).child("Friends").updateChildValues(followDict)
+            self.ref?.child("Friends").child((user?.uid)!).updateChildValues(followDict)
         } else {
             
             following = false
             
-            self.ref?.child("Users").child((user?.uid)!).child("Friends").child(uid).removeValue()
+            self.ref?.child("Friends").child((user?.uid)!).child(uid).removeValue()
         }
         
         updateFollowButton()
@@ -105,19 +105,18 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
             })
             
-            ref?.child("Users").child((FIRAuth.auth()?.currentUser?.uid)!).child("Friends").observeSingleEvent(of: .value, with: { (friendSnapshot) in
+            ref?.child("Friends").child((FIRAuth.auth()?.currentUser?.uid)!).child(uid).observeSingleEvent(of: .value, with: { (friendSnapshot) in
                 
-                print("Friends update")
-                if let friends = friendSnapshot.value as? [String : Bool] {
-                    
-                    for friend in friends.keys {
-                        if friend == self.uid {
-                            self.following = true
-                            self.updateFollowButton()
-                        }
-                    }
+                print("Friends set data update ")
+                print(friendSnapshot.value.unsafelyUnwrapped)
+                if friendSnapshot.value is NSNull {
+                    print("following")
+                    self.following = false
+                } else {
+                    print("not following")
+                    self.following = true
                 }
-                
+                self.updateFollowButton()
             })
         }
     }

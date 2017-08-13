@@ -47,7 +47,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // get reference to database
         ref = FIRDatabase.database().reference()
         
-        databaseFriendsHandle = ref?.child("Users").child((FIRAuth.auth()?.currentUser?.uid)!).child("Friends").observe(.value, with: { (friendSnapshot) in
+        databaseFriendsHandle = ref?.child("Friends").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.value, with: { (friendSnapshot) in
             
             print("Friends update")
             self.friends.removeAll()
@@ -74,8 +74,10 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         manager.startUpdatingLocation()
     }
     
+    
     func reloadListings() {
         
+        let setupQuery: String
         ref?.child("Listings").observeSingleEvent(of: .value, with: { (snapshot) in
             
             print("Reload Listings update")
@@ -90,7 +92,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     
                     for dictValues in dict.values {
                         if let listingItem = dictValues as? [String : String] {
-                            let newListing = Listing(userName: listingItem["Username"]!, uid: listingItem["UserID"]!, description: listingItem["Description"]!, amount: listingItem["Amount"]!, photoURL: listingItem["ProfileURL"]!, datePosted: listingItem["DatePosted"]!, latitude: listingItem["UserLatitude"]! as NSString, longitude: listingItem["UserLongitude"]! as NSString)
+                            let newListing = Listing(userName: listingItem["Username"]!, uid: listingItem["UserID"]!, description: listingItem["Description"]!, amount: listingItem["Amount"]!, photoURL: listingItem["ProfileURL"]!, datePosted: listingItem["DatePosted"]!, latitude: listingItem["UserLatitude"]! as NSString, longitude: listingItem["UserLongitude"]! as NSString, key: listingItem["ListingKey"]! as String)
                             
                             if self.friends.contains(listingItem["UserID"]!) {
                                 self.friendListings.append(newListing)
@@ -165,6 +167,8 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // check for only items not from user
         cell.userNameButton.setTitle(listingItem.userName, for: UIControlState.normal)
         (cell.userNameButton as! UserNameButton).uid = listingItem.uid
+        cell.requestButton.uid = listingItem.uid
+        cell.requestButton.key = listingItem.key
         cell.descriptionLabel.text = listingItem.description
         cell.amountLabel.text = "$" + listingItem.amount
         

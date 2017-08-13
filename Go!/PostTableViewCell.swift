@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseDatabase
 
 class PostTableViewCell: UITableViewCell {
 
@@ -16,9 +18,10 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var userNameButton: UIButton!
     @IBOutlet weak var timeAgo: UILabel!
     @IBOutlet weak var distance: UILabel!
-    @IBOutlet weak var requestButton: UIButton!
+    @IBOutlet weak var requestButton: RequestButton!
     
     var requested : Bool = false
+    var ref : FIRDatabaseReference?
     
     @IBAction func OnRequestButtonPressed(_ sender: Any) {
         
@@ -31,12 +34,17 @@ class PostTableViewCell: UITableViewCell {
             requestButton.alpha = 1
             requestButton.setTitle("Requested", for: UIControlState.normal)
             requested = true
+            
+            let request : [String : Bool] = [(FIRAuth.auth()?.currentUser?.uid)! : false]
+            
+            ref?.child("Requests").child(requestButton.key).updateChildValues(request)
         }
     }
     override func awakeFromNib() {
         
         super.awakeFromNib()
         // Initialization code
+        ref = FIRDatabase.database().reference()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

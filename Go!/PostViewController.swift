@@ -45,7 +45,10 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         postDict["UserLatitude"] = userLocation.latitude.description
         postDict["UserLongitude"] = userLocation.longitude.description
         
-        ref?.child("Listings").childByAutoId().setValue(postDict)
+        let key = ref?.child("Listings").childByAutoId().key
+        postDict["ListingKey"] = key
+        
+        ref?.child("Listings").child(key!).setValue(postDict)
         
         manager.stopUpdatingLocation()
         

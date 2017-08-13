@@ -20,10 +20,11 @@ struct Listing {
     let datePosted: String
     let latitude: NSString
     let longitude: NSString
+    let key: String
     
     let profilePhoto: UIImage?
     
-    init(userName: String, uid: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: NSString, longitude: NSString) {
+    init(userName: String, uid: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: NSString, longitude: NSString, key: String) {
         
         self.userName = userName
         self.uid = uid
@@ -33,6 +34,7 @@ struct Listing {
         self.datePosted = datePosted
         self.latitude = latitude
         self.longitude = longitude
+        self.key = key
         
         let url = URL(string: photoURL)
         let data = try? Data(contentsOf: url!)

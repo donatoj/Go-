@@ -63,7 +63,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         } else {
             print("login successful")
             
-            // handle permissions or cancelled
+            let handlePermissionsOrCancelled : String
             
             let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
             
