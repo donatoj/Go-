@@ -19,6 +19,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         ref = FIRDatabase.database().reference()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -65,6 +66,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             // handle permissions or cancelled
             
             let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+            
             FIRAuth.auth()?.signIn(with: credential, completion: { (user : FIRUser?, error :Error?) in
                 
                 if error != nil {
@@ -78,11 +80,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     print("user email \(String(describing: user!.email))")
                     
                     var userDict = [String : String]()
-                    let user = FIRAuth.auth()?.currentUser
                     userDict["Username"] = user?.displayName
                     userDict["ProfileURL"] = user?.providerData[0].photoURL?.absoluteString
                     
-                    self.ref?.child("Users").child((user?.uid)!).setValue(userDict)
+                    self.ref?.child("Users").child((user?.uid)!).updateChildValues(userDict)
                     
                     self.performSegue(withIdentifier: "showMain", sender: self)
                 }

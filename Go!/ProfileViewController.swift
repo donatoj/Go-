@@ -15,11 +15,14 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
         
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
+    @IBOutlet weak var followButton: UIButton!
     
     var ref : FIRDatabaseReference?
     var databaseHandle : FIRDatabaseHandle?
     
     var uid: String = ""
+    
+    var following : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +30,46 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
         setUserData()
     }
     
+    @IBAction func onFollowButtonPressed(_ sender: Any) {
+        
+        let user = FIRAuth.auth()?.currentUser
+        
+        if !following {
+            
+            following = true
+            
+            var followDict = [String : Bool]()
+            followDict[uid] = true
+            
+            self.ref?.child("Users").child((user?.uid)!).child("Friends").updateChildValues(followDict)
+        } else {
+            
+            following = false
+            
+            self.ref?.child("Users").child((user?.uid)!).child("Friends").child(uid).removeValue()
+        }
+        
+        updateFollowButton()
+    }
+    
+    func updateFollowButton() {
+       
+        if following {
+            
+            followButton.setTitle("Following", for: UIControlState.normal)
+            followButton.setTitleColor(UIColor.white, for: UIControlState.normal)
+            followButton.backgroundColor = UIColor.green
+            
+        } else {
+            
+            followButton.setTitle("Follow", for: UIControlState.normal)
+            followButton.setTitleColor(UIColor.green, for: UIControlState.normal)
+            followButton.backgroundColor = UIColor.white
+            
+        }
+        
+    }
+
     func setUserData() {
         // not from UI button
         if uid == "" || uid == FIRAuth.auth()?.currentUser?.uid{
@@ -40,6 +83,8 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             // allow logout
             showFBLoginButton()
+            followButton.isHidden = true
+            
         } else {
             print("UID is other")
             // get reference to database
@@ -49,20 +94,40 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
                 let value = snapshot.value as? [String : AnyObject]
                 
-                self.userNameLabel.text = value?["Username"] as? String ?? ""
+                self.userNameLabel.text = value?["Username"] as? String
                 
-                let urlString = value?["ProfileURL"] as? String ?? ""
-                let url = URL(string: urlString)
-                self.setUserProfilePhoto(url: url!)
+                if let urlString = value?["ProfileURL"] as? String {
+                    if let url = URL(string: urlString) {
+                        self.setUserProfilePhoto(url: url)
+                        self.followButton.isHidden = false
+                    }
+                }
+                
+            })
+            
+            ref?.child("Users").child((FIRAuth.auth()?.currentUser?.uid)!).child("Friends").observeSingleEvent(of: .value, with: { (friendSnapshot) in
+                
+                print("Friends update")
+                if let friends = friendSnapshot.value as? [String : Bool] {
+                    
+                    for friend in friends.keys {
+                        if friend == self.uid {
+                            self.following = true
+                            self.updateFollowButton()
+                        }
+                    }
+                }
+                
             })
         }
     }
     
     func setUserProfilePhoto(url : URL) {
-        let data = try? Data(contentsOf: url)
-        profileImageView.image = UIImage(data: data!)
-        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;
-        profileImageView.clipsToBounds = true;
+        if let data = try? Data(contentsOf: url) {
+            profileImageView.image = UIImage(data: data)
+            profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;
+            profileImageView.clipsToBounds = true;
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -84,6 +149,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
         let firebaseAuth = FIRAuth.auth()
         do {
             try firebaseAuth?.signOut()
+            
             self.presentingViewController?.dismiss(animated: true, completion: nil)
         } catch let signOutError as NSError {
             print ("Error signing out: %@", signOutError)

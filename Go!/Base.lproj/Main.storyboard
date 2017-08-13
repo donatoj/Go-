@@ -44,38 +44,52 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TVQ-hF-WS6">
-                                <rect key="frame" x="157" y="101" width="100" height="105"/>
+                                <rect key="frame" x="157" y="101" width="100" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="apa-2M-rQG"/>
-                                    <constraint firstAttribute="height" constant="105" id="n7l-wu-T7P"/>
+                                    <constraint firstAttribute="height" constant="100" id="n7l-wu-T7P"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pIP-iF-9XI">
-                                <rect key="frame" x="186.33333333333337" y="214" width="41.666666666666657" height="20"/>
+                                <rect key="frame" x="186" y="214" width="42" height="20"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gwo-Or-lre">
+                                <rect key="frame" x="157" y="249" width="100" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" title="Follow">
+                                    <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="onFollowButtonPressed:" destination="kwL-LA-W8z" eventType="touchUpInside" id="GAI-lV-ciS"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="pIP-iF-9XI" firstAttribute="centerX" secondItem="oq6-My-NSh" secondAttribute="centerX" id="1AF-fE-AuN"/>
                             <constraint firstItem="TVQ-hF-WS6" firstAttribute="centerX" secondItem="oq6-My-NSh" secondAttribute="centerX" id="2Ep-fU-igI"/>
-                            <constraint firstItem="pIP-iF-9XI" firstAttribute="top" secondItem="TVQ-hF-WS6" secondAttribute="bottom" constant="8" symbolic="YES" id="4Md-A4-tJ9"/>
+                            <constraint firstItem="pIP-iF-9XI" firstAttribute="top" secondItem="TVQ-hF-WS6" secondAttribute="bottom" constant="13" id="4Md-A4-tJ9"/>
                             <constraint firstItem="TVQ-hF-WS6" firstAttribute="top" secondItem="3c7-sV-BN2" secondAttribute="bottom" constant="37" id="8Xi-WT-ZWG"/>
+                            <constraint firstItem="Gwo-Or-lre" firstAttribute="top" secondItem="pIP-iF-9XI" secondAttribute="bottom" constant="15" id="8gf-Z4-0cF"/>
                             <constraint firstItem="TVQ-hF-WS6" firstAttribute="centerX" secondItem="pIP-iF-9XI" secondAttribute="centerX" id="9tO-fO-kAB"/>
+                            <constraint firstItem="Gwo-Or-lre" firstAttribute="leading" secondItem="TVQ-hF-WS6" secondAttribute="leading" id="VuH-bm-cwa"/>
+                            <constraint firstItem="Gwo-Or-lre" firstAttribute="trailing" secondItem="TVQ-hF-WS6" secondAttribute="trailing" id="bTc-rb-mhp"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="contacts" id="oDu-Kq-h0d" userLabel="Profile"/>
                     <navigationItem key="navigationItem" title="Profile" id="IJg-f1-crs"/>
                     <connections>
+                        <outlet property="followButton" destination="Gwo-Or-lre" id="o6N-hK-5JK"/>
                         <outlet property="profileImageView" destination="TVQ-hF-WS6" id="eHo-PQ-gcL"/>
                         <outlet property="userNameLabel" destination="pIP-iF-9XI" id="xIH-Ee-qCW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sGy-g2-KGT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2670" y="787"/>
+            <point key="canvasLocation" x="2328.985507246377" y="771.19565217391312"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sQq-6g-oOl">
@@ -230,7 +244,7 @@
                             <rect key="frame" x="117.5" y="7" width="179" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
-                                <segment title="World"/>
+                                <segment title="All"/>
                                 <segment title="Friends"/>
                                 <segment title="Self"/>
                             </segments>
@@ -320,7 +334,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lP3-Mn-wZB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2670" y="-674"/>
+            <point key="canvasLocation" x="2433" y="-214"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

@@ -17,13 +17,16 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
     var ref : FIRDatabaseReference?
-    var databaseHandle : FIRDatabaseHandle?
+    var databaseListingsHandle : FIRDatabaseHandle?
+    var databaseFriendsHandle : FIRDatabaseHandle?
     
     var worldListings = [Listing]()
     var friendListings = [Listing]()
     var selfListings = [Listing]()
     
     var currentListings = [Listing]()
+    
+    var friends = [String]()
     
     let manager = CLLocationManager()
     var userLocation = CLLocation()
@@ -44,37 +47,25 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // get reference to database
         ref = FIRDatabase.database().reference()
         
-        // save all items in Listings node to dictionary array
-        databaseHandle = ref?.child("Listings").observe(.value, with: { (snapshot) in
+        databaseFriendsHandle = ref?.child("Users").child((FIRAuth.auth()?.currentUser?.uid)!).child("Friends").observe(.value, with: { (friendSnapshot) in
             
-            let listingDict = snapshot.value as? [String : AnyObject] ?? [:]
-            
-            self.worldListings.removeAll()
-            self.friendListings.removeAll()
-            self.selfListings.removeAll()
-            
-            for listing in listingDict {
-                let dict : [String : AnyObject] = [listing.key : listing.value]
+            print("Friends update")
+            self.friends.removeAll()
+            if let friends = friendSnapshot.value as? [String : Bool] {
                 
-                for dictValues in dict.values {
-                    if let listingItem = dictValues as? [String : String] {
-                        let newListing = Listing(userName: listingItem["Username"]!, uid: listingItem["UserID"]!, description: listingItem["Description"]!, amount: listingItem["Amount"]!, photoURL: listingItem["ProfileURL"]!, datePosted: listingItem["DatePosted"]!, latitude: listingItem["UserLatitude"]! as NSString, longitude: listingItem["UserLongitude"]! as NSString)
-                        
-                        if FIRAuth.auth()?.currentUser?.uid == newListing.uid {
-                            print("appending listing to self " + newListing.description)
-                            self.selfListings.append(newListing)
-                        } else {
-                            print("appending listing to world and friends " + newListing.description)
-                            self.worldListings.append(newListing)
-                        }
-                        
-                    }
+                for friend in friends.keys {
+                    print(friend + "is a friend")
+                    self.friends.append(friend)
                 }
             }
+            self.reloadListings()
             
-            print("Updating table view")
-            self.updateListings()
+        })
+        
+        // save all items in Listings node to dictionary array
+        databaseListingsHandle = ref?.child("Listings").observe(.value, with: { (snapshot) in
             
+            self.reloadListings()
         })
         
         manager.delegate = self
@@ -83,19 +74,50 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         manager.startUpdatingLocation()
     }
     
+    func reloadListings() {
+        
+        ref?.child("Listings").observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            print("Reload Listings update")
+            self.worldListings.removeAll()
+            self.friendListings.removeAll()
+            self.selfListings.removeAll()
+            
+            if let listingDict = snapshot.value as? [String : AnyObject] {
+            
+                for listing in listingDict {
+                    let dict : [String : AnyObject] = [listing.key : listing.value]
+                    
+                    for dictValues in dict.values {
+                        if let listingItem = dictValues as? [String : String] {
+                            let newListing = Listing(userName: listingItem["Username"]!, uid: listingItem["UserID"]!, description: listingItem["Description"]!, amount: listingItem["Amount"]!, photoURL: listingItem["ProfileURL"]!, datePosted: listingItem["DatePosted"]!, latitude: listingItem["UserLatitude"]! as NSString, longitude: listingItem["UserLongitude"]! as NSString)
+                            
+                            if self.friends.contains(listingItem["UserID"]!) {
+                                self.friendListings.append(newListing)
+                            } else if FIRAuth.auth()?.currentUser?.uid == newListing.uid {
+                                self.selfListings.append(newListing)
+                            } else {
+                                self.worldListings.append(newListing)
+                            }
+                        }
+                    }
+                }
+                print("Updating table view")
+                self.updateListings()
+            }
+        })
+    }
+    
     func updateListings() {
         
         switch segmentControl.selectedSegmentIndex {
         case 0:
-            print("segment 0")
             currentListings = worldListings
             break
         case 1:
-            print("segment 1")
             currentListings = friendListings
             break
         case 2:
-            print("segment 2")
             currentListings = selfListings
             break
         default:
