@@ -22,7 +22,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var worldListings = [Listing]()
     var friendListings = [Listing]()
-    var selfListings = [Listing]()
+    var selfListings = [String : Listing]()
     
     var currentListings = [Listing]()
     
@@ -47,25 +47,56 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // get reference to database
         ref = FIRDatabase.database().reference()
         
-        databaseFriendsHandle = ref?.child("Friends").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.value, with: { (friendSnapshot) in
+        let useChildEvents : String
+//        databaseFriendsHandle = ref?.child("Friends").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.value, with: { (friendSnapshot) in
+//            
+//            print("Friends update")
+//            self.friends.removeAll()
+//            if let friends = friendSnapshot.value as? [String : Bool] {
+//                
+//                for friend in friends.keys {
+//                    print(friend + "is a friend")
+//                    self.friends.append(friend)
+//                }
+//            }
+//            self.reloadListings()
+//            
+//        })
+//        
+//        // save all items in Listings node to dictionary array
+//        databaseListingsHandle = ref?.child("Listings").observe(.value, with: { (snapshot) in
+//            
+//            self.reloadListings()
+//        })
+        
+        ref?.child("UserPosts").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childAdded, with: { (userPostSnapshot) in
             
-            print("Friends update")
-            self.friends.removeAll()
-            if let friends = friendSnapshot.value as? [String : Bool] {
+            print("Self child added")
+            let listingKey = userPostSnapshot.key
+            print("listing key " + listingKey)
+            self.ref?.child("Listings").queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
+                print("snapshot key " + listingSnapshot.key + " value " + listingSnapshot.value.debugDescription)
                 
-                for friend in friends.keys {
-                    print(friend + "is a friend")
-                    self.friends.append(friend)
+                if let listingItem = listingSnapshot.value as? [String : String] {
+                    let newListing = Listing(userName: listingItem["Username"]!, uid: listingItem["UserID"]!, description: listingItem["Description"]!, amount: listingItem["Amount"]!, photoURL: listingItem["ProfileURL"]!, datePosted: listingItem["DatePosted"]!, latitude: listingItem["UserLatitude"]! as NSString, longitude: listingItem["UserLongitude"]! as NSString, key: listingItem["ListingKey"]! as String)
+                    self.selfListings[listingKey] = newListing
+                    print("added new listing " + newListing.description)
+                    self.updateListings()
                 }
-            }
-            self.reloadListings()
-            
+                
+            })
         })
         
-        // save all items in Listings node to dictionary array
-        databaseListingsHandle = ref?.child("Listings").observe(.value, with: { (snapshot) in
+        ref?.child("UserPosts").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childRemoved, with: { (userPostSnapshot) in
             
-            self.reloadListings()
+            print("Self child removed")
+            let listingKey = userPostSnapshot.key
+            self.selfListings.removeValue(forKey: userPostSnapshot.key)
+            print("removed listing " + userPostSnapshot.value.debugDescription)
+            self.updateListings()
+            self.ref?.child("Listings").child(listingKey).removeValue()
+            
+            let removePostfromFriends : String
         })
         
         manager.delegate = self
@@ -97,7 +128,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                             if self.friends.contains(listingItem["UserID"]!) {
                                 self.friendListings.append(newListing)
                             } else if FIRAuth.auth()?.currentUser?.uid == newListing.uid {
-                                self.selfListings.append(newListing)
+                                //self.selfListings.append(newListing)
                             } else {
                                 self.worldListings.append(newListing)
                             }
@@ -120,7 +151,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             currentListings = friendListings
             break
         case 2:
-            currentListings = selfListings
+            currentListings = Array(selfListings.values)
             break
         default:
             break

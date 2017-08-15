@@ -42,6 +42,8 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         postDict["Amount"] = amountTextField.text
         
         postDict["DatePosted"] = Date().description
+        
+        let implementGeoLocations : String
         postDict["UserLatitude"] = userLocation.latitude.description
         postDict["UserLongitude"] = userLocation.longitude.description
         
@@ -49,6 +51,7 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         postDict["ListingKey"] = key
         
         ref?.child("Listings").child(key!).setValue(postDict)
+        ref?.child("UserPosts").child((FIRAuth.auth()?.currentUser?.uid)!).updateChildValues([key! : true])
         
         manager.stopUpdatingLocation()
         
