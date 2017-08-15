@@ -20,13 +20,11 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var databaseListingsHandle : FIRDatabaseHandle?
     var databaseFriendsHandle : FIRDatabaseHandle?
     
-    var worldListings = [Listing]()
-    var friendListings = [Listing]()
+    var worldListings = [String : Listing]()
+    var followerListings = [String : Listing]()
     var selfListings = [String : Listing]()
     
     var currentListings = [Listing]()
-    
-    var friends = [String]()
     
     let manager = CLLocationManager()
     var userLocation = CLLocation()
@@ -47,55 +45,96 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // get reference to database
         ref = FIRDatabase.database().reference()
         
-        let useChildEvents : String
-//        databaseFriendsHandle = ref?.child("Friends").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.value, with: { (friendSnapshot) in
-//            
-//            print("Friends update")
-//            self.friends.removeAll()
-//            if let friends = friendSnapshot.value as? [String : Bool] {
-//                
-//                for friend in friends.keys {
-//                    print(friend + "is a friend")
-//                    self.friends.append(friend)
-//                }
-//            }
-//            self.reloadListings()
-//            
-//        })
-//        
-//        // save all items in Listings node to dictionary array
-//        databaseListingsHandle = ref?.child("Listings").observe(.value, with: { (snapshot) in
-//            
-//            self.reloadListings()
-//        })
-        
         ref?.child("UserPosts").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childAdded, with: { (userPostSnapshot) in
             
             let listingKey = userPostSnapshot.key
-            print("self child added listing key " + listingKey)
+
             self.ref?.child("Listings").queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
 
                 if let listingItem = listingSnapshot.value as? [String : String] {
                     let newListing = ListingsDataSource.sharedInstance.getNewListing(forKey: listingKey, withSnapshotValue: listingItem)
                     self.selfListings[listingKey] = newListing
                     self.updateListings()
-                    print("added new listing " + (newListing?.description)!)
                 }
                 
             })
         })
         
-        ref?.child("UserPosts").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childRemoved, with: { (userPostSnapshot) in
+        ref?.child("FollowerPosts").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childAdded, with: { (followerPostSnapshot) in
             
-            print("Self child removed")
-            let listingKey = userPostSnapshot.key
-            self.selfListings.removeValue(forKey: userPostSnapshot.key)
-            print("removed listing " + userPostSnapshot.value.debugDescription)
-            self.updateListings()
-            self.ref?.child("Listings").child(listingKey).removeValue()
+            let listingKey = followerPostSnapshot.key
             
-            let removePostfromFriends : String
+            self.ref?.child("Listings").queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
+                
+                if let listingItem = listingSnapshot.value as? [String : String] {
+                    let newListing = ListingsDataSource.sharedInstance.getNewListing(forKey: listingKey, withSnapshotValue: listingItem)
+                    self.followerListings[listingKey] = newListing
+                    self.updateListings()
+                }
+                
+            })
         })
+        
+        ref?.child("Following").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childAdded, with: { (followingSnapshot) in
+
+            let uid = followingSnapshot.key
+            self.ref?.child("UserPosts").child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
+                
+                if let listins = userPostSnapshot.value as? [String : Bool] {
+                    for listingKey in listins.keys {
+                        self.ref?.child("FollowerPosts").child((FIRAuth.auth()?.currentUser?.uid)!).updateChildValues([listingKey : true])
+                    }
+                }
+            })
+        })
+        
+        ref?.child("Following").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childRemoved, with: { (followingSnapshot) in
+
+            let uid = followingSnapshot.key
+            self.ref?.child("UserPosts").child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
+                
+                if let listings = userPostSnapshot.value as? [String : Bool] {
+                    for listingKey in listings.keys {
+                        self.ref?.child("FollowerPosts").child((FIRAuth.auth()?.currentUser?.uid)!).child(listingKey).removeValue()
+                    }
+                }
+            })
+        })
+        
+        let implementGeoListings : String
+        ref?.child("Listings").observe(.childAdded, with: { (listingSnapshot) in
+            
+            let listingKey = listingSnapshot.key
+            if let listingItem = listingSnapshot.value as? [String : String] {
+                let newListing = ListingsDataSource.sharedInstance.getNewListing(forKey: listingKey, withSnapshotValue: listingItem)
+                self.worldListings[listingKey] = newListing
+                self.updateListings()
+            }
+        })
+        
+        ref?.child("Listings").observe(.childRemoved, with: { (listingSnapshot) in
+            
+            self.ref?.child("Listings").child(listingSnapshot.key).removeValue()
+            self.worldListings.removeValue(forKey: listingSnapshot.key)
+            
+            if let listingValue = listingSnapshot.value as? [String : String] {
+                self.ref?.child("UserPosts").child(listingValue["UserID"]!).child(listingSnapshot.key).removeValue()
+                self.selfListings.removeValue(forKey: listingSnapshot.key)
+            }
+            
+                self.ref?.child("FollowerPosts").child((FIRAuth.auth()?.currentUser?.uid)!).child(listingSnapshot.key).removeValue()
+                self.followerListings.removeValue(forKey: listingSnapshot.key)
+            
+            
+            self.updateListings()
+        })
+        
+        ref?.child("FollowerPosts").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childRemoved, with: { (followerPostSnapshot) in
+            
+            self.followerListings.removeValue(forKey: followerPostSnapshot.key)
+            self.updateListings()
+        })
+        
         
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
@@ -106,47 +145,16 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func reloadListings() {
         
-        let setupQuery: String
-        ref?.child("Listings").observeSingleEvent(of: .value, with: { (snapshot) in
-            
-            print("Reload Listings update")
-            self.worldListings.removeAll()
-            self.friendListings.removeAll()
-            self.selfListings.removeAll()
-            
-            if let listingDict = snapshot.value as? [String : AnyObject] {
-            
-                for listing in listingDict {
-                    let dict : [String : AnyObject] = [listing.key : listing.value]
-                    
-                    for dictValues in dict.values {
-                        if let listingItem = dictValues as? [String : String] {
-                            let newListing = Listing(userName: listingItem["Username"]!, uid: listingItem["UserID"]!, description: listingItem["Description"]!, amount: listingItem["Amount"]!, photoURL: listingItem["ProfileURL"]!, datePosted: listingItem["DatePosted"]!, latitude: listingItem["UserLatitude"]! as NSString, longitude: listingItem["UserLongitude"]! as NSString, key: listingItem["ListingKey"]! as String)
-                            
-                            if self.friends.contains(listingItem["UserID"]!) {
-                                self.friendListings.append(newListing)
-                            } else if FIRAuth.auth()?.currentUser?.uid == newListing.uid {
-                                //self.selfListings.append(newListing)
-                            } else {
-                                self.worldListings.append(newListing)
-                            }
-                        }
-                    }
-                }
-                print("Updating table view")
-                self.updateListings()
-            }
-        })
     }
     
     func updateListings() {
         
         switch segmentControl.selectedSegmentIndex {
         case 0:
-            currentListings = worldListings
+            currentListings = Array(worldListings.values)
             break
         case 1:
-            currentListings = friendListings
+            currentListings = Array(followerListings.values)
             break
         case 2:
             currentListings = Array(selfListings.values)

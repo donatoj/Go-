@@ -21,6 +21,8 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
     let manager = CLLocationManager()
     var userLocation : CLLocationCoordinate2D!
     
+    var followerKeyList = [String]()
+    
     @IBAction func cancelPressed(_ sender: Any) {
         
         // create alert before canceling
@@ -53,6 +55,10 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         ref?.child("Listings").child(key!).setValue(postDict)
         ref?.child("UserPosts").child((FIRAuth.auth()?.currentUser?.uid)!).updateChildValues([key! : true])
         
+        for followerKey in followerKeyList {
+            ref?.child("FollowerPosts").child(followerKey).updateChildValues([key! : true])
+        }
+        
         manager.stopUpdatingLocation()
         
         presentingViewController?.dismiss(animated: true, completion: nil)
@@ -69,6 +75,13 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
 
         // Do any additional setup after loading the view.
         ref = FIRDatabase.database().reference()
+        
+        ref?.child("Followers").child((FIRAuth.auth()?.currentUser?.uid)!).queryOrderedByKey().observeSingleEvent(of: .childAdded, with: { (friendSnapshot) in
+            
+            print("follower snapshot " + friendSnapshot.key)
+            self.followerKeyList.append(friendSnapshot.key)
+            
+        })
         
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest

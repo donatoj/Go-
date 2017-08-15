@@ -34,19 +34,20 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         let user = FIRAuth.auth()?.currentUser
         
+        let implementApprovalProcess : String
+        
         if !following {
             
             following = true
-            
-            var followDict = [String : Bool]()
-            followDict[uid] = true
-            
-            self.ref?.child("Friends").child((user?.uid)!).updateChildValues(followDict)
+
+            self.ref?.child("Following").child((user?.uid)!).updateChildValues([uid : true])
+            self.ref?.child("Followers").child(uid).updateChildValues([(user?.uid)! : true])
         } else {
             
             following = false
             
-            self.ref?.child("Friends").child((user?.uid)!).child(uid).removeValue()
+            self.ref?.child("Following").child((user?.uid)!).child(uid).removeValue()
+            self.ref?.child("Followers").child(uid).child((user?.uid)!).removeValue()
         }
         
         updateFollowButton()
@@ -105,15 +106,15 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
             })
             
-            ref?.child("Friends").child((FIRAuth.auth()?.currentUser?.uid)!).child(uid).observeSingleEvent(of: .value, with: { (friendSnapshot) in
+            ref?.child("Following").child((FIRAuth.auth()?.currentUser?.uid)!).queryOrderedByKey().queryEqual(toValue: uid).observeSingleEvent(of: .childAdded, with: { (followingSnapshot) in
                 
                 print("Friends set data update ")
-                print(friendSnapshot.value.unsafelyUnwrapped)
-                if friendSnapshot.value is NSNull {
-                    print("following")
+                print(followingSnapshot.value.unsafelyUnwrapped)
+                if followingSnapshot.value is NSNull {
+                    print("not following")
                     self.following = false
                 } else {
-                    print("not following")
+                    print("following")
                     self.following = true
                 }
                 self.updateFollowButton()

@@ -17,7 +17,6 @@ class ListingsDataSource {
     // Get a new listing
     func getNewListing(forKey : String, withSnapshotValue: [String : String]) -> Listing? {
         
-        print("Self child added")
         var newListing : Listing?
         
         newListing = Listing(userName: withSnapshotValue["Username"]!,
