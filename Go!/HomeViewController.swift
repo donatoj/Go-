@@ -71,17 +71,15 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         ref?.child("UserPosts").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childAdded, with: { (userPostSnapshot) in
             
-            print("Self child added")
             let listingKey = userPostSnapshot.key
-            print("listing key " + listingKey)
+            print("self child added listing key " + listingKey)
             self.ref?.child("Listings").queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
-                print("snapshot key " + listingSnapshot.key + " value " + listingSnapshot.value.debugDescription)
-                
+
                 if let listingItem = listingSnapshot.value as? [String : String] {
-                    let newListing = Listing(userName: listingItem["Username"]!, uid: listingItem["UserID"]!, description: listingItem["Description"]!, amount: listingItem["Amount"]!, photoURL: listingItem["ProfileURL"]!, datePosted: listingItem["DatePosted"]!, latitude: listingItem["UserLatitude"]! as NSString, longitude: listingItem["UserLongitude"]! as NSString, key: listingItem["ListingKey"]! as String)
+                    let newListing = ListingsDataSource.sharedInstance.getNewListing(forKey: listingKey, withSnapshotValue: listingItem)
                     self.selfListings[listingKey] = newListing
-                    print("added new listing " + newListing.description)
                     self.updateListings()
+                    print("added new listing " + (newListing?.description)!)
                 }
                 
             })
