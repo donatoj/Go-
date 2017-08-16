@@ -17,8 +17,8 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var followButton: UIButton!
     
-    var ref : FIRDatabaseReference?
-    var databaseHandle : FIRDatabaseHandle?
+    var ref : DatabaseReference?
+    var databaseHandle : DatabaseHandle?
     
     var uid: String = ""
     
@@ -32,7 +32,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     @IBAction func onFollowButtonPressed(_ sender: Any) {
         
-        let user = FIRAuth.auth()?.currentUser
+        let user = Auth.auth().currentUser
         
         let implementApprovalProcess : String
         
@@ -73,10 +73,10 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
 
     func setUserData() {
         // not from UI button
-        if uid == "" || uid == FIRAuth.auth()?.currentUser?.uid{
+        if uid == "" || uid == Auth.auth().currentUser?.uid{
             print("UID is self")
             
-            let user = FIRAuth.auth()?.currentUser
+            let user = Auth.auth().currentUser
             userNameLabel.text = user?.displayName
             
             let url = (user?.providerData[0].photoURL)!
@@ -89,7 +89,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
         } else {
             print("UID is other")
             // get reference to database
-            ref = FIRDatabase.database().reference()
+            ref = Database.database().reference()
             
             ref?.child("Users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
                 
@@ -106,7 +106,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
             })
             
-            ref?.child("Following").child((FIRAuth.auth()?.currentUser?.uid)!).queryOrderedByKey().queryEqual(toValue: uid).observeSingleEvent(of: .childAdded, with: { (followingSnapshot) in
+            ref?.child("Following").child((Auth.auth().currentUser?.uid)!).queryOrderedByKey().queryEqual(toValue: uid).observeSingleEvent(of: .childAdded, with: { (followingSnapshot) in
                 
                 print("Friends set data update ")
                 print(followingSnapshot.value.unsafelyUnwrapped)
@@ -146,9 +146,9 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         
         print("user did log out of facebook")
-        let firebaseAuth = FIRAuth.auth()
+        let firebaseAuth = Auth.auth()
         do {
-            try firebaseAuth?.signOut()
+            try firebaseAuth.signOut()
             
             self.presentingViewController?.dismiss(animated: true, completion: nil)
         } catch let signOutError as NSError {
@@ -165,8 +165,8 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             // handle permissions or cancelled
             
-            let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
-            FIRAuth.auth()?.signIn(with: credential, completion: { (user : FIRUser?, error :Error?) in
+            let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+            Auth.auth().signIn(with: credential, completion: { (user : User?, error :Error?) in
                 
                 if error != nil {
                     if let error = error {

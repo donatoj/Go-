@@ -10,15 +10,20 @@ import UIKit
 import FirebaseDatabase
 import Firebase
 import CoreLocation
+import GeoFire
 
 class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
-    var ref : FIRDatabaseReference?
-    var databaseListingsHandle : FIRDatabaseHandle?
-    var databaseFriendsHandle : FIRDatabaseHandle?
+    var ref : DatabaseReference?
+    
+    var geoFireRef : DatabaseReference?
+    var geoFire : GeoFire?
+    
+    var databaseListingsHandle : DatabaseHandle?
+    var databaseFriendsHandle : DatabaseHandle?
     
     var worldListings = [String : Listing]()
     var followerListings = [String : Listing]()
@@ -34,6 +39,34 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         updateListings()
     }
     
+    func geoFireTest() {
+        
+        geoFireRef = ref?.child("GeoLocations")
+        geoFire = GeoFire(firebaseRef: geoFireRef)
+        
+        let lat : CLLocationDegrees = 34.765
+        let long : CLLocationDegrees = 34.345
+        let loc : CLLocation = CLLocation(latitude: lat, longitude: long)
+        
+        geoFire?.setLocation(loc, forKey: Auth.auth().currentUser?.uid)
+        
+        let lat2 : CLLocationDegrees = 34.1
+        let long2 : CLLocationDegrees = 12.1
+        let loc2 : CLLocation = CLLocation(latitude: lat2, longitude: long2)
+        
+        let query = geoFire?.query(at: loc2, withRadius: 1000.0)
+        
+        // Query location by region
+        let span = MKCoordinateSpanMake(10, 10)
+        let region = MKCoordinateRegionMake(loc2.coordinate, span)
+        let regionQuery = geoFire?.query(with: region)
+        
+        query?.observe(.keyEntered, with: { (key: String!, location : CLLocation!) in
+            
+            print("key entered " + key + " location " + location.description)
+        })
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,9 +76,11 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.estimatedRowHeight = 111
         
         // get reference to database
-        ref = FIRDatabase.database().reference()
+        ref = Database.database().reference()
         
-        ref?.child("UserPosts").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childAdded, with: { (userPostSnapshot) in
+        geoFireTest()
+        
+        ref?.child("UserPosts").child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (userPostSnapshot) in
             
             let listingKey = userPostSnapshot.key
 
@@ -60,7 +95,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             })
         })
         
-        ref?.child("FollowerPosts").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childAdded, with: { (followerPostSnapshot) in
+        ref?.child("FollowerPosts").child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followerPostSnapshot) in
             
             let listingKey = followerPostSnapshot.key
             
@@ -75,27 +110,27 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             })
         })
         
-        ref?.child("Following").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childAdded, with: { (followingSnapshot) in
+        ref?.child("Following").child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followingSnapshot) in
 
             let uid = followingSnapshot.key
             self.ref?.child("UserPosts").child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
                 
                 if let listins = userPostSnapshot.value as? [String : Bool] {
                     for listingKey in listins.keys {
-                        self.ref?.child("FollowerPosts").child((FIRAuth.auth()?.currentUser?.uid)!).updateChildValues([listingKey : true])
+                        self.ref?.child("FollowerPosts").child((Auth.auth().currentUser?.uid)!).updateChildValues([listingKey : true])
                     }
                 }
             })
         })
         
-        ref?.child("Following").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childRemoved, with: { (followingSnapshot) in
+        ref?.child("Following").child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followingSnapshot) in
 
             let uid = followingSnapshot.key
             self.ref?.child("UserPosts").child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
                 
                 if let listings = userPostSnapshot.value as? [String : Bool] {
                     for listingKey in listings.keys {
-                        self.ref?.child("FollowerPosts").child((FIRAuth.auth()?.currentUser?.uid)!).child(listingKey).removeValue()
+                        self.ref?.child("FollowerPosts").child((Auth.auth().currentUser?.uid)!).child(listingKey).removeValue()
                     }
                 }
             })
@@ -122,14 +157,14 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.selfListings.removeValue(forKey: listingSnapshot.key)
             }
             
-                self.ref?.child("FollowerPosts").child((FIRAuth.auth()?.currentUser?.uid)!).child(listingSnapshot.key).removeValue()
+                self.ref?.child("FollowerPosts").child((Auth.auth().currentUser?.uid)!).child(listingSnapshot.key).removeValue()
                 self.followerListings.removeValue(forKey: listingSnapshot.key)
             
             
             self.updateListings()
         })
         
-        ref?.child("FollowerPosts").child((FIRAuth.auth()?.currentUser?.uid)!).observe(.childRemoved, with: { (followerPostSnapshot) in
+        ref?.child("FollowerPosts").child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followerPostSnapshot) in
             
             self.followerListings.removeValue(forKey: followerPostSnapshot.key)
             self.updateListings()

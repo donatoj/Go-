@@ -15,7 +15,7 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
     
-    var ref : FIRDatabaseReference?
+    var ref : DatabaseReference?
     var postDict = [String : String]()
     
     let manager = CLLocationManager()
@@ -37,9 +37,9 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
     @IBAction func savePressed(_ sender: Any) {
         
         //todo check for null fields and create alert with activity bar
-        postDict["Username"] = FIRAuth.auth()?.currentUser?.displayName
-        postDict["UserID"] = FIRAuth.auth()?.currentUser?.uid
-        postDict["ProfileURL"] = FIRAuth.auth()?.currentUser?.providerData[0].photoURL?.absoluteString
+        postDict["Username"] = Auth.auth().currentUser?.displayName
+        postDict["UserID"] = Auth.auth().currentUser?.uid
+        postDict["ProfileURL"] = Auth.auth().currentUser?.providerData[0].photoURL?.absoluteString
         postDict["Description"] = descriptionTextView.text
         postDict["Amount"] = amountTextField.text
         
@@ -53,7 +53,7 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         postDict["ListingKey"] = key
         
         ref?.child("Listings").child(key!).setValue(postDict)
-        ref?.child("UserPosts").child((FIRAuth.auth()?.currentUser?.uid)!).updateChildValues([key! : true])
+        ref?.child("UserPosts").child((Auth.auth().currentUser?.uid)!).updateChildValues([key! : true])
         
         for followerKey in followerKeyList {
             ref?.child("FollowerPosts").child(followerKey).updateChildValues([key! : true])
@@ -74,9 +74,9 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        ref = FIRDatabase.database().reference()
+        ref = Database.database().reference()
         
-        ref?.child("Followers").child((FIRAuth.auth()?.currentUser?.uid)!).queryOrderedByKey().observeSingleEvent(of: .childAdded, with: { (friendSnapshot) in
+        ref?.child("Followers").child((Auth.auth().currentUser?.uid)!).queryOrderedByKey().observeSingleEvent(of: .childAdded, with: { (friendSnapshot) in
             
             print("follower snapshot " + friendSnapshot.key)
             self.followerKeyList.append(friendSnapshot.key)

@@ -13,12 +13,12 @@ import FirebaseDatabase
 
 class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     
-    var ref: FIRDatabaseReference!
+    var ref: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        ref = FIRDatabase.database().reference()
+        ref = Database.database().reference()
         
     }
     
@@ -48,9 +48,9 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         
         print("user did log out of facebook")
-        let firebaseAuth = FIRAuth.auth()
+        let firebaseAuth = Auth.auth()
         do {
-            try firebaseAuth?.signOut()
+            try firebaseAuth.signOut()
         } catch let signOutError as NSError {
             print ("Error signing out: %@", signOutError)
         }
@@ -65,9 +65,9 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             let handlePermissionsOrCancelled : String
             
-            let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+            let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
             
-            FIRAuth.auth()?.signIn(with: credential, completion: { (user : FIRUser?, error :Error?) in
+            Auth.auth().signIn(with: credential, completion: { (user : User?, error :Error?) in
                 
                 if error != nil {
                     if let error = error {

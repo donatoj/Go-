@@ -21,7 +21,7 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var requestButton: RequestButton!
     
     var requested : Bool = false
-    var ref : FIRDatabaseReference?
+    var ref : DatabaseReference?
     
     @IBAction func OnRequestButtonPressed(_ sender: Any) {
         
@@ -35,7 +35,7 @@ class PostTableViewCell: UITableViewCell {
             requestButton.setTitle("Requested", for: UIControlState.normal)
             requested = true
             
-            let request : [String : Bool] = [(FIRAuth.auth()?.currentUser?.uid)! : false]
+            let request : [String : Bool] = [(Auth.auth().currentUser?.uid)! : false]
             
             ref?.child("Requests").child(requestButton.key).updateChildValues(request)
         }
@@ -44,7 +44,7 @@ class PostTableViewCell: UITableViewCell {
         
         super.awakeFromNib()
         // Initialization code
-        ref = FIRDatabase.database().reference()
+        ref = Database.database().reference()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
