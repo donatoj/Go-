@@ -9,25 +9,26 @@
 import Foundation
 import Firebase
 import FirebaseDatabase
+import CoreLocation
 
 class ListingsDataSource {
     
     static let sharedInstance = ListingsDataSource()
     
     // Get a new listing
-    func getNewListing(forKey : String, withSnapshotValue: [String : String]) -> Listing? {
+    func getNewListing(forKey : String, withSnapshotValue: [String : Any], location : CLLocation) -> Listing? {
         
         var newListing : Listing?
         
-        newListing = Listing(userName: withSnapshotValue["Username"]!,
-                             uid: withSnapshotValue["UserID"]!,
-                             description: withSnapshotValue["Description"]!,
-                             amount: withSnapshotValue["Amount"]!,
-                             photoURL: withSnapshotValue["ProfileURL"]!,
-                             datePosted: withSnapshotValue["DatePosted"]!,
-                             latitude: withSnapshotValue["UserLatitude"]! as NSString,
-                             longitude: withSnapshotValue["UserLongitude"]! as NSString,
-                             key: withSnapshotValue["ListingKey"]! as String
+        newListing = Listing(userName: withSnapshotValue["Username"]! as! String,
+                             uid: withSnapshotValue["UserID"]! as! String,
+                             description: withSnapshotValue["Description"]! as! String,
+                             amount: withSnapshotValue["Amount"]! as! String,
+                             photoURL: withSnapshotValue["ProfileURL"]! as! String,
+                             datePosted: withSnapshotValue["DatePosted"]! as! String,
+                             latitude: location.coordinate.latitude,
+                             longitude: location.coordinate.longitude,
+                             key: forKey
         )
         
        return newListing

@@ -18,13 +18,13 @@ struct Listing {
     let amount: String
     let photoURL: String
     let datePosted: String
-    let latitude: NSString
-    let longitude: NSString
+    let latitude: CLLocationDegrees
+    let longitude: CLLocationDegrees
     let key: String
     
     let profilePhoto: UIImage?
     
-    init(userName: String, uid: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: NSString, longitude: NSString, key: String) {
+    init(userName: String, uid: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, key: String) {
         
         self.userName = userName
         self.uid = uid
@@ -43,7 +43,7 @@ struct Listing {
     
     func getDistanceFromListing(userLocation : CLLocation) -> String {
         
-        let listingCoordinates = CLLocation(latitude: latitude.doubleValue, longitude: longitude.doubleValue)
+        let listingCoordinates = CLLocation(latitude: latitude, longitude: longitude)
         let distanceInMeters = listingCoordinates.distance(from: userLocation)
         let distanceInMiles = distanceInMeters/1609.344
         let truncatedDistance = Double(round(100 * distanceInMiles)/100)

@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import CoreLocation
+import GeoFire
 
 class PostViewController: UIViewController, CLLocationManagerDelegate {
 
@@ -16,6 +17,9 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var descriptionTextView: UITextView!
     
     var ref : DatabaseReference?
+    var geoFireRef : DatabaseReference?
+    var geoFire : GeoFire?
+    
     var postDict = [String : String]()
     
     let manager = CLLocationManager()
@@ -36,32 +40,47 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBAction func savePressed(_ sender: Any) {
         
-        //todo check for null fields and create alert with activity bar
-        postDict["Username"] = Auth.auth().currentUser?.displayName
-        postDict["UserID"] = Auth.auth().currentUser?.uid
-        postDict["ProfileURL"] = Auth.auth().currentUser?.providerData[0].photoURL?.absoluteString
-        postDict["Description"] = descriptionTextView.text
-        postDict["Amount"] = amountTextField.text
-        
-        postDict["DatePosted"] = Date().description
-        
-        let implementGeoLocations : String
-        postDict["UserLatitude"] = userLocation.latitude.description
-        postDict["UserLongitude"] = userLocation.longitude.description
-        
-        let key = ref?.child("Listings").childByAutoId().key
-        postDict["ListingKey"] = key
-        
-        ref?.child("Listings").child(key!).setValue(postDict)
-        ref?.child("UserPosts").child((Auth.auth().currentUser?.uid)!).updateChildValues([key! : true])
-        
-        for followerKey in followerKeyList {
-            ref?.child("FollowerPosts").child(followerKey).updateChildValues([key! : true])
+        if let key = ref?.child("Listings").childByAutoId().key {
+            
+            
+            geoFireRef = ref?.child("GeoLocations")
+            geoFire = GeoFire(firebaseRef: geoFireRef)
+            geoFire?.setLocation(getUserLocation(), forKey: key)
+            
+            //todo check for null fields and create alert with activity bar
+            postDict["Username"] = Auth.auth().currentUser?.displayName
+            postDict["UserID"] = Auth.auth().currentUser?.uid
+            postDict["ProfileURL"] = Auth.auth().currentUser?.providerData[0].photoURL?.absoluteString
+            postDict["Description"] = descriptionTextView.text
+            postDict["Amount"] = amountTextField.text
+            
+            postDict["DatePosted"] = Date().description
+                        
+            ref?.child("Listings").child(key).updateChildValues(postDict)
+            ref?.child("UserPosts").child((Auth.auth().currentUser?.uid)!).updateChildValues([key : true])
+            
+            for followerKey in followerKeyList {
+                ref?.child("FollowerPosts").child(followerKey).updateChildValues([key : true])
+            }
+            
+            
+            
+            manager.stopUpdatingLocation()
+            
+            presentingViewController?.dismiss(animated: true, completion: nil)
+            
+        } else {
+            let keyFailed: String
         }
+    }
+    
+    func getUserLocation() -> CLLocation {
         
-        manager.stopUpdatingLocation()
+        let lat = userLocation.latitude
+        let long = userLocation.longitude
+        let location = CLLocation(latitude: lat, longitude: long)
         
-        presentingViewController?.dismiss(animated: true, completion: nil)
+        return location
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
