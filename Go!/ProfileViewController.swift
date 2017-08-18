@@ -34,7 +34,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         let user = Auth.auth().currentUser
         
-        let implementApprovalProcess : String
+        let implementApprovalProcessFollwingMechanicsm : String
         
         if !following {
             
@@ -91,13 +91,13 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
             // get reference to database
             ref = Database.database().reference()
             
-            ref?.child("Users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+            ref?.child(Keys.Users.rawValue).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
                 
                 let value = snapshot.value as? [String : AnyObject]
                 
-                self.userNameLabel.text = value?["Username"] as? String
+                self.userNameLabel.text = value?[Keys.Username.rawValue] as? String
                 
-                if let urlString = value?["ProfileURL"] as? String {
+                if let urlString = value?[Keys.ProfileURL.rawValue] as? String {
                     if let url = URL(string: urlString) {
                         self.setUserProfilePhoto(url: url)
                         self.followButton.isHidden = false
@@ -106,7 +106,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
             })
             
-            ref?.child("Following").child((Auth.auth().currentUser?.uid)!).queryOrderedByKey().queryEqual(toValue: uid).observeSingleEvent(of: .childAdded, with: { (followingSnapshot) in
+            ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).queryOrderedByKey().queryEqual(toValue: uid).observeSingleEvent(of: .childAdded, with: { (followingSnapshot) in
                 
                 print("Friends set data update ")
                 print(followingSnapshot.value.unsafelyUnwrapped)

@@ -40,27 +40,27 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBAction func savePressed(_ sender: Any) {
         
-        if let key = ref?.child("Listings").childByAutoId().key {
+        if let key = ref?.child(Keys.Listings.rawValue).childByAutoId().key {
             
             
-            geoFireRef = ref?.child("GeoLocations")
+            geoFireRef = ref?.child(Keys.GeoLocations.rawValue)
             geoFire = GeoFire(firebaseRef: geoFireRef)
             geoFire?.setLocation(getUserLocation(), forKey: key)
             
             //todo check for null fields and create alert with activity bar
-            postDict["Username"] = Auth.auth().currentUser?.displayName
-            postDict["UserID"] = Auth.auth().currentUser?.uid
-            postDict["ProfileURL"] = Auth.auth().currentUser?.providerData[0].photoURL?.absoluteString
-            postDict["Description"] = descriptionTextView.text
-            postDict["Amount"] = amountTextField.text
+            postDict[Keys.Username.rawValue] = Auth.auth().currentUser?.displayName
+            postDict[Keys.UserID.rawValue] = Auth.auth().currentUser?.uid
+            postDict[Keys.ProfileURL.rawValue] = Auth.auth().currentUser?.providerData[0].photoURL?.absoluteString
+            postDict[Keys.Description.rawValue] = descriptionTextView.text
+            postDict[Keys.Amount.rawValue] = amountTextField.text
             
-            postDict["DatePosted"] = Date().description
+            postDict[Keys.DatePosted.rawValue] = Date().description
                         
-            ref?.child("Listings").child(key).updateChildValues(postDict)
-            ref?.child("UserPosts").child((Auth.auth().currentUser?.uid)!).updateChildValues([key : true])
+            ref?.child(Keys.Listings.rawValue).child(key).updateChildValues(postDict)
+            ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).updateChildValues([key : true])
             
             for followerKey in followerKeyList {
-                ref?.child("FollowerPosts").child(followerKey).updateChildValues([key : true])
+                ref?.child(Keys.FollowingPosts.rawValue).child(followerKey).updateChildValues([key : true])
             }
             
             
@@ -95,7 +95,7 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         // Do any additional setup after loading the view.
         ref = Database.database().reference()
         
-        ref?.child("Followers").child((Auth.auth().currentUser?.uid)!).queryOrderedByKey().observeSingleEvent(of: .childAdded, with: { (friendSnapshot) in
+        ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).queryOrderedByKey().observeSingleEvent(of: .childAdded, with: { (friendSnapshot) in
             
             print("follower snapshot " + friendSnapshot.key)
             self.followerKeyList.append(friendSnapshot.key)

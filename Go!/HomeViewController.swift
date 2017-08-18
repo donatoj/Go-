@@ -81,16 +81,16 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // get reference to database
         ref = Database.database().reference()
         
-        geoFireRef = ref?.child("GeoLocations")
+        geoFireRef = ref?.child(Keys.GeoLocations.rawValue)
         geoFire = GeoFire(firebaseRef: geoFireRef)
         
-        ref?.child("UserPosts").child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (userPostSnapshot) in
+        ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (userPostSnapshot) in
             
             let listingKey = userPostSnapshot.key
             
             self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
                 
-                self.ref?.child("Listings").queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
+                self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
                     
                     if let listingItem = listingSnapshot.value as? [String : Any] {
                         let newListing = ListingsDataSource.sharedInstance.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
@@ -102,12 +102,12 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             })
         })
         
-        ref?.child("FollowerPosts").child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followerPostSnapshot) in
+        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followerPostSnapshot) in
             
             let listingKey = followerPostSnapshot.key
             
             self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
-                self.ref?.child("Listings").queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
+                self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
                     
                     if let listingItem = listingSnapshot.value as? [String : Any] {
                         let newListing = ListingsDataSource.sharedInstance.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
@@ -121,49 +121,49 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
         })
         
-        ref?.child("FollowerPosts").child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followerPostSnapshot) in
+        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followerPostSnapshot) in
             
             self.followerListings.removeValue(forKey: followerPostSnapshot.key)
             self.updateListings()
         })
         
-        ref?.child("Following").child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followingSnapshot) in
+        ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followingSnapshot) in
 
             let uid = followingSnapshot.key
-            self.ref?.child("UserPosts").child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
+            self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
                 
                 if let listins = userPostSnapshot.value as? [String : Bool] {
                     for listingKey in listins.keys {
-                        self.ref?.child("FollowerPosts").child((Auth.auth().currentUser?.uid)!).updateChildValues([listingKey : true])
+                        self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).updateChildValues([listingKey : true])
                     }
                 }
             })
         })
         
-        ref?.child("Following").child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followingSnapshot) in
+        ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followingSnapshot) in
 
             let uid = followingSnapshot.key
-            self.ref?.child("UserPosts").child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
+            self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
                 
                 if let listings = userPostSnapshot.value as? [String : Bool] {
                     for listingKey in listings.keys {
-                        self.ref?.child("FollowerPosts").child((Auth.auth().currentUser?.uid)!).child(listingKey).removeValue()
+                        self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).child(listingKey).removeValue()
                     }
                 }
             })
         })
         
-        ref?.child("Listings").observe(.childRemoved, with: { (listingSnapshot) in
+        ref?.child(Keys.Listings.rawValue).observe(.childRemoved, with: { (listingSnapshot) in
             
-            self.ref?.child("Listings").child(listingSnapshot.key).removeValue()
+            self.ref?.child(Keys.Listings.rawValue).child(listingSnapshot.key).removeValue()
             self.worldListings.removeValue(forKey: listingSnapshot.key)
             
             if let listingValue = listingSnapshot.value as? [String : Any] {
-                self.ref?.child("UserPosts").child(listingValue["UserID"]! as! String).child(listingSnapshot.key).removeValue()
+                self.ref?.child(Keys.UserPosts.rawValue).child(listingValue["UserID"]! as! String).child(listingSnapshot.key).removeValue()
                 self.selfListings.removeValue(forKey: listingSnapshot.key)
             }
             
-            self.ref?.child("FollowerPosts").child((Auth.auth().currentUser?.uid)!).child(listingSnapshot.key).removeValue()
+            self.ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).child(listingSnapshot.key).removeValue()
             self.followerListings.removeValue(forKey: listingSnapshot.key)
             
             
@@ -228,7 +228,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
                 print("key entered " + key! + " location " + (location?.description)!)
                 
-                self.ref?.child("Listings").queryOrderedByKey().queryEqual(toValue: key).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
+                self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: key).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
                     
                     let listingKey = listingSnapshot.key
                     if let listingItem = listingSnapshot.value as? [String : Any] {
