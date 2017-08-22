@@ -21,54 +21,55 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var geoFireRef : DatabaseReference?
     var geoFire : GeoFire?
-    var query : GFQuery?
+    var query : GFCircleQuery?
+    var geoQueryHandle : DatabaseHandle?
+    
+    var radius = 5.0
+    var listingLimit = 5
+    var worldListingCount = 0
     
     var databaseListingsHandle : DatabaseHandle?
     var databaseFriendsHandle : DatabaseHandle?
     
     var worldListings = [String : Listing]()
-    var followerListings = [String : Listing]()
+    var followingistings = [String : Listing]()
     var selfListings = [String : Listing]()
     
     var currentListings = [Listing]()
     
+    var worldListingKeys = [String]()
+    
     let manager = CLLocationManager()
     var userLocation = CLLocation()
     
-    var geoQueryObserving : Bool = false
-    
-    @IBAction func OnSegmentValueChanged(_ sender: Any) {
+    func geoFireTest() {
         
-        updateListings()
+        //geoFireRef = ref?.child("GeoLocations")
+        //geoFire = GeoFire(firebaseRef: geoFireRef)
+        
+        
+        let lat2 : CLLocationDegrees = 34.765
+        let long2 : CLLocationDegrees = 12.345
+        let loc2 : CLLocation = CLLocation(latitude: lat2, longitude: long2)
+        
+        let query = geoFire?.query(at: loc2, withRadius: 1000.0)
+        
+        // Query location by region
+        let span = MKCoordinateSpanMake(10, 10)
+        let region = MKCoordinateRegionMake(loc2.coordinate, span)
+        let regionQuery = geoFire?.query(with: region)
+        
+        query?.observe(.keyEntered, with: { (key, location) in
+            print("Key test entered " + key!)
+        })
+        
+        let lat : CLLocationDegrees = 34.765
+        let long : CLLocationDegrees = 12.345
+        let loc : CLLocation = CLLocation(latitude: lat, longitude: long)
+        
+        geoFire?.setLocation(loc, forKey: Auth.auth().currentUser?.uid)
+
     }
-    
-//    func geoFireTest() {
-//        
-//        //geoFireRef = ref?.child("GeoLocations")
-//        //geoFire = GeoFire(firebaseRef: geoFireRef)
-//        
-//        let lat : CLLocationDegrees = 34.765
-//        let long : CLLocationDegrees = 12.345
-//        let loc : CLLocation = CLLocation(latitude: lat, longitude: long)
-//        
-//        geoFire?.setLocation(loc, forKey: Auth.auth().currentUser?.uid)
-//        
-//        let lat2 : CLLocationDegrees = 34.765
-//        let long2 : CLLocationDegrees = 12.345
-//        let loc2 : CLLocation = CLLocation(latitude: lat2, longitude: long2)
-//        
-//        let query = geoFire?.query(at: loc2, withRadius: 1000.0)
-//        
-//        // Query location by region
-//        let span = MKCoordinateSpanMake(10, 10)
-//        let region = MKCoordinateRegionMake(loc2.coordinate, span)
-//        let regionQuery = geoFire?.query(with: region)
-//        
-//        
-//        query?.observe(.keyEntered, with: { (key, location) in
-//            print("Key test entered " + key!)
-//        })
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,9 +84,61 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         geoFireRef = ref?.child(Keys.GeoLocations.rawValue)
         geoFire = GeoFire(firebaseRef: geoFireRef)
+        query = geoFire?.query(at: userLocation, withRadius: 5)
+        
+        geoQueryHandle = query?.observe(.keyEntered, with: { (key, location) in
+            
+            print("key entered " + key! + " location " + (location?.description)!)
+            
+            //self.worldListingKeys.append(key!)
+            self.worldListingCount += 1
+            
+            self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: key).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
+                
+                let listingKey = listingSnapshot.key
+                if let listingItem = listingSnapshot.value as? [String : Any] {
+                    
+                    let newListing = ListingsDataSource.sharedInstance.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
+                    self.worldListings[listingKey] = newListing
+                    print("World listing updated")
+                    
+                    self.updateListings()
+                    
+                }
+            })
+            
+            
+        })
+        
+        query?.observe(.keyExited, with: { (key, location) in
+            
+            print("key exited " + key!)
+            self.worldListingCount -= 1
+            self.worldListings.removeValue(forKey: key!)
+            self.updateListings()
+        })
+        
+        query?.observeReady({
+            
+            print("Query observe Ready")
+            
+            if self.worldListingCount < self.listingLimit {
+                
+                if (self.query?.radius.isLessThanOrEqualTo(5000.0))! {
+                   self.query?.radius += 5
+                    print("update radius " + (self.query?.radius.description)!)
+                } else {
+                    let stopLoading: String
+                }
+                
+            } else {
+                let stopLoading: String
+            }
+
+        })
         
         ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (userPostSnapshot) in
-            
+            print("User post added " + userPostSnapshot.key)
             let listingKey = userPostSnapshot.key
             
             self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
@@ -103,7 +156,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         })
         
         ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followerPostSnapshot) in
-            
+            print("Following post added " + followerPostSnapshot.key)
             let listingKey = followerPostSnapshot.key
             
             self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
@@ -111,7 +164,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     
                     if let listingItem = listingSnapshot.value as? [String : Any] {
                         let newListing = ListingsDataSource.sharedInstance.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-                        self.followerListings[listingKey] = newListing
+                        self.followingistings[listingKey] = newListing
                         self.updateListings()
                     }
                     
@@ -122,13 +175,13 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         })
         
         ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followerPostSnapshot) in
-            
-            self.followerListings.removeValue(forKey: followerPostSnapshot.key)
+            print("Following post removed " + followerPostSnapshot.key)
+            self.followingistings.removeValue(forKey: followerPostSnapshot.key)
             self.updateListings()
         })
         
         ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followingSnapshot) in
-
+            print("Following child added " + followingSnapshot.key)
             let uid = followingSnapshot.key
             self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
                 
@@ -141,7 +194,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         })
         
         ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followingSnapshot) in
-
+            print("Following removed " + followingSnapshot.key)
             let uid = followingSnapshot.key
             self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
                 
@@ -154,9 +207,10 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         })
         
         ref?.child(Keys.Listings.rawValue).observe(.childRemoved, with: { (listingSnapshot) in
-            
+            print("Listing removed " + listingSnapshot.key)
             self.ref?.child(Keys.Listings.rawValue).child(listingSnapshot.key).removeValue()
-            self.worldListings.removeValue(forKey: listingSnapshot.key)
+            self.ref?.child(Keys.GeoLocations.rawValue).child(listingSnapshot.key).removeValue()
+            //self.worldListings.removeValue(forKey: listingSnapshot.key)
             
             if let listingValue = listingSnapshot.value as? [String : Any] {
                 self.ref?.child(Keys.UserPosts.rawValue).child(listingValue["UserID"]! as! String).child(listingSnapshot.key).removeValue()
@@ -164,11 +218,12 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             
             self.ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).child(listingSnapshot.key).removeValue()
-            self.followerListings.removeValue(forKey: listingSnapshot.key)
+            self.followingistings.removeValue(forKey: listingSnapshot.key)
             
             
             self.updateListings()
         })
+        
         
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
@@ -176,17 +231,41 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         manager.startUpdatingLocation()
     }
     
-    func updateListings() {
+    override func viewDidAppear(_ animated: Bool) {
+        print("View Did Appear")
+        //updateListings()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+        print("MEMORY WARNING")
+    }
+    
+    @IBAction func OnSegmentValueChanged(_ sender: Any) {
         
+        updateListings()
+    }
+    
+    func updateListings() {
+        print("Update listings")
         switch segmentControl.selectedSegmentIndex {
         case 0:
-            currentListings = Array(worldListings.values)
+            currentListings = Array(worldListings.values).sorted(by: { (listing1, listing2) -> Bool in
+                return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
+            })
             break
         case 1:
-            currentListings = Array(followerListings.values)
+            currentListings = Array(followingistings.values).sorted(by: { (listing1, listing2) -> Bool in
+                return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
+            })
+
             break
         case 2:
-            currentListings = Array(selfListings.values)
+            currentListings = Array(selfListings.values).sorted(by: { (listing1, listing2) -> Bool in
+                return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
+            })
+
             break
         default:
             break
@@ -196,6 +275,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.separatorStyle = .none
         
     }
+
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
@@ -204,59 +284,22 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         separatorLine.backgroundColor = UIColor.lightGray
         separatorLine.tag = 1
         cell.addSubview(separatorLine)
-    }
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        let location = locations[0]
-        let userLocationCoordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        userLocation = CLLocation(latitude: userLocationCoordinate.latitude, longitude: userLocationCoordinate.longitude)
-        //print(userLocation)
-        
-        if geoQueryObserving == false {
+        let lastElement = currentListings.count - 1
+        if indexPath.row == lastElement  {
             
-            geoQueryObserving = true
+            if worldListingCount >= listingLimit {
+                listingLimit = worldListingCount + 5
+                print("Will Display Cell last element index path row " + indexPath.row.description + " listing limit " + listingLimit.description)
+                let startLoading: String
+            }
             
-            query = geoFire?.query(at: userLocation, withRadius: 200.0)
-            query?.observe(.keyEntered, with: { (key, location) in
-                
-                print("key entered " + key! + " location " + (location?.description)!)
-                
-                self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: key).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
-                    
-                    let listingKey = listingSnapshot.key
-                    if let listingItem = listingSnapshot.value as? [String : Any] {
-                        
-                        print("Update listings")
-                        let newListing = ListingsDataSource.sharedInstance.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-                        self.worldListings[listingKey] = newListing
-                        self.updateListings()
-                    }
-                })
-                
-                
-            })
             
-            query?.observe(.keyExited, with: { (key, location) in
-                
-                print("key exited " + key! + " location " + (location?.description)!)
-                
-                self.worldListings.removeValue(forKey: key!)
-                self.updateListings()
-            })
         }
-        
-        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+    
         return currentListings.count
     }
     
@@ -286,9 +329,21 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return cell 
     }
     
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        let location = locations[0]
+        let userLocationCoordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        userLocation = CLLocation(latitude: userLocationCoordinate.latitude, longitude: userLocationCoordinate.longitude)
+        
+        //print(userLocation)
+        query?.center = userLocation
+    }
+    
     deinit {
         print("HomeViewController Deinitialized")
     }
+    
+
     
      // MARK: - Navigation
      

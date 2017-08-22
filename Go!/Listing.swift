@@ -22,6 +22,10 @@ struct Listing {
     let longitude: CLLocationDegrees
     let key: String
     
+    var location: CLLocation {
+        return CLLocation(latitude: self.latitude, longitude: self.longitude)
+    }
+    
     let profilePhoto: UIImage?
     
     init(userName: String, uid: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, key: String) {
@@ -39,6 +43,10 @@ struct Listing {
         let url = URL(string: photoURL)
         let data = try? Data(contentsOf: url!)
         self.profilePhoto = UIImage(data: data!)
+    }
+    
+    func distance(to location: CLLocation) -> CLLocationDistance {
+        return location.distance(from: self.location)
     }
     
     func getDistanceFromListing(userLocation : CLLocation) -> String {
