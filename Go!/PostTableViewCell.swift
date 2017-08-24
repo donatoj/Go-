@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseDatabase
+import Firebase
 
 class PostTableViewCell: UITableViewCell {
 
@@ -25,26 +26,36 @@ class PostTableViewCell: UITableViewCell {
     
     @IBAction func OnRequestButtonPressed(_ sender: Any) {
         
-        if requested {
-            requestButton.alpha = 0.5
-            requestButton.setTitle("Request", for: UIControlState.normal)
-            requested = false
-        }
-        else {
-            requestButton.alpha = 1
-            requestButton.setTitle("Requested", for: UIControlState.normal)
-            requested = true
+        if requestButton.uid == Auth.auth().currentUser?.uid {
             
-            let request : [String : Bool] = [(Auth.auth().currentUser?.uid)! : false]
-            
-            ref?.child("Requests").child(requestButton.key).updateChildValues(request)
+            // go to approval table view
+        } else {
+            if requested {
+                requestButton.alpha = 1
+                requestButton.setTitle("Request", for: UIControlState.normal)
+                requested = false
+            }
+            else {
+                requestButton.alpha = 0.5
+                requestButton.setTitle("Requested", for: UIControlState.normal)
+                requested = true
+                
+                let request : [String : Bool] = [(Auth.auth().currentUser?.uid)! : false]
+                
+                ref?.child("Requests").child(requestButton.key).updateChildValues(request)
+            }
         }
+        
+
     }
     override func awakeFromNib() {
         
         super.awakeFromNib()
         // Initialization code
         ref = Database.database().reference()
+        
+        
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

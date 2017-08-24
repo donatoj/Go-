@@ -20,12 +20,12 @@ class ListingsDataSource {
         
         var newListing : Listing?
         
-        newListing = Listing(userName: withSnapshotValue["Username"]! as! String,
-                             uid: withSnapshotValue["UserID"]! as! String,
-                             description: withSnapshotValue["Description"]! as! String,
-                             amount: withSnapshotValue["Amount"]! as! String,
-                             photoURL: withSnapshotValue["ProfileURL"]! as! String,
-                             datePosted: withSnapshotValue["DatePosted"]! as! String,
+        newListing = Listing(userName: withSnapshotValue[Keys.Username.rawValue]! as! String,
+                             uid: withSnapshotValue[Keys.UserID.rawValue]! as! String,
+                             description: withSnapshotValue[Keys.Description.rawValue]! as! String,
+                             amount: withSnapshotValue[Keys.Amount.rawValue]! as! String,
+                             photoURL: withSnapshotValue[Keys.ProfileURL.rawValue]! as! String,
+                             datePosted: withSnapshotValue[Keys.DatePosted.rawValue]! as! String,
                              latitude: location.coordinate.latitude,
                              longitude: location.coordinate.longitude,
                              key: forKey

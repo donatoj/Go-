@@ -26,7 +26,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var radius = 5.0
     var listingLimit = 5
-    var worldListingCount = 0
+    let distanceLimit = 700.0
     
     var databaseListingsHandle : DatabaseHandle?
     var databaseFriendsHandle : DatabaseHandle?
@@ -37,47 +37,13 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var currentListings = [Listing]()
     
-    var worldListingKeys = [String]()
-    
     let manager = CLLocationManager()
     var userLocation = CLLocation()
-    
-    func geoFireTest() {
-        
-        //geoFireRef = ref?.child("GeoLocations")
-        //geoFire = GeoFire(firebaseRef: geoFireRef)
-        
-        
-        let lat2 : CLLocationDegrees = 34.765
-        let long2 : CLLocationDegrees = 12.345
-        let loc2 : CLLocation = CLLocation(latitude: lat2, longitude: long2)
-        
-        let query = geoFire?.query(at: loc2, withRadius: 1000.0)
-        
-        // Query location by region
-        let span = MKCoordinateSpanMake(10, 10)
-        let region = MKCoordinateRegionMake(loc2.coordinate, span)
-        let regionQuery = geoFire?.query(with: region)
-        
-        query?.observe(.keyEntered, with: { (key, location) in
-            print("Key test entered " + key!)
-        })
-        
-        let lat : CLLocationDegrees = 34.765
-        let long : CLLocationDegrees = 12.345
-        let loc : CLLocation = CLLocation(latitude: lat, longitude: long)
-        
-        geoFire?.setLocation(loc, forKey: Auth.auth().currentUser?.uid)
-
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 111
         
         // get reference to database
         ref = Database.database().reference()
@@ -90,20 +56,18 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             print("key entered " + key! + " location " + (location?.description)!)
             
-            //self.worldListingKeys.append(key!)
-            self.worldListingCount += 1
-            
             self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: key).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
                 
                 let listingKey = listingSnapshot.key
                 if let listingItem = listingSnapshot.value as? [String : Any] {
                     
-                    let newListing = ListingsDataSource.sharedInstance.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-                    self.worldListings[listingKey] = newListing
-                    print("World listing updated")
-                    
-                    self.updateListings()
-                    
+                    if listingItem[Keys.UserID.rawValue] as? String != Auth.auth().currentUser?.uid {
+                        let newListing = ListingsDataSource.sharedInstance.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
+                        self.worldListings[listingKey] = newListing
+                        print("World listing updated")
+                        
+                        self.updateListings()
+                    }
                 }
             })
             
@@ -113,7 +77,6 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         query?.observe(.keyExited, with: { (key, location) in
             
             print("key exited " + key!)
-            self.worldListingCount -= 1
             self.worldListings.removeValue(forKey: key!)
             self.updateListings()
         })
@@ -122,9 +85,9 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             print("Query observe Ready")
             
-            if self.worldListingCount < self.listingLimit {
+            if self.worldListings.count < self.listingLimit {
                 
-                if (self.query?.radius.isLessThanOrEqualTo(5000.0))! {
+                if (self.query?.radius.isLessThanOrEqualTo(self.distanceLimit))! {
                    self.query?.radius += 5
                     print("update radius " + (self.query?.radius.description)!)
                 } else {
@@ -224,6 +187,8 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.updateListings()
         })
         
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 111
         
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
@@ -288,8 +253,8 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let lastElement = currentListings.count - 1
         if indexPath.row == lastElement  {
             
-            if worldListingCount >= listingLimit {
-                listingLimit = worldListingCount + 5
+            if worldListings.count >= listingLimit {
+                listingLimit = worldListings.count + 5
                 print("Will Display Cell last element index path row " + indexPath.row.description + " listing limit " + listingLimit.description)
                 let startLoading: String
             }
@@ -325,6 +290,14 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.distance.text = listingItem.getDistanceFromListing(userLocation: userLocation)
         
         cell.selectionStyle = UITableViewCellSelectionStyle.none
+        
+        if cell.requestButton.uid == Auth.auth().currentUser?.uid {
+            cell.requestButton.backgroundColor = UIColor.red
+            cell.requestButton.setTitle("View Requests", for: UIControlState.normal)
+        } else {
+            cell.requestButton.backgroundColor = UIColor.green
+            cell.requestButton.setTitle("Request", for: UIControlState.normal)
+        }
         
         return cell 
     }
