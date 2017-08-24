@@ -180,7 +180,7 @@
                                                         <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="OnRequestButtonPressed:" destination="dcZ-sH-OWX" eventType="touchUpInside" id="clT-Ph-5hy"/>
+                                                        <action selector="OnRequestButtonPressed:" destination="0gY-dL-7rk" eventType="touchUpInside" id="5aw-9c-gDH"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -261,11 +261,84 @@
                     <connections>
                         <outlet property="segmentControl" destination="1IT-k9-fkI" id="MsU-v6-Ea5"/>
                         <outlet property="tableView" destination="nAP-tP-BgS" id="aoY-t0-c6u"/>
+                        <segue destination="mYw-Qy-qgj" kind="show" identifier="showRequests" id="WGJ-BM-lAy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OWk-MX-j6p" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1571.0144927536232" y="41.576086956521742"/>
+        </scene>
+        <!--Requests Table View Controller-->
+        <scene sceneID="TAq-Sn-7qh">
+            <objects>
+                <tableViewController id="mYw-Qy-qgj" customClass="RequestsTableViewController" customModule="Go_" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="57" sectionHeaderHeight="28" sectionFooterHeight="28" id="rEz-NU-aDd">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="requestCell" rowHeight="57" id="CLf-eW-ZEd" customClass="RequestTableViewCell" customModule="Go_" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="57"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CLf-eW-ZEd" id="hbt-KR-m6t">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="57"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="r1w-sM-LZf">
+                                            <rect key="frame" x="8" y="8" width="40" height="40"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="40" id="aDa-QC-11a"/>
+                                                <constraint firstAttribute="width" constant="40" id="faf-B9-FJW"/>
+                                            </constraints>
+                                        </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7KS-98-kJg" customClass="UserNameButton" customModule="Go_" customModuleProvider="target">
+                                            <rect key="frame" x="56" y="16" width="71" height="24.666666666666664"/>
+                                            <state key="normal" title="Username">
+                                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            </state>
+                                            <connections>
+                                                <segue destination="kwL-LA-W8z" kind="show" id="NzV-ug-Kh5"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mUs-0h-qWt">
+                                            <rect key="frame" x="348" y="8" width="58" height="41"/>
+                                            <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <state key="normal" title="Approve">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="onApprovePressed:" destination="CLf-eW-ZEd" eventType="touchUpInside" id="sCD-sr-Cxl"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="7KS-98-kJg" secondAttribute="bottom" constant="8" id="9zI-d6-Eji"/>
+                                        <constraint firstItem="mUs-0h-qWt" firstAttribute="bottom" secondItem="hbt-KR-m6t" secondAttribute="bottomMargin" id="A07-Bp-Zr4"/>
+                                        <constraint firstItem="r1w-sM-LZf" firstAttribute="top" secondItem="hbt-KR-m6t" secondAttribute="topMargin" id="ESt-aB-XHC"/>
+                                        <constraint firstItem="7KS-98-kJg" firstAttribute="leading" secondItem="r1w-sM-LZf" secondAttribute="trailing" constant="8" id="IXU-h5-tqX"/>
+                                        <constraint firstItem="r1w-sM-LZf" firstAttribute="bottom" secondItem="hbt-KR-m6t" secondAttribute="bottomMargin" id="dfH-qE-4ir"/>
+                                        <constraint firstItem="mUs-0h-qWt" firstAttribute="trailing" secondItem="hbt-KR-m6t" secondAttribute="trailingMargin" id="oXz-Au-3Rc"/>
+                                        <constraint firstItem="7KS-98-kJg" firstAttribute="top" secondItem="hbt-KR-m6t" secondAttribute="topMargin" constant="8" id="poT-Fw-pV0"/>
+                                        <constraint firstItem="r1w-sM-LZf" firstAttribute="leading" secondItem="hbt-KR-m6t" secondAttribute="leadingMargin" id="rok-o3-ifq"/>
+                                        <constraint firstItem="mUs-0h-qWt" firstAttribute="top" secondItem="hbt-KR-m6t" secondAttribute="topMargin" id="yBB-Te-CVN"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="approveButton" destination="mUs-0h-qWt" id="EIK-kJ-6Sd"/>
+                                    <outlet property="profileImageView" destination="r1w-sM-LZf" id="Ffq-8d-OGG"/>
+                                    <outlet property="userNameButton" destination="7KS-98-kJg" id="O2f-j8-fWR"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="mYw-Qy-qgj" id="Ewp-VS-du3"/>
+                            <outlet property="delegate" destination="mYw-Qy-qgj" id="nQY-HE-df2"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dyt-8c-W0D" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2328.985507246377" y="41.576086956521742"/>
         </scene>
         <!--Post View Controller-->
         <scene sceneID="bun-MI-LXg">

@@ -1,25 +1,20 @@
 //
-//  PostTableViewCell.swift
+//  RequestTableViewCell.swift
 //  Go!
 //
-//  Created by Jordan Donato on 7/26/17.
+//  Created by Jordan Donato on 8/24/17.
 //  Copyright © 2017 Go!. All rights reserved.
 //
 
 import UIKit
 
-class PostTableViewCell: UITableViewCell {
+class RequestTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var amountLabel: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var userNameButton: UIButton!
-    @IBOutlet weak var timeAgo: UILabel!
-    @IBOutlet weak var distance: UILabel!
-    @IBOutlet weak var requestButton: RequestButton!
-
+    @IBOutlet weak var userNameButton: UserNameButton!
+    @IBOutlet weak var approveButton: UIButton!
+    
     override func awakeFromNib() {
-        
         super.awakeFromNib()
         // Initialization code
     }
@@ -30,4 +25,7 @@ class PostTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+    @IBAction func onApprovePressed(_ sender: Any) {
+        
+    }
 }

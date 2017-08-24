@@ -12,6 +12,8 @@ class RequestButton: UIButton {
     
     var uid : String = ""
     var key : String = ""
+    var requested: Bool = false
+    
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
