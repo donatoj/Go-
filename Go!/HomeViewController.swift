@@ -63,14 +63,12 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let requestedStateBasedOnDatabase: String
             if requestButton.requested {
                 requestButton.alpha = 1
-                requestButton.setTitle("Request", for: UIControlState.normal)
                 requestButton.requested = false
                 
                 ListingsDataSource.sharedInstance.updateRequests(forKey: requestButton.key, updateChild: false)
             }
             else {
                 requestButton.alpha = 0.5
-                requestButton.setTitle("Requested", for: UIControlState.normal)
                 requestButton.requested = true
                 
                 ListingsDataSource.sharedInstance.updateRequests(forKey: requestButton.key, updateChild: true)
@@ -140,7 +138,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.requestButton.uid = listingItem.uid
         cell.requestButton.key = listingItem.key
         cell.descriptionLabel.text = listingItem.description
-        cell.amountLabel.text = "$" + listingItem.amount
+        cell.requestButton.setTitle("$" + listingItem.amount, for: UIControlState.normal)
         
         cell.profileImageView.image = listingItem.profilePhoto
         cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
@@ -153,11 +151,9 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         if cell.requestButton.uid == Auth.auth().currentUser?.uid {
             cell.requestButton.backgroundColor = UIColor.red
-            cell.requestButton.setTitle("View Requests", for: UIControlState.normal)
             cell.requestButton.alpha = 1
         } else {
             cell.requestButton.backgroundColor = UIColor.green
-            cell.requestButton.setTitle("Request", for: UIControlState.normal)
         }
         
         return cell 
