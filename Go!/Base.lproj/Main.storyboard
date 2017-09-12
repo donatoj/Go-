@@ -122,14 +122,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="139" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nAP-tP-BgS">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="692"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="139" id="dcZ-sH-OWX" customClass="PostTableViewCell" customModule="Go_" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="139"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dcZ-sH-OWX" id="oFo-D6-huH">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="139"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="138.66666666666666"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ODB-D6-XRO">
@@ -217,31 +217,32 @@
                                     <outlet property="delegate" destination="0gY-dL-7rk" id="GgL-3M-Epx"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zuc-D6-Lti">
-                                <rect key="frame" x="190" y="696" width="35" height="30"/>
-                                <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Post!">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="oen-nc-jcN" kind="presentation" id="dPm-JM-Hdn"/>
-                                </connections>
-                            </button>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4qR-jj-TjL">
+                                <rect key="frame" x="0.0" y="692" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem systemItem="organize" id="qAM-Bo-PGf"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Atf-qe-2tT"/>
+                                    <barButtonItem systemItem="compose" id="zIr-3d-deT">
+                                        <connections>
+                                            <segue destination="oen-nc-jcN" kind="presentation" id="vxN-oj-P10"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="nkB-9T-0hr" firstAttribute="top" secondItem="zuc-D6-Lti" secondAttribute="bottom" constant="10" id="3tg-XB-srw"/>
                             <constraint firstItem="nAP-tP-BgS" firstAttribute="leading" secondItem="7A0-pr-pbH" secondAttribute="leading" id="4tY-tQ-tBp"/>
-                            <constraint firstItem="zuc-D6-Lti" firstAttribute="centerX" secondItem="7A0-pr-pbH" secondAttribute="centerX" id="FAA-4c-YcI"/>
                             <constraint firstItem="nAP-tP-BgS" firstAttribute="top" secondItem="7A0-pr-pbH" secondAttribute="top" id="Ius-f9-9rc"/>
                             <constraint firstAttribute="trailing" secondItem="nAP-tP-BgS" secondAttribute="trailing" id="Xgg-Ko-O0V"/>
-                            <constraint firstItem="nkB-9T-0hr" firstAttribute="top" secondItem="nAP-tP-BgS" secondAttribute="bottom" id="oGv-gc-mwJ"/>
+                            <constraint firstItem="nkB-9T-0hr" firstAttribute="top" secondItem="nAP-tP-BgS" secondAttribute="bottom" constant="44" id="oGv-gc-mwJ"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="ZgI-Yy-2KV" userLabel="Home"/>
                     <navigationItem key="navigationItem" id="WkA-D2-wOv">
                         <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" systemItem="organize" id="QGR-lp-4Ua">
+                        <barButtonItem key="leftBarButtonItem" systemItem="bookmarks" id="QGR-lp-4Ua">
                             <connections>
                                 <segue destination="kwL-LA-W8z" kind="show" id="oIv-xd-N8h"/>
                             </connections>
@@ -272,7 +273,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OWk-MX-j6p" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="178" y="783"/>
+            <point key="canvasLocation" x="176.81159420289856" y="782.60869565217399"/>
         </scene>
         <!--Active Table View Controller-->
         <scene sceneID="WRF-JW-FNY">
@@ -524,6 +525,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="NzV-ug-Kh5"/>
+        <segue reference="oIv-xd-N8h"/>
     </inferredMetricsTieBreakers>
 </document>

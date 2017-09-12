@@ -26,7 +26,7 @@ class ActiveDetailViewController: UIViewController {
     }
 
     @IBAction func onCancelPressed(_ sender: UIButton) {
-        
+        dismiss(animated: true, completion: nil)
     }
     /*
     // MARK: - Navigation
