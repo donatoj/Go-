@@ -1,20 +1,19 @@
 //
-//  RequestTableViewCell.swift
+//  ActiveTableViewCell.swift
 //  Go!
 //
-//  Created by Jordan Donato on 8/24/17.
+//  Created by Jordan Donato on 9/7/17.
 //  Copyright © 2017 Go!. All rights reserved.
 //
 
 import UIKit
 
-class RequestTableViewCell: UITableViewCell {
+class ActiveTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var userNameButton: UserNameButton!
-    @IBOutlet weak var approveButton: ApproveButton!
     
-    var uid = String()
+    @IBOutlet weak var profileButton: UIButton!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,4 +26,6 @@ class RequestTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+    @IBAction func onProfileButtonPressed(_ sender: Any) {
+    }
 }

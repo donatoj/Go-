@@ -23,4 +23,5 @@ enum Keys: String {
     case Amount = "Amount"
     case DatePosted = "DatePosted"
     case Description = "Description"
+    case Active = "Active"
 }

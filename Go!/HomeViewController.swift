@@ -48,8 +48,9 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     @IBAction func OnSegmentValueChanged(_ sender: Any) {
-        updateListings()
+        updateListings(segmentChanged: true)
     }
+    
     @IBAction func OnRequestButtonPressed(_ sender: Any) {
         
         let requestButton = sender as! RequestButton
@@ -76,33 +77,57 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    func updateListings() {
+    var previousCase : Int = 0
+    //var previousListing : [Listing]
+    
+    func updateListings(segmentChanged : Bool) {
         print("Update listings")
+        let indexSet = IndexSet(integer: 0)
         switch segmentControl.selectedSegmentIndex {
         case 0:
             currentListings = Array(ListingsDataSource.sharedInstance.worldListings.values).sorted(by: { (listing1, listing2) -> Bool in
                 return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
             })
+            if segmentChanged {
+                tableView.reloadSections(indexSet, with: UITableViewRowAnimation.right)
+                previousCase = 0
+            } else {
+                tableView.reloadSections(indexSet, with: UITableViewRowAnimation.automatic)
+            }
+            
             break
         case 1:
             currentListings = Array(ListingsDataSource.sharedInstance.followingistings.values).sorted(by: { (listing1, listing2) -> Bool in
                 return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
             })
-
+            if segmentChanged {
+                if previousCase < 1 {
+                    tableView.reloadSections(indexSet, with: UITableViewRowAnimation.left)
+                } else {
+                    tableView.reloadSections(indexSet, with: UITableViewRowAnimation.right)
+                }
+            } else {
+                tableView.reloadSections(indexSet, with: UITableViewRowAnimation.automatic)
+            }
+            
             break
         case 2:
             currentListings = Array(ListingsDataSource.sharedInstance.selfListings.values).sorted(by: { (listing1, listing2) -> Bool in
                 return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
             })
-
+            if segmentChanged {
+                tableView.reloadSections(indexSet, with: UITableViewRowAnimation.left)
+                previousCase = 2
+            } else {
+                tableView.reloadSections(indexSet, with: UITableViewRowAnimation.automatic)
+            }
+            
             break
         default:
             break
         }
         
-        tableView.reloadData()
-        tableView.separatorStyle = .none
-        
+         tableView.separatorStyle = .none
     }
 
     
@@ -167,7 +192,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         //print(userLocation)
         ListingsDataSource.sharedInstance.query?.center = userLocation
-        updateListings()
+        updateListings(segmentChanged: false)
     }
     
     deinit {

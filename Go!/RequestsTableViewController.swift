@@ -66,6 +66,19 @@ class RequestsTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    @IBAction func OnApproveButtonPressed(_ sender: Any) {
+        
+        let approveButton = sender as! ApproveButton
+        
+        print("approve button " + approveButton.uid + " pressed")
+        
+        var activeUsers = ["Poster": (Auth.auth().currentUser?.uid)!, "Approved": approveButton.uid]
+        
+        let childUpdates = ["/\(approveButton.uid)/\(key)" : activeUsers,
+                            "/\((Auth.auth().currentUser?.uid)!)/\(key)" : activeUsers]
+        ref?.child(Keys.Active.rawValue).updateChildValues(childUpdates)
+    }
 
     // MARK: - Table view data source
 
@@ -86,6 +99,7 @@ class RequestsTableViewController: UITableViewController {
         // Configure the cell...
         cell.userNameButton.setTitle(requestingUsers[indexPath.row], for: .normal)
         cell.userNameButton.uid = requestingUserIDs[indexPath.row]
+        cell.approveButton.uid = requestingUserIDs[indexPath.row]
         cell.profileImageView.image = requestingUserPhotos[indexPath.row]
         cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
         cell.profileImageView.clipsToBounds = true;
