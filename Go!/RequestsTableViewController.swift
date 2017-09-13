@@ -98,7 +98,7 @@ class RequestsTableViewController: UITableViewController {
 
         // Configure the cell...
         cell.userNameButton.setTitle(requestingUsers[indexPath.row], for: .normal)
-        cell.userNameButton.uid = requestingUserIDs[indexPath.row]
+        cell.userNameButton.tag = indexPath.row
         
         cell.approveButton.tag = indexPath.row
         cell.approveButton.addTarget(self, action: #selector(OnApproveButtonPressed(_:)), for: .touchUpInside)
@@ -153,10 +153,11 @@ class RequestsTableViewController: UITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-        if let userNameButton = sender as? UserNameButton {
+        if let button = sender as? UIButton {
             print("sender is ui button")
             let nextScene = segue.destination as! ProfileViewController
-            nextScene.uid = userNameButton.uid
+            let uid = requestingUserIDs[button.tag]
+            nextScene.uid = uid
         }
         else {
             print("sender is not a ui button")

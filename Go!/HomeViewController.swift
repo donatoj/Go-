@@ -166,7 +166,8 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
         // check for only items not from user
         cell.userNameButton.setTitle(listingItem.userName, for: UIControlState.normal)
-        (cell.userNameButton as! UserNameButton).uid = listingItem.uid
+        cell.userNameButton.tag = indexPath.row
+        
         cell.descriptionLabel.text = listingItem.description
         
         cell.requestButton.setTitle("$" + listingItem.amount, for: UIControlState.normal)
@@ -214,22 +215,17 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
      // Get the new view controller using segue.destinationViewController.
      // Pass the selected object to the new view controller.
         
-        if let userNameButton = sender as? UserNameButton {
-            print("sender is ui button")
-            let nextScene = segue.destination as! ProfileViewController
-            nextScene.uid = userNameButton.uid
-        }
-        else {
-            print("sender is not a ui button")
-        }
-        
         if let button = sender as? UIButton {
             if (button.accessibilityIdentifier?.contains("requestButton"))! {
                 print("sender is request button")
                 let nextScene = segue.destination as! RequestsTableViewController
                 let listingItem = currentListings[button.tag]
                 nextScene.key = listingItem.key
-            } else {
+            } else if (button.accessibilityIdentifier?.contains("usernameButton"))!{
+                print("sender is ui button")
+                let nextScene = segue.destination as! ProfileViewController
+                let listingItem = currentListings[button.tag]
+                nextScene.uid = listingItem.uid
                 
             }
         }

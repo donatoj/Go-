@@ -11,7 +11,7 @@ import UIKit
 class RequestTableViewCell: UITableViewCell {
 
     @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var userNameButton: UserNameButton!
+    @IBOutlet weak var userNameButton: UIButton!
     @IBOutlet weak var approveButton: UIButton!
     
     var uid = String()

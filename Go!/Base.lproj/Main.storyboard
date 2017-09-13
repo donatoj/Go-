@@ -145,8 +145,9 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Ms-EI-oQB" customClass="UserNameButton" customModule="Go_" customModuleProvider="target">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Ms-EI-oQB">
                                                     <rect key="frame" x="61" y="5" width="276" height="30"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="usernameButton"/>
                                                     <state key="normal" title="Username">
                                                         <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
@@ -403,8 +404,9 @@
                                                 <constraint firstAttribute="width" constant="40" id="faf-B9-FJW"/>
                                             </constraints>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7KS-98-kJg" customClass="UserNameButton" customModule="Go_" customModuleProvider="target">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7KS-98-kJg">
                                             <rect key="frame" x="56" y="16" width="71" height="24"/>
+                                            <accessibility key="accessibilityConfiguration" identifier="usernameButton"/>
                                             <state key="normal" title="Username">
                                                 <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             </state>
@@ -520,6 +522,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="NzV-ug-Kh5"/>
+        <segue reference="oIv-xd-N8h"/>
     </inferredMetricsTieBreakers>
 </document>
