@@ -35,10 +35,15 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
+        
+        let url = URL(string: (Auth.auth().currentUser?.providerData[0].photoURL?.absoluteString)!)
+        let data = try? Data(contentsOf: url!)
+        navigationItem.leftBarButtonItems?[0].image = UIImage(data: data!)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         print("View Did Appear")
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -51,29 +56,31 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         updateListings(segmentChanged: true)
     }
     
-    @IBAction func OnRequestButtonPressed(_ sender: Any) {
+    func buttonAction(_ sender: UIButton) {
         
-        let requestButton = sender as! RequestButton
+        let listingItem = currentListings[sender.tag]
         
-        if requestButton.uid == Auth.auth().currentUser?.uid {
+        if listingItem.uid == Auth.auth().currentUser?.uid {
             
+            let removeThisWhenSelfPostsAreDone : String
             // go to approval table view\
-            self.performSegue(withIdentifier: "showRequests", sender: requestButton)
+            self.performSegue(withIdentifier: "showRequests", sender: sender)
             
         } else {
             let requestedStateBasedOnDatabase: String
-            if requestButton.requested {
-                requestButton.alpha = 1
-                requestButton.requested = false
-                
-                ListingsDataSource.sharedInstance.updateRequests(forKey: requestButton.key, updateChild: false)
-            }
-            else {
-                requestButton.alpha = 0.5
-                requestButton.requested = true
-                
-                ListingsDataSource.sharedInstance.updateRequests(forKey: requestButton.key, updateChild: true)
-            }
+//            if requestButton.requested {
+//                requestButton.alpha = 1
+//                requestButton.requested = false
+//                
+//                ListingsDataSource.sharedInstance.updateRequests(forKey: requestButton.key, updateChild: false)
+//            }
+//            else {
+//                requestButton.alpha = 0.5
+//                requestButton.requested = true
+//                
+//                ListingsDataSource.sharedInstance.updateRequests(forKey: requestButton.key, updateChild: true)
+//            }
+            ListingsDataSource.sharedInstance.updateRequests(forKey: listingItem.key, updateChild: true)
         }
     }
     
@@ -133,10 +140,10 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        cell.viewWithTag(1)?.removeFromSuperview()
+        cell.viewWithTag(-1)?.removeFromSuperview()
         let separatorLine = UIImageView.init(frame: CGRect(x: 61, y: cell.frame.height - 1, width: cell.frame.width - 61, height: 1))
         separatorLine.backgroundColor = UIColor.lightGray
-        separatorLine.tag = 1
+        separatorLine.tag = -1
         cell.addSubview(separatorLine)
         
         let lastElement = currentListings.count - 1
@@ -160,10 +167,11 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // check for only items not from user
         cell.userNameButton.setTitle(listingItem.userName, for: UIControlState.normal)
         (cell.userNameButton as! UserNameButton).uid = listingItem.uid
-        cell.requestButton.uid = listingItem.uid
-        cell.requestButton.key = listingItem.key
         cell.descriptionLabel.text = listingItem.description
+        
         cell.requestButton.setTitle("$" + listingItem.amount, for: UIControlState.normal)
+        cell.requestButton.tag = indexPath.row
+        cell.requestButton.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
         
         cell.profileImageView.image = listingItem.profilePhoto
         cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
@@ -174,7 +182,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         cell.selectionStyle = UITableViewCellSelectionStyle.none
         
-        if cell.requestButton.uid == Auth.auth().currentUser?.uid {
+        if listingItem.uid == Auth.auth().currentUser?.uid {
             cell.requestButton.backgroundColor = UIColor.red
             cell.requestButton.alpha = 1
         } else {
@@ -215,10 +223,16 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             print("sender is not a ui button")
         }
         
-        if let requestButton = sender as? RequestButton {
-            print("sender is request button")
-            let nextScene = segue.destination as! RequestsTableViewController
-            nextScene.key = requestButton.key
+        if let button = sender as? UIButton {
+            if (button.accessibilityIdentifier?.contains("requestButton"))! {
+                print("sender is request button")
+                let nextScene = segue.destination as! RequestsTableViewController
+                let listingItem = currentListings[button.tag]
+                nextScene.key = listingItem.key
+            } else {
+                
+            }
         }
+            
      }
 }

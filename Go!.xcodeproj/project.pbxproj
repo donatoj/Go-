@@ -10,11 +10,9 @@
 		171BF02E1F366F520048A222 /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171BF02D1F366F520048A222 /* Listing.swift */; };
 		171BF0321F3AF42C0048A222 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 171BF0311F3AF42C0048A222 /* CoreLocation.framework */; };
 		171BF0341F3F0ADA0048A222 /* UserNameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171BF0331F3F0ADA0048A222 /* UserNameButton.swift */; };
-		171BF0361F4057B00048A222 /* RequestButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171BF0351F4057B00048A222 /* RequestButton.swift */; };
 		171BF0381F42D9970048A222 /* ListingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171BF0371F42D9970048A222 /* ListingsDataSource.swift */; };
 		172C1B541F62548A001826CE /* ActiveTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B531F62548A001826CE /* ActiveTableViewController.swift */; };
 		172C1B561F625532001826CE /* ActiveTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B551F625532001826CE /* ActiveTableViewCell.swift */; };
-		172C1B581F6270A9001826CE /* ApproveButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B571F6270A9001826CE /* ApproveButton.swift */; };
 		172C1B601F6412F1001826CE /* user-role.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 172C1B5F1F6412F1001826CE /* user-role.jpg */; };
 		172C1B621F67B923001826CE /* ActiveDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B611F67B923001826CE /* ActiveDetailViewController.swift */; };
 		17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */; };
@@ -38,11 +36,9 @@
 		171BF02D1F366F520048A222 /* Listing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Listing.swift; sourceTree = "<group>"; };
 		171BF0311F3AF42C0048A222 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		171BF0331F3F0ADA0048A222 /* UserNameButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNameButton.swift; sourceTree = "<group>"; };
-		171BF0351F4057B00048A222 /* RequestButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestButton.swift; sourceTree = "<group>"; };
 		171BF0371F42D9970048A222 /* ListingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListingsDataSource.swift; sourceTree = "<group>"; };
 		172C1B531F62548A001826CE /* ActiveTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTableViewController.swift; sourceTree = "<group>"; };
 		172C1B551F625532001826CE /* ActiveTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTableViewCell.swift; sourceTree = "<group>"; };
-		172C1B571F6270A9001826CE /* ApproveButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApproveButton.swift; sourceTree = "<group>"; };
 		172C1B5F1F6412F1001826CE /* user-role.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "user-role.jpg"; path = "../../../../../user-role.jpg"; sourceTree = "<group>"; };
 		172C1B611F67B923001826CE /* ActiveDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveDetailViewController.swift; sourceTree = "<group>"; };
 		17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -90,9 +86,7 @@
 		172C1B591F62725E001826CE /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
-				172C1B571F6270A9001826CE /* ApproveButton.swift */,
 				171BF0331F3F0ADA0048A222 /* UserNameButton.swift */,
-				171BF0351F4057B00048A222 /* RequestButton.swift */,
 			);
 			name = Buttons;
 			sourceTree = "<group>";
@@ -370,12 +364,10 @@
 			files = (
 				172C1B561F625532001826CE /* ActiveTableViewCell.swift in Sources */,
 				178296591ED17964008C64BA /* PostViewController.swift in Sources */,
-				171BF0361F4057B00048A222 /* RequestButton.swift in Sources */,
 				171BF02E1F366F520048A222 /* Listing.swift in Sources */,
 				177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */,
 				175F2E8B1F47183300931A9B /* Keys.swift in Sources */,
 				171BF0341F3F0ADA0048A222 /* UserNameButton.swift in Sources */,
-				172C1B581F6270A9001826CE /* ApproveButton.swift in Sources */,
 				17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */,
 				177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */,
 				178296541ECC3877008C64BA /* HomeViewController.swift in Sources */,

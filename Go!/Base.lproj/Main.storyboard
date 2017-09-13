@@ -129,7 +129,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="139"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dcZ-sH-OWX" id="oFo-D6-huH">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="138.66666666666666"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="139"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ODB-D6-XRO">
@@ -166,9 +166,10 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8O4-0E-X2k" customClass="RequestButton" customModule="Go_" customModuleProvider="target">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8O4-0E-X2k">
                                                     <rect key="frame" x="346" y="12" width="60" height="30"/>
                                                     <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="requestButton"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="8Wi-Fh-jni"/>
                                                         <constraint firstAttribute="width" constant="60" id="fEa-yn-EZy"/>
@@ -177,9 +178,6 @@
                                                     <state key="normal" title="$569">
                                                         <color key="titleColor" red="0.95121412620000001" green="1" blue="0.95223098790000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     </state>
-                                                    <connections>
-                                                        <action selector="OnRequestButtonPressed:" destination="0gY-dL-7rk" eventType="touchUpInside" id="5aw-9c-gDH"/>
-                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -251,9 +249,9 @@
                             <rect key="frame" x="117.5" y="7" width="179" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
-                                <segment title="All"/>
+                                <segment title="Nearby"/>
                                 <segment title="Friends"/>
-                                <segment title="Self"/>
+                                <segment title="Direct"/>
                             </segments>
                             <connections>
                                 <action selector="OnSegmentValueChanged:" destination="0gY-dL-7rk" eventType="valueChanged" id="4ZC-N8-IZl"/>
@@ -414,15 +412,12 @@
                                                 <segue destination="kwL-LA-W8z" kind="show" id="NzV-ug-Kh5"/>
                                             </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mUs-0h-qWt" customClass="ApproveButton" customModule="Go_" customModuleProvider="target">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mUs-0h-qWt">
                                             <rect key="frame" x="348" y="8" width="58" height="40"/>
                                             <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <state key="normal" title="Approve">
                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
-                                            <connections>
-                                                <action selector="OnApproveButtonPressed:" destination="mYw-Qy-qgj" eventType="touchUpInside" id="UP0-uw-43a"/>
-                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
@@ -525,6 +520,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="oIv-xd-N8h"/>
+        <segue reference="NzV-ug-Kh5"/>
     </inferredMetricsTieBreakers>
 </document>
