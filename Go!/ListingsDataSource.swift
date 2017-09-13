@@ -244,4 +244,9 @@ class ListingsDataSource {
         }
     }
     
+    func removeAllObservers() {
+        
+        ref?.removeAllObservers()
+    }
+    
 }

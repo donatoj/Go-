@@ -26,7 +26,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        ListingsDataSource.sharedInstance.registerObservers(userLocation: userLocation)
+        
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 111
@@ -34,7 +34,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
-        manager.startUpdatingLocation()
+        
         
         let url = URL(string: (Auth.auth().currentUser?.providerData[0].photoURL?.absoluteString)!)
         let data = try? Data(contentsOf: url!)
@@ -43,7 +43,13 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     override func viewDidAppear(_ animated: Bool) {
         print("View Did Appear")
-        
+        ListingsDataSource.sharedInstance.registerObservers(userLocation: userLocation)
+        manager.startUpdatingLocation()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        ListingsDataSource.sharedInstance.removeAllObservers()
+        manager.stopUpdatingLocation()
     }
     
     override func didReceiveMemoryWarning() {
