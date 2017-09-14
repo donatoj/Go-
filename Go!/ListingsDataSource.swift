@@ -35,6 +35,9 @@ class ListingsDataSource {
         
         var newListing : Listing?
         
+        let requests = withSnapshotValue["Requests"] as? [String: Bool]
+        let requested = requests?[(Auth.auth().currentUser?.uid)!] != nil
+        
         newListing = Listing(userName: withSnapshotValue[Keys.Username.rawValue]! as! String,
                              uid: withSnapshotValue[Keys.UserID.rawValue]! as! String,
                              description: withSnapshotValue[Keys.Description.rawValue]! as! String,
@@ -43,7 +46,8 @@ class ListingsDataSource {
                              datePosted: withSnapshotValue[Keys.DatePosted.rawValue]! as! String,
                              latitude: location.coordinate.latitude,
                              longitude: location.coordinate.longitude,
-                             key: forKey
+                             key: forKey,
+                             requested: requested
         )
         
        return newListing
@@ -238,9 +242,13 @@ class ListingsDataSource {
         if updateChild {
             
             let request : [String : Bool] = [(Auth.auth().currentUser?.uid)! : false]
-            ref?.child("Requests").child(forKey).updateChildValues(request)
+            ref?.child(Keys.Listings.rawValue).child(forKey).child("Requests").updateChildValues(request)
+            worldListings[forKey]?.requested = true
+            followingistings[forKey]?.requested = true
         } else {
-            ref?.child("Requests").child(forKey).removeValue()
+            ref?.child(Keys.Listings.rawValue).child(forKey).child("Requests").removeValue()
+            worldListings[forKey]?.requested = false
+            followingistings[forKey]?.requested = false
         }
     }
     

@@ -99,7 +99,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="G3h-y9-AFs">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.40000000600000002" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="0gY-dL-7rk" kind="relationship" relationship="rootViewController" id="7cQ-LW-2AW"/>
@@ -121,9 +121,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="139" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nAP-tP-BgS">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="139" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nAP-tP-BgS">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="692"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="139" id="dcZ-sH-OWX" customClass="PostTableViewCell" customModule="Go_" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="139"/>
@@ -140,7 +140,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Tt-3m-V5J">
-                                                    <rect key="frame" x="61" y="58" width="345" height="64"/>
+                                                    <rect key="frame" x="61" y="58" width="345" height="65"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -169,7 +169,6 @@
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8O4-0E-X2k">
                                                     <rect key="frame" x="346" y="12" width="60" height="30"/>
-                                                    <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="requestButton"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="8Wi-Fh-jni"/>
@@ -177,7 +176,7 @@
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                     <state key="normal" title="$569">
-                                                        <color key="titleColor" red="0.95121412620000001" green="1" blue="0.95223098790000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <color key="titleColor" red="0.0" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                 </button>
                                             </subviews>
@@ -219,10 +218,14 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4qR-jj-TjL">
                                 <rect key="frame" x="0.0" y="692" width="414" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <items>
-                                    <barButtonItem systemItem="organize" id="qAM-Bo-PGf"/>
+                                    <barButtonItem systemItem="organize" id="qAM-Bo-PGf">
+                                        <color key="tintColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Atf-qe-2tT"/>
                                     <barButtonItem systemItem="compose" id="zIr-3d-deT">
+                                        <color key="tintColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <segue destination="oen-nc-jcN" kind="presentation" id="vxN-oj-P10"/>
                                         </connections>
@@ -230,7 +233,8 @@
                                 </items>
                             </toolbar>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="nAP-tP-BgS" firstAttribute="leading" secondItem="7A0-pr-pbH" secondAttribute="leading" id="4tY-tQ-tBp"/>
                             <constraint firstItem="nAP-tP-BgS" firstAttribute="top" secondItem="7A0-pr-pbH" secondAttribute="top" id="Ius-f9-9rc"/>
@@ -242,6 +246,7 @@
                     <navigationItem key="navigationItem" id="WkA-D2-wOv">
                         <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" systemItem="bookmarks" id="QGR-lp-4Ua">
+                            <color key="tintColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="kwL-LA-W8z" kind="show" id="oIv-xd-N8h"/>
                             </connections>
@@ -254,11 +259,13 @@
                                 <segment title="Friends"/>
                                 <segment title="Direct"/>
                             </segments>
+                            <color key="tintColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="OnSegmentValueChanged:" destination="0gY-dL-7rk" eventType="valueChanged" id="4ZC-N8-IZl"/>
                             </connections>
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="8LI-Tb-tog">
+                            <color key="tintColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="Z81-sS-WN9" kind="show" id="ctT-7g-q9y"/>
                             </connections>
@@ -468,7 +475,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="64" id="yJK-ZG-uAs"/>
                                 </constraints>
-                                <color key="barTintColor" red="0.40000000600000002" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <items>
                                     <navigationItem title="Post" id="ZR4-4N-fPj">
                                         <barButtonItem key="leftBarButtonItem" systemItem="trash" id="gSI-6D-PPr">

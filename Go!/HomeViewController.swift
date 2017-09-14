@@ -27,7 +27,6 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         // Do any additional setup after loading the view.
         
-        
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 111
         
@@ -35,10 +34,6 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
         
-        
-        let url = URL(string: (Auth.auth().currentUser?.providerData[0].photoURL?.absoluteString)!)
-        let data = try? Data(contentsOf: url!)
-        navigationItem.leftBarButtonItems?[0].image = UIImage(data: data!)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -48,6 +43,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     override func viewDidDisappear(_ animated: Bool) {
+        print("View Did disappear")
         ListingsDataSource.sharedInstance.removeAllObservers()
         manager.stopUpdatingLocation()
     }
@@ -61,8 +57,8 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBAction func OnSegmentValueChanged(_ sender: Any) {
         updateListings(segmentChanged: true)
     }
-    
-    func buttonAction(_ sender: UIButton) {
+
+    func onRequestPressed(_ sender: UIButton) {
         
         let listingItem = currentListings[sender.tag]
         
@@ -73,112 +69,85 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.performSegue(withIdentifier: "showRequests", sender: sender)
             
         } else {
-            let requestedStateBasedOnDatabase: String
-//            if requestButton.requested {
-//                requestButton.alpha = 1
-//                requestButton.requested = false
-//                
-//                ListingsDataSource.sharedInstance.updateRequests(forKey: requestButton.key, updateChild: false)
-//            }
-//            else {
-//                requestButton.alpha = 0.5
-//                requestButton.requested = true
-//                
-//                ListingsDataSource.sharedInstance.updateRequests(forKey: requestButton.key, updateChild: true)
-//            }
-            ListingsDataSource.sharedInstance.updateRequests(forKey: listingItem.key, updateChild: true)
+            ListingsDataSource.sharedInstance.updateRequests(forKey: listingItem.key, updateChild: !listingItem.requested)
+            updateListings(segmentChanged: false)
         }
     }
-    
-    var previousCase : Int = 0
-    //var previousListing : [Listing]
+
     
     func updateListings(segmentChanged : Bool) {
         print("Update listings")
-        let indexSet = IndexSet(integer: 0)
+
         switch segmentControl.selectedSegmentIndex {
         case 0:
             currentListings = Array(ListingsDataSource.sharedInstance.worldListings.values).sorted(by: { (listing1, listing2) -> Bool in
                 return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
             })
-            if segmentChanged {
-                tableView.reloadSections(indexSet, with: UITableViewRowAnimation.right)
-                previousCase = 0
-            } else {
-                tableView.reloadSections(indexSet, with: UITableViewRowAnimation.automatic)
-            }
             
             break
         case 1:
             currentListings = Array(ListingsDataSource.sharedInstance.followingistings.values).sorted(by: { (listing1, listing2) -> Bool in
                 return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
             })
-            if segmentChanged {
-                if previousCase < 1 {
-                    tableView.reloadSections(indexSet, with: UITableViewRowAnimation.left)
-                } else {
-                    tableView.reloadSections(indexSet, with: UITableViewRowAnimation.right)
-                }
-            } else {
-                tableView.reloadSections(indexSet, with: UITableViewRowAnimation.automatic)
-            }
             
             break
         case 2:
             currentListings = Array(ListingsDataSource.sharedInstance.selfListings.values).sorted(by: { (listing1, listing2) -> Bool in
                 return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
             })
-            if segmentChanged {
-                tableView.reloadSections(indexSet, with: UITableViewRowAnimation.left)
-                previousCase = 2
-            } else {
-                tableView.reloadSections(indexSet, with: UITableViewRowAnimation.automatic)
-            }
             
             break
         default:
             break
         }
+        tableView.reloadData()
+        tableView.separatorStyle = .none
         
-         tableView.separatorStyle = .none
     }
 
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        cell.viewWithTag(-1)?.removeFromSuperview()
-        let separatorLine = UIImageView.init(frame: CGRect(x: 61, y: cell.frame.height - 1, width: cell.frame.width - 61, height: 1))
-        separatorLine.backgroundColor = UIColor.lightGray
-        separatorLine.tag = -1
-        cell.addSubview(separatorLine)
-        
         let lastElement = currentListings.count - 1
-        if indexPath.row == lastElement  {
+        if indexPath.section == lastElement  {
             
             ListingsDataSource.sharedInstance.updateListingLimit()
         }
     }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let headerview = UIView()
+        headerview.backgroundColor = UIColor.clear
+        return headerview
+        
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        
+        return currentListings.count
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     
-        return currentListings.count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PostTableViewCell
         
-        let listingItem = currentListings[indexPath.row]
+        let listingItem = currentListings[indexPath.section]
                 
         // check for only items not from user
         cell.userNameButton.setTitle(listingItem.userName, for: UIControlState.normal)
-        cell.userNameButton.tag = indexPath.row
+        cell.userNameButton.tag = indexPath.section
         
         cell.descriptionLabel.text = listingItem.description
-        
-        cell.requestButton.setTitle("$" + listingItem.amount, for: UIControlState.normal)
-        cell.requestButton.tag = indexPath.row
-        cell.requestButton.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
         
         cell.profileImageView.image = listingItem.profilePhoto
         cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
@@ -189,11 +158,20 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         cell.selectionStyle = UITableViewCellSelectionStyle.none
         
-        if listingItem.uid == Auth.auth().currentUser?.uid {
-            cell.requestButton.backgroundColor = UIColor.red
-            cell.requestButton.alpha = 1
+        cell.requestButton.setTitle("$" + listingItem.amount, for: UIControlState.normal)
+        cell.requestButton.layer.borderWidth = 1
+        cell.requestButton.layer.borderColor = UIColor.blue.cgColor
+        cell.requestButton.layer.cornerRadius = 8
+        cell.requestButton.clipsToBounds = true
+        cell.requestButton.tag = indexPath.section
+        cell.requestButton.addTarget(self, action: #selector(onRequestPressed(_:)), for: .touchUpInside)
+        
+        if listingItem.requested {
+            cell.requestButton.backgroundColor = UIColor.blue
+            cell.requestButton.setTitleColor(UIColor.white, for: .normal)
         } else {
-            cell.requestButton.backgroundColor = UIColor.green
+            cell.requestButton.backgroundColor = UIColor.white
+            cell.requestButton.setTitleColor(UIColor.blue, for: .normal)
         }
         
         return cell 

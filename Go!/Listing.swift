@@ -21,6 +21,7 @@ struct Listing {
     let latitude: CLLocationDegrees
     let longitude: CLLocationDegrees
     let key: String
+    var requested: Bool
     
     var location: CLLocation {
         return CLLocation(latitude: self.latitude, longitude: self.longitude)
@@ -28,7 +29,7 @@ struct Listing {
     
     let profilePhoto: UIImage?
     
-    init(userName: String, uid: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, key: String) {
+    init(userName: String, uid: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, key: String, requested: Bool) {
         
         self.userName = userName
         self.uid = uid
@@ -39,6 +40,7 @@ struct Listing {
         self.latitude = latitude
         self.longitude = longitude
         self.key = key
+        self.requested = requested
         
         let url = URL(string: photoURL)
         let data = try? Data(contentsOf: url!)
