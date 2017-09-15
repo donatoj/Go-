@@ -76,11 +76,11 @@ class ActiveTableViewController: UITableViewController {
         print("getting user data for " + userID)
         self.ref?.child(Keys.Users.rawValue).child(userID).observeSingleEvent(of: .value, with: { (usersSnapshot) in
             print(usersSnapshot)
-            if let values = usersSnapshot.value as? [String : String] {
+            if let values = usersSnapshot.value as? [String : Any] {
                 let username = values[Keys.Username.rawValue]!
                 let profileURL = values[Keys.ProfileURL.rawValue]!
                 
-                let url = URL(string: profileURL)
+                let url = URL(string: profileURL as! String)
                 let data = try? Data(contentsOf: url!)
                 let photo = UIImage(data: data!)
                 
@@ -89,7 +89,7 @@ class ActiveTableViewController: UITableViewController {
                     print("description " + description.value.debugDescription)
                     let description = description.value as! String
                     
-                    self.activeUsers.append(username)
+                    self.activeUsers.append(username as! String)
                     self.activeUserPhotos.append(photo!)
                     self.activeUserIDs.append(userID)
                     self.activeDescriptions.append(description)

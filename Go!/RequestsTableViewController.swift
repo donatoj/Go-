@@ -52,21 +52,23 @@ class RequestsTableViewController: UITableViewController {
         
         let createRequestssDataSource: String
         
-        ref?.child(Keys.Requests.rawValue).child(key).observe(.childAdded, with: { (snapshot) in
+        ref?.child(Keys.Listings.rawValue).child(key).child(Keys.Requests.rawValue).observe(.childAdded, with: { (snapshot) in
             
             let userID = snapshot.key
+            print("requesting user " + userID)
             
             self.ref?.child(Keys.Users.rawValue).child(userID).observeSingleEvent(of: .value, with: { (usersSnapshot) in
                 print(usersSnapshot)
-                if let values = usersSnapshot.value as? [String : String] {
+                if let values = usersSnapshot.value as? [String : Any] {
+                    print("update table data with snapshot baluye " + values.debugDescription)
                     let username = values[Keys.Username.rawValue]!
                     let profileURL = values[Keys.ProfileURL.rawValue]!
                     
-                    let url = URL(string: profileURL)
+                    let url = URL(string: profileURL as! String)
                     let data = try? Data(contentsOf: url!)
                     let photo = UIImage(data: data!)
                     
-                    self.requestingUsers.append(username)
+                    self.requestingUsers.append(username as! String)
                     self.requestingUserPhotos.append(photo!)
                     self.requestingUserIDs.append(userID)
                     
