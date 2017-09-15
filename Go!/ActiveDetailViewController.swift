@@ -38,4 +38,7 @@ class ActiveDetailViewController: UIViewController {
     }
     */
 
+    deinit {
+        print("ActiveDetailViewController Deinitialized")
+    }
 }

@@ -14,6 +14,7 @@ enum Keys: String {
     case Listings = "Listings"
     case FollowingPosts = "FollowingPosts"
     case Following = "Following"
+    case Followers = "Followers"
     case Requests = "Requests"
     case UserPosts = "UserPosts"
     case Users = "Users"

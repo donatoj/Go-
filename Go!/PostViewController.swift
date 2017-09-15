@@ -40,30 +40,28 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBAction func savePressed(_ sender: Any) {
         
-        if let key = ref?.child(Keys.Listings.rawValue).childByAutoId().key {
-            
+        if let key = ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).childByAutoId().key {
             
             geoFireRef = ref?.child(Keys.GeoLocations.rawValue)
             geoFire = GeoFire(firebaseRef: geoFireRef)
             geoFire?.setLocation(getUserLocation(), forKey: key)
             
-            //todo check for null fields and create alert with activity bar
+            let checkfornullfieldsandcreatealertwithactivitybar : String
+            
             postDict[Keys.Username.rawValue] = Auth.auth().currentUser?.displayName
             postDict[Keys.UserID.rawValue] = Auth.auth().currentUser?.uid
             postDict[Keys.ProfileURL.rawValue] = Auth.auth().currentUser?.providerData[0].photoURL?.absoluteString
             postDict[Keys.Description.rawValue] = descriptionTextView.text
             postDict[Keys.Amount.rawValue] = amountTextField.text
-            
             postDict[Keys.DatePosted.rawValue] = Date().description
-                        
-            ref?.child(Keys.Listings.rawValue).child(key).updateChildValues(postDict)
-            ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).updateChildValues([key : true])
             
+            var childUpdates = [String : Any]()
+            childUpdates["/\(Keys.Listings.rawValue)/\(key)"] = postDict
+            childUpdates["/\(Keys.UserPosts.rawValue)/\((Auth.auth().currentUser?.uid)!)/\(key)"] = true
             for followerKey in followerKeyList {
-                ref?.child(Keys.FollowingPosts.rawValue).child(followerKey).updateChildValues([key : true])
-            }
+                childUpdates["/\(Keys.FollowingPosts.rawValue)/\(followerKey)/\(key)"] = true            }
             
-            
+            ref?.updateChildValues(childUpdates)
             
             manager.stopUpdatingLocation()
             
@@ -95,21 +93,29 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         // Do any additional setup after loading the view.
         ref = Database.database().reference()
         
-        ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).queryOrderedByKey().observeSingleEvent(of: .childAdded, with: { (friendSnapshot) in
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.requestWhenInUseAuthorization()
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Followers.rawValue).queryOrderedByKey().observe( .childAdded, with: { (friendSnapshot) in
             
             print("follower snapshot " + friendSnapshot.key)
             self.followerKeyList.append(friendSnapshot.key)
             
         })
         
-        manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         view.endEditing(true)
+        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Followers.rawValue).removeAllObservers()
+        
+        manager.stopUpdatingLocation()
     }
 
     override func didReceiveMemoryWarning() {

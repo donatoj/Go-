@@ -125,6 +125,24 @@ class ListingsDataSource {
         })
     }
     
+    func registerListingRemoved() {
+        
+        ref?.child(Keys.Listings.rawValue).observe(.childRemoved, with: { (listingSnapshot) in
+            print("Listing removed " + listingSnapshot.key)
+            self.ref?.child(Keys.Listings.rawValue).child(listingSnapshot.key).removeValue()
+            self.ref?.child(Keys.GeoLocations.rawValue).child(listingSnapshot.key).removeValue()
+            //self.worldListings.removeValue(forKey: listingSnapshot.key)
+            
+            if let listingValue = listingSnapshot.value as? [String : Any] {
+                self.ref?.child(Keys.UserPosts.rawValue).child(listingValue["UserID"]! as! String).child(listingSnapshot.key).removeValue()
+                self.selfListings.removeValue(forKey: listingSnapshot.key)
+            }
+            
+            self.ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).child(listingSnapshot.key).removeValue()
+            self.followingistings.removeValue(forKey: listingSnapshot.key)
+        })
+    }
+    
     func registerFollowingPostAdded() {
         
         ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followerPostSnapshot) in
@@ -156,13 +174,13 @@ class ListingsDataSource {
     
     func registerFollowingAdded() {
         
-        ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followingSnapshot) in
+        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).observe(.childAdded, with: { (followingSnapshot) in
             print("Following child added " + followingSnapshot.key)
             let uid = followingSnapshot.key
             self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
                 
-                if let listins = userPostSnapshot.value as? [String : Bool] {
-                    for listingKey in listins.keys {
+                if let listings = userPostSnapshot.value as? [String : Bool] {
+                    for listingKey in listings.keys {
                         self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).updateChildValues([listingKey : true])
                     }
                 }
@@ -172,7 +190,7 @@ class ListingsDataSource {
     
     func registerFollowingRemoved() {
         
-        ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followingSnapshot) in
+        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).observe(.childRemoved, with: { (followingSnapshot) in
             print("Following removed " + followingSnapshot.key)
             let uid = followingSnapshot.key
             self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
@@ -186,23 +204,7 @@ class ListingsDataSource {
         })
     }
     
-    func registerListingRemoved() {
-        
-        ref?.child(Keys.Listings.rawValue).observe(.childRemoved, with: { (listingSnapshot) in
-            print("Listing removed " + listingSnapshot.key)
-            self.ref?.child(Keys.Listings.rawValue).child(listingSnapshot.key).removeValue()
-            self.ref?.child(Keys.GeoLocations.rawValue).child(listingSnapshot.key).removeValue()
-            //self.worldListings.removeValue(forKey: listingSnapshot.key)
-            
-            if let listingValue = listingSnapshot.value as? [String : Any] {
-                self.ref?.child(Keys.UserPosts.rawValue).child(listingValue["UserID"]! as! String).child(listingSnapshot.key).removeValue()
-                self.selfListings.removeValue(forKey: listingSnapshot.key)
-            }
-            
-            self.ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).child(listingSnapshot.key).removeValue()
-            self.followingistings.removeValue(forKey: listingSnapshot.key)
-        })
-    }
+
     
     func registerObservers(userLocation : CLLocation)  {
         
@@ -254,7 +256,13 @@ class ListingsDataSource {
     
     func removeAllObservers() {
         
-        ref?.removeAllObservers()
+        query?.removeAllObservers()
+        
+        ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
+        ref?.child(Keys.Listings.rawValue).removeAllObservers()
+        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
+        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).removeAllObservers()
+        
     }
     
 }

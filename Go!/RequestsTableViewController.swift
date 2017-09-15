@@ -26,16 +26,42 @@ class RequestsTableViewController: UITableViewController {
         // get reference to database
         ref = Database.database().reference()
         
+        let createRequestssDataSource: String
+        
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 111
+
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        registerRequestsObserver()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        
+        ref?.child(Keys.Requests.rawValue).child(key).removeAllObservers()
+    }
+    
+    func registerRequestsObserver() {
+        
         ref?.child(Keys.Requests.rawValue).child(key).observe(.childAdded, with: { (snapshot) in
             
             let userID = snapshot.key
-        
+            
             self.ref?.child(Keys.Users.rawValue).child(userID).observeSingleEvent(of: .value, with: { (usersSnapshot) in
                 print(usersSnapshot)
                 if let values = usersSnapshot.value as? [String : String] {
                     let username = values[Keys.Username.rawValue]!
                     let profileURL = values[Keys.ProfileURL.rawValue]!
-       
+                    
                     let url = URL(string: profileURL)
                     let data = try? Data(contentsOf: url!)
                     let photo = UIImage(data: data!)
@@ -49,17 +75,6 @@ class RequestsTableViewController: UITableViewController {
                 
             })
         })
-        
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 111
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -164,5 +179,8 @@ class RequestsTableViewController: UITableViewController {
         }
     }
     
-
+    deinit {
+        
+        print("RequestsTableViewController deinitialized")
+    }
 }

@@ -34,8 +34,19 @@ class ActiveTableViewController: UITableViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 111
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
+        
+        let createActivesDataSource: String
+        
+        registerActivesObserver()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        ref?.child(Keys.Active.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
+    }
+    
+    func registerActivesObserver() {
         
         ref?.child(Keys.Active.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (snapshot) in
             
@@ -141,7 +152,10 @@ class ActiveTableViewController: UITableViewController {
         return cell
     }
  
-
+    deinit {
+        
+        print("ActiveTableViewController deinitialized")
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

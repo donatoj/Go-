@@ -34,20 +34,21 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         let user = Auth.auth().currentUser
         
-        let implementApprovalProcessFollwingMechanicsm : String
-        
         if !following {
             
             following = true
-
-            self.ref?.child("Following").child((user?.uid)!).updateChildValues([uid : true])
-            self.ref?.child("Followers").child(uid).updateChildValues([(user?.uid)! : true])
+            let childUpdates = ["/\((user?.uid)!)/\(Keys.Following.rawValue)/\(uid)" : true,
+                                "/\(uid)/\(Keys.Followers.rawValue)/\((user?.uid)!)" : true]
+            self.ref?.child(Keys.Users.rawValue).updateChildValues(childUpdates)
         } else {
             
             following = false
             
-            self.ref?.child("Following").child((user?.uid)!).child(uid).removeValue()
-            self.ref?.child("Followers").child(uid).child((user?.uid)!).removeValue()
+            let childUpdates = ["/\((user?.uid)!)/\(Keys.Following.rawValue)/\(uid)" : NSNull(),
+                                "/\(uid)/\(Keys.Followers.rawValue)/\((user?.uid)!)" : NSNull()]
+            
+            
+            self.ref?.child(Keys.Users.rawValue).updateChildValues(childUpdates)
         }
         
         updateFollowButton()
@@ -104,20 +105,17 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
                     }
                 }
                 
-            })
-            
-            ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).queryOrderedByKey().queryEqual(toValue: uid).observeSingleEvent(of: .childAdded, with: { (followingSnapshot) in
-                
-                print("Friends set data update ")
-                print(followingSnapshot.value.unsafelyUnwrapped)
-                if followingSnapshot.value is NSNull {
-                    print("not following")
-                    self.following = false
-                } else {
-                    print("following")
-                    self.following = true
+                if let followers = value?[Keys.Followers.rawValue] as? [String : Any] {
+                    
+                    if followers[(Auth.auth().currentUser?.uid)!] != nil {
+                        self.following = true
+                    } else {
+                        self.following = false
+                    }
+                    
+                    self.updateFollowButton()
                 }
-                self.updateFollowButton()
+                
             })
         }
     }

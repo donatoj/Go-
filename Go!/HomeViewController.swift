@@ -12,7 +12,7 @@ import Firebase
 import CoreLocation
 
 
-class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
+class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
@@ -21,6 +21,8 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     let manager = CLLocationManager()
     var userLocation = CLLocation()
+    
+    var searchController : UISearchController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +36,18 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
         
+        searchController = UISearchController(searchResultsController:  nil)
+        
+        searchController.searchResultsUpdater = self
+        searchController.delegate = self
+        searchController.searchBar.delegate = self
+        
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.dimsBackgroundDuringPresentation = true
+        
+        //navigationItem.titleView = searchController.searchBar
+        tableView.tableHeaderView = searchController.searchBar
+        definesPresentationContext = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -57,21 +71,21 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBAction func OnSegmentValueChanged(_ sender: Any) {
         updateListings(segmentChanged: true)
     }
-
-    func onRequestPressed(_ sender: UIButton) {
+    
+    func updateSearchResults(for searchController: UISearchController) {
         
-        let listingItem = currentListings[sender.tag]
+        print("update search results")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        if listingItem.uid == Auth.auth().currentUser?.uid {
-            
-            let removeThisWhenSelfPostsAreDone : String
-            // go to approval table view\
-            self.performSegue(withIdentifier: "showRequests", sender: sender)
-            
-        } else {
-            ListingsDataSource.sharedInstance.updateRequests(forKey: listingItem.key, updateChild: !listingItem.requested)
-            updateListings(segmentChanged: false)
-        }
+        let location = locations[0]
+        let userLocationCoordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        userLocation = CLLocation(latitude: userLocationCoordinate.latitude, longitude: userLocationCoordinate.longitude)
+        
+        //print(userLocation)
+        ListingsDataSource.sharedInstance.query?.center = userLocation
+        updateListings(segmentChanged: false)
     }
 
     
@@ -177,15 +191,20 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return cell 
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func onRequestPressed(_ sender: UIButton) {
         
-        let location = locations[0]
-        let userLocationCoordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        userLocation = CLLocation(latitude: userLocationCoordinate.latitude, longitude: userLocationCoordinate.longitude)
+        let listingItem = currentListings[sender.tag]
         
-        //print(userLocation)
-        ListingsDataSource.sharedInstance.query?.center = userLocation
-        updateListings(segmentChanged: false)
+        if listingItem.uid == Auth.auth().currentUser?.uid {
+            
+            let removeThisWhenSelfPostsAreDone : String
+            // go to approval table view\
+            self.performSegue(withIdentifier: "showRequests", sender: sender)
+            
+        } else {
+            ListingsDataSource.sharedInstance.updateRequests(forKey: listingItem.key, updateChild: !listingItem.requested)
+            updateListings(segmentChanged: false)
+        }
     }
     
     deinit {
