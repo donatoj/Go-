@@ -26,8 +26,6 @@ class RequestsTableViewController: UITableViewController {
         // get reference to database
         ref = Database.database().reference()
         
-        let createRequestssDataSource: String
-        
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 111
 
@@ -51,6 +49,8 @@ class RequestsTableViewController: UITableViewController {
     }
     
     func registerRequestsObserver() {
+        
+        let createRequestssDataSource: String
         
         ref?.child(Keys.Requests.rawValue).child(key).observe(.childAdded, with: { (snapshot) in
             

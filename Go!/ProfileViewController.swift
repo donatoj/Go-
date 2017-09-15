@@ -34,6 +34,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         let user = Auth.auth().currentUser
         
+        let implementfromFollowingDatasource : String
         if !following {
             
             following = true
@@ -75,49 +76,61 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate {
     func setUserData() {
         // not from UI button
         if uid == "" || uid == Auth.auth().currentUser?.uid{
-            print("UID is self")
-            
-            let user = Auth.auth().currentUser
-            userNameLabel.text = user?.displayName
-            
-            let url = (user?.providerData[0].photoURL)!
-            setUserProfilePhoto(url: url)
-            
-            // allow logout
-            showFBLoginButton()
-            followButton.isHidden = true
+            getCurrentUserData()
             
         } else {
-            print("UID is other")
-            // get reference to database
-            ref = Database.database().reference()
-            
-            ref?.child(Keys.Users.rawValue).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
-                
-                let value = snapshot.value as? [String : AnyObject]
-                
-                self.userNameLabel.text = value?[Keys.Username.rawValue] as? String
-                
-                if let urlString = value?[Keys.ProfileURL.rawValue] as? String {
-                    if let url = URL(string: urlString) {
-                        self.setUserProfilePhoto(url: url)
-                        self.followButton.isHidden = false
-                    }
-                }
-                
-                if let followers = value?[Keys.Followers.rawValue] as? [String : Any] {
-                    
-                    if followers[(Auth.auth().currentUser?.uid)!] != nil {
-                        self.following = true
-                    } else {
-                        self.following = false
-                    }
-                    
-                    self.updateFollowButton()
-                }
-                
-            })
+            getOtherUserData()
         }
+    }
+    
+    func getCurrentUserData() {
+        
+        print("UID is self")
+        
+        let user = Auth.auth().currentUser
+        userNameLabel.text = user?.displayName
+        
+        let url = (user?.providerData[0].photoURL)!
+        setUserProfilePhoto(url: url)
+        
+        // allow logout
+        showFBLoginButton()
+        followButton.isHidden = true
+    }
+    
+    func getOtherUserData() {
+        
+        print("UID is other")
+        let considerimplementingUserDataSource : String
+        
+        // get reference to database
+        ref = Database.database().reference()
+
+        ref?.child(Keys.Users.rawValue).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            let value = snapshot.value as? [String : AnyObject]
+            
+            self.userNameLabel.text = value?[Keys.Username.rawValue] as? String
+            
+            if let urlString = value?[Keys.ProfileURL.rawValue] as? String {
+                if let url = URL(string: urlString) {
+                    self.setUserProfilePhoto(url: url)
+                    self.followButton.isHidden = false
+                }
+            }
+            
+            if let followers = value?[Keys.Followers.rawValue] as? [String : Any] {
+                
+                if followers[(Auth.auth().currentUser?.uid)!] != nil {
+                    self.following = true
+                } else {
+                    self.following = false
+                }
+                
+                self.updateFollowButton()
+            }
+            
+        })
     }
     
     func setUserProfilePhoto(url : URL) {

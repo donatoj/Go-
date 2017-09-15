@@ -128,18 +128,29 @@ class ListingsDataSource {
     func registerListingRemoved() {
         
         ref?.child(Keys.Listings.rawValue).observe(.childRemoved, with: { (listingSnapshot) in
+            
             print("Listing removed " + listingSnapshot.key)
-            self.ref?.child(Keys.Listings.rawValue).child(listingSnapshot.key).removeValue()
-            self.ref?.child(Keys.GeoLocations.rawValue).child(listingSnapshot.key).removeValue()
-            //self.worldListings.removeValue(forKey: listingSnapshot.key)
+            
+            var childUpdates = [String : NSNull]()
+            
+            childUpdates["/\(Keys.GeoLocations.rawValue)/\(listingSnapshot.key)"] = NSNull()
             
             if let listingValue = listingSnapshot.value as? [String : Any] {
-                self.ref?.child(Keys.UserPosts.rawValue).child(listingValue["UserID"]! as! String).child(listingSnapshot.key).removeValue()
+                
+                childUpdates["/\(Keys.UserPosts.rawValue)/\(listingValue["UserID"]! as! String)/\(listingSnapshot.key)"] = NSNull()
                 self.selfListings.removeValue(forKey: listingSnapshot.key)
+                
+                self.ref?.child(Keys.Users.rawValue).child(listingValue["UserID"]! as! String).child(Keys.Followers.rawValue).observeSingleEvent(of: .value, with: { (followerSnapshot) in
+                    if let followers = followerSnapshot.value as? [String : Bool] {
+                        for followerKey in followers.keys {
+                            print("found follower post to remove from " + followerKey)
+                            childUpdates["/\(Keys.FollowingPosts.rawValue)/\(followerKey)/\(listingSnapshot.key)"] = NSNull()
+                            
+                            self.ref?.updateChildValues(childUpdates)
+                        }
+                    }
+                })
             }
-            
-            self.ref?.child(Keys.Following.rawValue).child((Auth.auth().currentUser?.uid)!).child(listingSnapshot.key).removeValue()
-            self.followingistings.removeValue(forKey: listingSnapshot.key)
         })
     }
     
@@ -204,8 +215,6 @@ class ListingsDataSource {
         })
     }
     
-
-    
     func registerObservers(userLocation : CLLocation)  {
         
         // get reference to database
@@ -218,16 +227,27 @@ class ListingsDataSource {
         registerGeoQueryKeyEntered()
         registerGeoQueryKeyExit()
         registerGeoQueryObserveReady()
+        
+        registerUserPostAdded()
+        registerListingRemoved()
     
         registerFollowingPostAdded()
         registerFollowingPostRemoved()
         
         registerFollowingAdded()
         registerFollowingRemoved()
-        
-        registerUserPostAdded()
-        registerListingRemoved()
 
+    }
+    
+    func removeAllObservers() {
+        
+        query?.removeAllObservers()
+        
+        ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
+        ref?.child(Keys.Listings.rawValue).removeAllObservers()
+        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
+        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).removeAllObservers()
+        
     }
     
     func updateListingLimit() {
@@ -254,15 +274,6 @@ class ListingsDataSource {
         }
     }
     
-    func removeAllObservers() {
-        
-        query?.removeAllObservers()
-        
-        ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
-        ref?.child(Keys.Listings.rawValue).removeAllObservers()
-        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
-        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).removeAllObservers()
-        
-    }
+
     
 }

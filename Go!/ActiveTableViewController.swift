@@ -37,8 +37,6 @@ class ActiveTableViewController: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         
-        let createActivesDataSource: String
-        
         registerActivesObserver()
     }
     
@@ -47,6 +45,8 @@ class ActiveTableViewController: UITableViewController {
     }
     
     func registerActivesObserver() {
+        
+        let createActivesDataSource: String
         
         ref?.child(Keys.Active.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (snapshot) in
             
