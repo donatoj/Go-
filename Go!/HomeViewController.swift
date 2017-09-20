@@ -29,6 +29,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         // Do any additional setup after loading the view.
         
+        tableView.separatorStyle = .none
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 111
         
@@ -115,7 +116,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             break
         }
         tableView.reloadData()
-        tableView.separatorStyle = .none
+        
         
     }
 
