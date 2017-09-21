@@ -27,6 +27,10 @@
 		177E6E9A1EC2E9A7003F017E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 177E6E991EC2E9A7003F017E /* GoogleService-Info.plist */; };
 		178296541ECC3877008C64BA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178296531ECC3877008C64BA /* HomeViewController.swift */; };
 		178296591ED17964008C64BA /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178296581ED17964008C64BA /* PostViewController.swift */; };
+		17979F211F733D7C00F82596 /* MyPostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17979F201F733D7C00F82596 /* MyPostsViewController.swift */; };
+		17979F241F736ED100F82596 /* CardItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17979F231F736ED100F82596 /* CardItemViewController.swift */; };
+		17979F261F736EF200F82596 /* CardItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17979F251F736EF200F82596 /* CardItemViewController.xib */; };
+		17979F281F736F0D00F82596 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17979F271F736F0D00F82596 /* PageControl.swift */; };
 		B87600B1132F9E1D080CC378 /* Pods_Go_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E545964835185630097A811 /* Pods_Go_.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +58,10 @@
 		177E6E991EC2E9A7003F017E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		178296531ECC3877008C64BA /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		178296581ED17964008C64BA /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		17979F201F733D7C00F82596 /* MyPostsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPostsViewController.swift; sourceTree = "<group>"; };
+		17979F231F736ED100F82596 /* CardItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardItemViewController.swift; sourceTree = "<group>"; };
+		17979F251F736EF200F82596 /* CardItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemViewController.xib; sourceTree = "<group>"; };
+		17979F271F736F0D00F82596 /* PageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageControl.swift; sourceTree = "<group>"; };
 		8E545964835185630097A811 /* Pods_Go_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Go_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D910C2A56AE47EA01F4FA51 /* Pods-Go!.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Go!.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Go!/Pods-Go!.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,11 +102,13 @@
 		172C1B5B1F627293001826CE /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				17979F221F736D9500F82596 /* PageControl */,
 				172C1B611F67B923001826CE /* ActiveDetailViewController.swift */,
 				177E6E891EC2E87C003F017E /* LoginViewController.swift */,
 				178296531ECC3877008C64BA /* HomeViewController.swift */,
 				17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */,
 				178296581ED17964008C64BA /* PostViewController.swift */,
+				17979F201F733D7C00F82596 /* MyPostsViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -178,6 +188,16 @@
 				177E6E991EC2E9A7003F017E /* GoogleService-Info.plist */,
 			);
 			name = Plists;
+			sourceTree = "<group>";
+		};
+		17979F221F736D9500F82596 /* PageControl */ = {
+			isa = PBXGroup;
+			children = (
+				17979F231F736ED100F82596 /* CardItemViewController.swift */,
+				17979F251F736EF200F82596 /* CardItemViewController.xib */,
+				17979F271F736F0D00F82596 /* PageControl.swift */,
+			);
+			name = PageControl;
 			sourceTree = "<group>";
 		};
 		7AD843FE6BF91B562AD50EAA /* Frameworks */ = {
@@ -270,6 +290,7 @@
 				172C1B601F6412F1001826CE /* user-role.jpg in Resources */,
 				177E6E9A1EC2E9A7003F017E /* GoogleService-Info.plist in Resources */,
 				177E6E8F1EC2E87C003F017E /* Assets.xcassets in Resources */,
+				17979F261F736EF200F82596 /* CardItemViewController.xib in Resources */,
 				177E6E8D1EC2E87C003F017E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -353,9 +374,11 @@
 			files = (
 				172C1B561F625532001826CE /* ActiveTableViewCell.swift in Sources */,
 				178296591ED17964008C64BA /* PostViewController.swift in Sources */,
+				17979F281F736F0D00F82596 /* PageControl.swift in Sources */,
 				171BF02E1F366F520048A222 /* Listing.swift in Sources */,
 				177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */,
 				175F2E8B1F47183300931A9B /* Keys.swift in Sources */,
+				17979F211F733D7C00F82596 /* MyPostsViewController.swift in Sources */,
 				17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */,
 				177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */,
 				178296541ECC3877008C64BA /* HomeViewController.swift in Sources */,
@@ -363,6 +386,7 @@
 				175F2E8D1F4ECA5600931A9B /* RequestsTableViewController.swift in Sources */,
 				175F2E8F1F4ECAF200931A9B /* RequestTableViewCell.swift in Sources */,
 				172C1B541F62548A001826CE /* ActiveTableViewController.swift in Sources */,
+				17979F241F736ED100F82596 /* CardItemViewController.swift in Sources */,
 				176860371F28A126000D9AC8 /* PostTableViewCell.swift in Sources */,
 				171BF0381F42D9970048A222 /* ListingsDataSource.swift in Sources */,
 			);
