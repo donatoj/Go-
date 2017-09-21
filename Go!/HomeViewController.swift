@@ -192,6 +192,8 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             cell.requestButton.setTitleColor(UIColor.blue, for: .normal)
         }
         
+        cell.layer.cornerRadius = 10
+        
         return cell 
     }
     

@@ -28,5 +28,17 @@ class PostTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    override var frame: CGRect {
+        get {
+            return super.frame
+        }
+        set (newFrame) {
+            var frame = newFrame
+            frame.origin.x += 10
+            frame.size.width -= 20
+            super.frame = frame
+        }
+    }
 
 }
