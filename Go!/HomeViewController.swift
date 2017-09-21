@@ -49,6 +49,9 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //navigationItem.titleView = searchController.searchBar
         tableView.tableHeaderView = searchController.searchBar
         definesPresentationContext = true
+        
+        self.addLeftBarButtonWithImage(UIImage(named: "ic_menu_black_24dp")!)
+        self.addRightBarButtonWithImage(UIImage(named: "ic_notifications_black_24dp")!)
     }
     
     override func viewDidAppear(_ animated: Bool) {

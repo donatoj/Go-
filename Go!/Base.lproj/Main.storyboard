@@ -23,18 +23,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <connections>
-                        <segue destination="GNe-xZ-Mdl" kind="presentation" identifier="showMain" id="k1m-gG-baf"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1401" y="783"/>
+            <point key="canvasLocation" x="-1404" y="787"/>
         </scene>
         <!--Profile Vew Controller-->
         <scene sceneID="Hes-0q-Trf">
             <objects>
-                <viewController id="kwL-LA-W8z" userLabel="Profile Vew Controller" customClass="ProfileViewController" customModule="Go_" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileViewController" id="kwL-LA-W8z" userLabel="Profile Vew Controller" customClass="ProfileViewController" customModule="Go_" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3c7-sV-BN2"/>
                         <viewControllerLayoutGuide type="bottom" id="aE2-Ic-pAB"/>
@@ -94,7 +91,7 @@
         <!--Navigation Controller-->
         <scene sceneID="sQq-6g-oOl">
             <objects>
-                <navigationController id="GNe-xZ-Mdl" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="nvc" id="GNe-xZ-Mdl" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="SfX-HL-DLv"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="G3h-y9-AFs">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -112,7 +109,7 @@
         <!--Home View Controller-->
         <scene sceneID="kk5-Oi-9cd">
             <objects>
-                <viewController id="0gY-dL-7rk" customClass="HomeViewController" customModule="Go_" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeViewController" id="0gY-dL-7rk" customClass="HomeViewController" customModule="Go_" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="5O8-mH-re9"/>
                         <viewControllerLayoutGuide type="bottom" id="nkB-9T-0hr"/>
@@ -287,7 +284,7 @@
         <!--Active Table View Controller-->
         <scene sceneID="WRF-JW-FNY">
             <objects>
-                <tableViewController id="Z81-sS-WN9" customClass="ActiveTableViewController" customModule="Go_" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ActiveTableViewController" id="Z81-sS-WN9" customClass="ActiveTableViewController" customModule="Go_" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="84" sectionHeaderHeight="28" sectionFooterHeight="28" id="i21-bO-7Du">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -297,7 +294,7 @@
                                 <rect key="frame" x="0.0" y="28" width="414" height="84"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Nlb-s5-BAg" id="0TD-C4-KD9">
-                                    <rect key="frame" x="0.0" y="0.0" width="381" height="83"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="381" height="84"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="okA-Kn-of1">
@@ -404,7 +401,7 @@
                                 <rect key="frame" x="0.0" y="28" width="414" height="57"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CLf-eW-ZEd" id="hbt-KR-m6t">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="57"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="r1w-sM-LZf">
@@ -579,6 +576,10 @@
         <scene sceneID="dbd-K4-Uqj">
             <objects>
                 <viewController id="Kpt-xU-YUf" customClass="PageControlViewController" customModule="Go_" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ur9-Ex-z7r"/>
+                        <viewControllerLayoutGuide type="bottom" id="PNz-LU-UMo"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Iwn-Vv-nWc">
                         <rect key="frame" x="0.0" y="0.0" width="374" height="716"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

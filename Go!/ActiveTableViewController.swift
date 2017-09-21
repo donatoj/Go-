@@ -36,11 +36,13 @@ class ActiveTableViewController: UITableViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        
+        print("View did appear")
+        clearData()
         registerActivesObserver()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
+        print("View did disappear")
         ref?.child(Keys.Active.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
     }
     
@@ -101,6 +103,14 @@ class ActiveTableViewController: UITableViewController {
             }
             
         })
+    }
+    
+    func clearData() {
+        
+        self.activeUsers.removeAll()
+        self.activeUserPhotos.removeAll()
+        self.activeUserIDs.removeAll()
+        self.activeDescriptions.removeAll()
     }
 
     override func didReceiveMemoryWarning() {
