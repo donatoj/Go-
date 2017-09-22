@@ -109,7 +109,6 @@
 				178296531ECC3877008C64BA /* HomeViewController.swift */,
 				17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */,
 				178296581ED17964008C64BA /* PostViewController.swift */,
-				17979F201F733D7C00F82596 /* MyPostsViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -204,6 +203,7 @@
 				17979F231F736ED100F82596 /* CardItemViewController.swift */,
 				17979F251F736EF200F82596 /* CardItemViewController.xib */,
 				17979F271F736F0D00F82596 /* PageControl.swift */,
+				17979F201F733D7C00F82596 /* MyPostsViewController.swift */,
 			);
 			name = PageControl;
 			sourceTree = "<group>";

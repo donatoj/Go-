@@ -7,26 +7,6 @@
 //
 
 import UIKit
-//import PageControl
-
-class MyUser {
-    
-    var id: Int?
-    var name: String?
-    var email: String?
-    var following: Int = 0
-    var followers: Int = 0
-    var boy: Bool = false
-    
-    init(id: Int, name: String, email: String, following: Int, followers: Int, boy: Bool) {
-        self.id = id
-        self.name = name
-        self.email = email
-        self.following = following
-        self.followers = followers
-        self.boy = boy
-    }
-}
 
 class MyPostsViewController: UIViewController {
 
@@ -48,18 +28,7 @@ class MyPostsViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.black.withAlphaComponent(0.8) //view only black coloured transparent
-//        
-//        self.data = [
-//            MyUser(id: 1, name: "Rodrigo Martins", email: "policante.martins@gmail.com", following: 1000, followers: 2000, boy: true),
-//            MyUser(id: 2, name: "Michael Roy", email: "michael.roy@mail.com", following: 31, followers: 501, boy: true),
-//            MyUser(id: 3, name: "Frank Donald", email: "frank.donald@mail.com", following: 154, followers: 921, boy: true),
-//            MyUser(id: 4, name: "Tom", email: "tom@mail.com", following: 12, followers: 65, boy: true),
-//            MyUser(id: 5, name: "Jerry", email: "jerry@mail.com", following: 720, followers: 682, boy: false),
-//            MyUser(id: 6, name: "Piterson", email: "piterson@mail.com", following: 605, followers: 240, boy: true),
-//            MyUser(id: 7, name: "Kessy", email: "kessy@mail.com", following: 120, followers: 804, boy: false),
-//            MyUser(id: 8, name: "Juh", email: "juh@mail.com", following: 942, followers: 2510, boy: false)
-//        ]
-        
+
         self.data = Array(ListingsDataSource.sharedInstance.selfListings.values)
         
         for us in self.data {
