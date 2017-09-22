@@ -29,7 +29,7 @@ class CardItemViewController: UIViewController {
 
         name.text = listing.userName
         
-        amount.text = "$ " + listing.amount
+        amount.text = "$" + listing.amount
         amount.textColor = UIColor.green
         
         timePassed.text = listing.timeAgoSinceDate()

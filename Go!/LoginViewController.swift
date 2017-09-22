@@ -105,6 +105,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         let rightViewController = storyboard.instantiateViewController(withIdentifier: "ActiveTableViewController") as! ActiveTableViewController
         
         let slideMenuController = SlideMenuController(mainViewController: mainViewController, leftMenuViewController: leftViewController, rightMenuViewController: rightViewController)
+        UIApplication.shared.keyWindow?.backgroundColor = UIColor.white
         UIApplication.shared.keyWindow?.rootViewController = slideMenuController
         //self.present(slideMenuController, animated: true, completion: nil)
     }
