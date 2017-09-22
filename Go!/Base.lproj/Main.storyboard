@@ -252,12 +252,13 @@
                             </connections>
                         </barButtonItem>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="1IT-k9-fkI">
-                            <rect key="frame" x="117.5" y="7" width="179" height="30"/>
+                            <rect key="frame" x="81.5" y="7" width="251" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
-                                <segment title="Nearby"/>
-                                <segment title="Friends"/>
-                                <segment title="Direct"/>
+                                <segment title="" image="icons8-Near Me-64"/>
+                                <segment title="" image="icons8-User Group Man Man Filled-50"/>
+                                <segment title="" image="icons8-Data Transfer-48"/>
+                                <segment title="" image="icons8-Invite-64"/>
                             </segments>
                             <color key="tintColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
@@ -591,6 +592,12 @@
             <point key="canvasLocation" x="932" y="2318"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="icons8-Data Transfer-48" width="24" height="24"/>
+        <image name="icons8-Invite-64" width="32" height="32"/>
+        <image name="icons8-Near Me-64" width="32" height="32"/>
+        <image name="icons8-User Group Man Man Filled-50" width="25" height="25"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="oIv-xd-N8h"/>
     </inferredMetricsTieBreakers>

@@ -24,6 +24,8 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var searchController : UISearchController!
     
+    let oceanBlue = UIColor(displayP3Red: 0.0, green: 84.0/255.0, blue: 146.0/255.0, alpha: 1)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,7 +53,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         definesPresentationContext = true
         
         self.addLeftBarButtonWithImage(UIImage(named: "ic_menu_black_24dp")!)
-        self.addRightBarButtonWithImage(UIImage(named: "ic_notifications_black_24dp")!)
+        self.addRightBarButtonWithImage(UIImage(named: "icons8-Running Filled-50")!)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -176,20 +178,21 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         cell.selectionStyle = UITableViewCellSelectionStyle.none
         
+        
         cell.requestButton.setTitle("$" + listingItem.amount, for: UIControlState.normal)
         cell.requestButton.layer.borderWidth = 1
-        cell.requestButton.layer.borderColor = UIColor.blue.cgColor
+        cell.requestButton.layer.borderColor = oceanBlue.cgColor
         cell.requestButton.layer.cornerRadius = 8
         cell.requestButton.clipsToBounds = true
         cell.requestButton.tag = indexPath.section
         cell.requestButton.addTarget(self, action: #selector(onRequestPressed(_:)), for: .touchUpInside)
         
         if listingItem.requested {
-            cell.requestButton.backgroundColor = UIColor.blue
+            cell.requestButton.backgroundColor = oceanBlue
             cell.requestButton.setTitleColor(UIColor.white, for: .normal)
         } else {
             cell.requestButton.backgroundColor = UIColor.white
-            cell.requestButton.setTitleColor(UIColor.blue, for: .normal)
+            cell.requestButton.setTitleColor(oceanBlue, for: .normal)
         }
         
         cell.layer.cornerRadius = 10
