@@ -27,6 +27,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     let oceanBlue = UIColor(displayP3Red: 0.0, green: 84.0/255.0, blue: 146.0/255.0, alpha: 1)
     let seafomGreen = UIColor(displayP3Red: 0.0, green: 255.0/255.0, blue: 128.0/255.0, alpha: 1)
     let mercury = UIColor(displayP3Red: 230.0/255.0, green: 230.0/255.0, blue: 230.0/255.0, alpha: 1)
+    let seafoam = UIColor(hue: 155/360, saturation: 1, brightness: 0.98, alpha: 1)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -183,18 +184,18 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         cell.requestButton.setTitle("$" + listingItem.amount, for: UIControlState.normal)
         cell.requestButton.layer.borderWidth = 1
-        cell.requestButton.layer.borderColor = UIColor.blue.cgColor
+        cell.requestButton.layer.borderColor = seafoam.cgColor
         cell.requestButton.layer.cornerRadius = 8
         cell.requestButton.clipsToBounds = true
         cell.requestButton.tag = indexPath.section
         cell.requestButton.addTarget(self, action: #selector(onRequestPressed(_:)), for: .touchUpInside)
         
         if listingItem.requested {
-            cell.requestButton.backgroundColor = UIColor.blue
+            cell.requestButton.backgroundColor = seafoam
             cell.requestButton.setTitleColor(UIColor.white, for: .normal)
         } else {
             cell.requestButton.backgroundColor = UIColor.white
-            cell.requestButton.setTitleColor(UIColor.blue, for: .normal)
+            cell.requestButton.setTitleColor(seafoam, for: .normal)
         }
         
         cell.layer.cornerRadius = 10

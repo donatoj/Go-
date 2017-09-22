@@ -18,6 +18,7 @@
 		175F2E8D1F4ECA5600931A9B /* RequestsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */; };
 		175F2E8F1F4ECAF200931A9B /* RequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F2E8E1F4ECAF200931A9B /* RequestTableViewCell.swift */; };
 		17662EDB1F73ABE50005CCEF /* SlideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17662EDA1F73ABE50005CCEF /* SlideMenuController.swift */; };
+		17662EE61F74ECE30005CCEF /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17662EE51F74ECE30005CCEF /* MenuTableViewController.swift */; };
 		176860371F28A126000D9AC8 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176860361F28A126000D9AC8 /* PostTableViewCell.swift */; };
 		177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177E6E871EC2E87C003F017E /* AppDelegate.swift */; };
 		177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177E6E891EC2E87C003F017E /* LoginViewController.swift */; };
@@ -47,6 +48,7 @@
 		175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestsTableViewController.swift; sourceTree = "<group>"; };
 		175F2E8E1F4ECAF200931A9B /* RequestTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTableViewCell.swift; sourceTree = "<group>"; };
 		17662EDA1F73ABE50005CCEF /* SlideMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideMenuController.swift; sourceTree = "<group>"; };
+		17662EE51F74ECE30005CCEF /* MenuTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
 		176860361F28A126000D9AC8 /* PostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		177E6E841EC2E87C003F017E /* Go!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Go!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		177E6E871EC2E87C003F017E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 		172C1B5C1F6272A7001826CE /* TableViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				17662EE51F74ECE30005CCEF /* MenuTableViewController.swift */,
 				172C1B531F62548A001826CE /* ActiveTableViewController.swift */,
 				175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */,
 			);
@@ -382,6 +385,7 @@
 				172C1B561F625532001826CE /* ActiveTableViewCell.swift in Sources */,
 				178296591ED17964008C64BA /* PostViewController.swift in Sources */,
 				17979F281F736F0D00F82596 /* PageControl.swift in Sources */,
+				17662EE61F74ECE30005CCEF /* MenuTableViewController.swift in Sources */,
 				171BF02E1F366F520048A222 /* Listing.swift in Sources */,
 				17662EDB1F73ABE50005CCEF /* SlideMenuController.swift in Sources */,
 				177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */,

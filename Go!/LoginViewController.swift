@@ -101,7 +101,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         //let homeViewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
         let mainViewController = storyboard.instantiateViewController(withIdentifier: "nvc") as! UINavigationController
-        let leftViewController = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as! ProfileViewController
+        let leftViewController = storyboard.instantiateViewController(withIdentifier: "Menu") as! UITableViewController
         let rightViewController = storyboard.instantiateViewController(withIdentifier: "ActiveTableViewController") as! ActiveTableViewController
         
         let slideMenuController = SlideMenuController(mainViewController: mainViewController, leftMenuViewController: leftViewController, rightMenuViewController: rightViewController)
