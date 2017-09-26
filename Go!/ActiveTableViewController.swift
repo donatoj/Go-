@@ -144,11 +144,11 @@ class ActiveTableViewController: UITableViewController {
         cell.profileButton.clipsToBounds = true;
         
         let boldText  = activeUsers[indexPath.row]
-        let attrs = [NSFontAttributeName : UIFont.boldSystemFont(ofSize: 15)]
+        let attrs = [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 15)]
         let attributedString = NSMutableAttributedString(string:boldText, attributes:attrs)
         
         let italicText = activeDescriptions[indexPath.row]
-        let attrsIt = [NSFontAttributeName : UIFont.italicSystemFont(ofSize: 18)]
+        let attrsIt = [NSAttributedStringKey.font : UIFont.italicSystemFont(ofSize: 18)]
         let attributedItString = NSMutableAttributedString(string:italicText, attributes:attrsIt)
         
         let normalText = " is working on \n"

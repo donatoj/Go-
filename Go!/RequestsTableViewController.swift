@@ -84,7 +84,7 @@ class RequestsTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func OnApproveButtonPressed(_ sender: UIButton) {
+    @objc func OnApproveButtonPressed(_ sender: UIButton) {
         
         let requestingUID = requestingUserIDs[sender.tag]
         
