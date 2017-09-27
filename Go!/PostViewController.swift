@@ -101,7 +101,6 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         
-        let createfollowingdatasource : String
         ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Followers.rawValue).queryOrderedByKey().observe( .childAdded, with: { (friendSnapshot) in
             
             print("follower snapshot " + friendSnapshot.key)

@@ -115,9 +115,10 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             break
         case 2:
-            currentListings = Array(ListingsDataSource.sharedInstance.selfListings.values).sorted(by: { (listing1, listing2) -> Bool in
-                return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
-            })
+            let needDirectListings : String
+//            currentListings = Array(ListingsDataSource.sharedInstance.selfListings.values).sorted(by: { (listing1, listing2) -> Bool in
+//                return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
+//            })
             
             break
         case 3:
@@ -212,16 +213,8 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let listingItem = currentListings[sender.tag]
         
-        if listingItem.uid == Auth.auth().currentUser?.uid {
-            
-            let removeThisWhenSelfPostsAreDone : String
-            // go to approval table view\
-            self.performSegue(withIdentifier: "showRequests", sender: sender)
-            
-        } else {
-            ListingsDataSource.sharedInstance.updateRequests(forKey: listingItem.key, updateChild: !listingItem.requested)
-            updateListings(segmentChanged: false)
-        }
+        ListingsDataSource.sharedInstance.updateRequests(forKey: listingItem.key, updateChild: !listingItem.requested)
+        updateListings(segmentChanged: false)
     }
     
     deinit {

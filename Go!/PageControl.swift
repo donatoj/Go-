@@ -69,7 +69,7 @@ public class PageControlViewController: UIViewController, UICollectionViewDelega
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.data = [:]
-        self.currentPos = 0
+        //self.currentPos = 0
         updateData()
     }
     

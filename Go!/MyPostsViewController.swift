@@ -37,7 +37,14 @@ class MyPostsViewController: UIViewController {
             vc.delegate = self as CardDelegate
             self.dataController.append(vc)
         }
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.isNavigationBarHidden = true
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

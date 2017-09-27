@@ -14,7 +14,6 @@ protocol CardDelegate {
 
 class CardItemViewController: UIViewController {
 
-    @IBOutlet weak var name: UILabel!
     @IBOutlet weak var amount: UILabel!
     @IBOutlet weak var timePassed: UILabel!
     @IBOutlet weak var photo: UIImageView!
@@ -26,8 +25,6 @@ class CardItemViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        name.text = listing.userName
         
         amount.text = "$" + listing.amount
         amount.textColor = UIColor.green
@@ -55,4 +52,12 @@ class CardItemViewController: UIViewController {
         self.delegate.removeCard(self.listing)
     }
     
+    @IBAction func viewRequests(_ sender: Any) {
+
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "RequestsTableViewController") as! RequestsTableViewController
+        vc.key = listing.key
+
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 }

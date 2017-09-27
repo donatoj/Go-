@@ -31,12 +31,8 @@ class RequestsTableViewController: UITableViewController {
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
-        
     }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         
@@ -49,9 +45,7 @@ class RequestsTableViewController: UITableViewController {
     }
     
     func registerRequestsObserver() {
-        
-        let createRequestssDataSource: String
-        
+                
         ref?.child(Keys.Listings.rawValue).child(key).child(Keys.Requests.rawValue).observe(.childAdded, with: { (snapshot) in
             
             let userID = snapshot.key
@@ -95,6 +89,7 @@ class RequestsTableViewController: UITableViewController {
         let childUpdates = ["/\(requestingUID)/\(key)" : activeUsers,
                             "/\((Auth.auth().currentUser?.uid)!)/\(key)" : activeUsers]
         ref?.child(Keys.Active.rawValue).updateChildValues(childUpdates)
+        
     }
 
     // MARK: - Table view data source
