@@ -26,6 +26,7 @@ class ListingsDataSource {
     var worldListings = [String : Listing]()
     var followingistings = [String : Listing]()
     var selfListings = [String : Listing]()
+    var requestListings = [String : Listing]()
     
     var listingLimit = 5
     let distanceLimit = 700.0
@@ -200,8 +201,7 @@ class ListingsDataSource {
     }
     
     func registerFollowingRemoved() {
-        
-        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).observe(.childRemoved, with: { (followingSnapshot) in
+    ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).observe(.childRemoved, with: { (followingSnapshot) in
             print("Following removed " + followingSnapshot.key)
             let uid = followingSnapshot.key
             self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
@@ -212,6 +212,35 @@ class ListingsDataSource {
                     }
                 }
             })
+        })
+    }
+    
+    func registerRequestsAdded() {
+        ref?.child(Keys.Requests.rawValue).child((Auth.auth().currentUser?.uid)!).observe(DataEventType.childAdded, with: { (requestSnapshot) in
+            
+                let listingKey = requestSnapshot.key
+                self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
+                self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
+                    
+                    if let listingItem = listingSnapshot.value as? [String : Any] {
+                        let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
+                        print("request added " + listingKey)
+                        self.requestListings[listingKey] = newListing
+                    }
+                    
+                    })
+                
+                })
+                
+            })
+    }
+    
+    func registerRequestsRemoved() {
+        
+        ref?.child(Keys.Requests.rawValue).child((Auth.auth().currentUser?.uid)!).observe(DataEventType.childRemoved, with: { (requestSnapshot) in
+            print("request removed " + requestSnapshot.key)
+            let listingKey = requestSnapshot.key
+            self.requestListings.removeValue(forKey: listingKey)
         })
     }
     
@@ -236,6 +265,9 @@ class ListingsDataSource {
         
         registerFollowingAdded()
         registerFollowingRemoved()
+        
+        registerRequestsAdded()
+        registerRequestsRemoved()
 
     }
     
@@ -263,14 +295,24 @@ class ListingsDataSource {
         
         if updateChild {
             
-            let request : [String : Bool] = [(Auth.auth().currentUser?.uid)! : false]
-            ref?.child(Keys.Listings.rawValue).child(forKey).child("Requests").updateChildValues(request)
+            var request = [String : Any]()
+            request["/\(Keys.Listings.rawValue)/\(forKey)/\(Keys.Requests.rawValue)/\((Auth.auth().currentUser?.uid)!)"] = false
+            request["/\(Keys.Requests.rawValue)/\((Auth.auth().currentUser?.uid)!)/\(forKey)"] = false
+            ref?.updateChildValues(request)
+            
             worldListings[forKey]?.requested = true
             followingistings[forKey]?.requested = true
+            requestListings[forKey]?.requested = true
         } else {
-            ref?.child(Keys.Listings.rawValue).child(forKey).child("Requests").removeValue()
+            
+            var request = [String : Any]()
+            request["/\(Keys.Listings.rawValue)/\(forKey)/\(Keys.Requests.rawValue)/\((Auth.auth().currentUser?.uid)!)"] = NSNull()
+            request["/\(Keys.Requests.rawValue)/\((Auth.auth().currentUser?.uid)!)/\(forKey)"] = NSNull()
+            ref?.updateChildValues(request)
+            
             worldListings[forKey]?.requested = false
             followingistings[forKey]?.requested = false
+            requestListings[forKey]?.requested = false
         }
     }
     
