@@ -35,7 +35,7 @@ class RequestsTableViewController: UITableViewController {
     
     
     override func viewDidAppear(_ animated: Bool) {
-        
+        clearData()
         registerRequestsObserver()
     }
     
@@ -76,6 +76,13 @@ class RequestsTableViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func clearData() {
+        
+        self.requestingUsers.removeAll()
+        self.requestingUserPhotos.removeAll()
+        self.requestingUserIDs.removeAll()
     }
     
     @objc func OnApproveButtonPressed(_ sender: UIButton) {
