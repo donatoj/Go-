@@ -10,6 +10,7 @@ import UIKit
 
 protocol CardDelegate {
     func removeCard(_ listing: Listing)
+    func viewRequests(_ listing: Listing)
 }
 
 class CardItemViewController: UIViewController {
@@ -53,11 +54,6 @@ class CardItemViewController: UIViewController {
     }
     
     @IBAction func viewRequests(_ sender: Any) {
-
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "RequestsTableViewController") as! RequestsTableViewController
-        vc.key = listing.key
-
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.delegate.viewRequests(self.listing)
     }
 }

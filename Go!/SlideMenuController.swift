@@ -1044,14 +1044,12 @@ extension UIViewController {
     
     public func addLeftBarButtonWithImage(_ buttonImage: UIImage) {
         let leftButton: UIBarButtonItem = UIBarButtonItem(image: buttonImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.toggleLeft))
-        //leftButton.tintColor = UIColor(displayP3Red: 0.0, green: 84.0/255.0, blue: 146.0/255.0, alpha: 1)
         leftButton.tintColor = UIColor.white
         navigationItem.leftBarButtonItem = leftButton
     }
     
     public func addRightBarButtonWithImage(_ buttonImage: UIImage) {
         let rightButton: UIBarButtonItem = UIBarButtonItem(image: buttonImage, style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.toggleRight))
-        //rightButton.tintColor = UIColor(displayP3Red: 0.0, green: 84.0/255.0, blue: 146.0/255.0, alpha: 1)
         rightButton.tintColor = UIColor.white
         navigationItem.rightBarButtonItem = rightButton
     }

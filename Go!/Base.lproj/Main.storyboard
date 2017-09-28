@@ -34,7 +34,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1404" y="787"/>
+            <point key="canvasLocation" x="-2145" y="-13"/>
         </scene>
         <!--Profile Vew Controller-->
         <scene sceneID="Hes-0q-Trf">
@@ -49,20 +49,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TVQ-hF-WS6">
-                                <rect key="frame" x="110" y="57" width="100" height="100"/>
+                                <rect key="frame" x="110" y="101" width="100" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="apa-2M-rQG"/>
                                     <constraint firstAttribute="height" constant="100" id="n7l-wu-T7P"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pIP-iF-9XI">
-                                <rect key="frame" x="139" y="170" width="42" height="21"/>
+                                <rect key="frame" x="139" y="214" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gwo-Or-lre">
-                                <rect key="frame" x="110" y="206" width="100" height="30"/>
+                                <rect key="frame" x="110" y="250" width="100" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="Follow">
                                     <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -94,7 +94,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sGy-g2-KGT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1596" y="-13"/>
+            <point key="canvasLocation" x="1999" y="783"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="dyd-Vc-H3g">
@@ -247,7 +247,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YY8-Bp-V3F" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-609" y="-12"/>
+            <point key="canvasLocation" x="-1283" y="-14"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sQq-6g-oOl">
@@ -335,7 +335,7 @@
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="Verdana-Bold" family="Verdana" pointSize="15"/>
                                                     <state key="normal" title="$569">
-                                                        <color key="titleColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                 </button>
                                             </subviews>
@@ -409,7 +409,7 @@
                     <navigationItem key="navigationItem" id="WkA-D2-wOv">
                         <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" systemItem="bookmarks" id="QGR-lp-4Ua">
-                            <color key="tintColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <segue destination="kwL-LA-W8z" kind="show" id="oIv-xd-N8h"/>
                             </connections>
@@ -429,7 +429,7 @@
                             </connections>
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="8LI-Tb-tog">
-                            <color key="tintColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -498,7 +498,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZGY-EH-vdz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1596" y="782"/>
+            <point key="canvasLocation" x="-285" y="-14"/>
         </scene>
         <!--Active Detail View Controller-->
         <scene sceneID="l8v-zH-3cF">
@@ -549,7 +549,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Djr-Bg-aBy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2319" y="783"/>
+            <point key="canvasLocation" x="598" y="-14"/>
         </scene>
         <!--Requests Table View Controller-->
         <scene sceneID="TAq-Sn-7qh">
@@ -586,7 +586,7 @@
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mUs-0h-qWt">
                                             <rect key="frame" x="254" y="8" width="58" height="40"/>
-                                            <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <state key="normal" title="Approve">
                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
@@ -619,7 +619,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dyt-8c-W0D" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="176" y="-12"/>
+            <point key="canvasLocation" x="1022" y="1576"/>
         </scene>
         <!--My Posts View Controller-->
         <scene sceneID="c1E-eN-LyF">
@@ -662,10 +662,13 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="PfB-ix-0es"/>
+                    <connections>
+                        <segue destination="mYw-Qy-qgj" kind="show" identifier="showRequests" id="cgP-fA-jSa"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VBA-4r-QyL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="571.875" y="2294.3661971830984"/>
+            <point key="canvasLocation" x="191" y="1577"/>
         </scene>
         <!--Post View Controller-->
         <scene sceneID="bun-MI-LXg">
@@ -688,11 +691,13 @@
                                 <items>
                                     <navigationItem title="Post" id="ZR4-4N-fPj">
                                         <barButtonItem key="leftBarButtonItem" systemItem="trash" id="gSI-6D-PPr">
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <connections>
                                                 <action selector="cancelPressed:" destination="oen-nc-jcN" id="Gpm-4H-ifn"/>
                                             </connections>
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="u44-9b-d41">
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <connections>
                                                 <action selector="savePressed:" destination="oen-nc-jcN" id="pge-zq-fUR"/>
                                             </connections>
@@ -734,7 +739,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lP3-Mn-wZB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1596" y="1564"/>
+            <point key="canvasLocation" x="1999" y="1577"/>
         </scene>
         <!--Page Control View Controller-->
         <scene sceneID="dbd-K4-Uqj">
@@ -752,25 +757,28 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7mC-ke-9ab" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1993.125" y="2294.3661971830984"/>
+            <point key="canvasLocation" x="189" y="2417"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="n8B-eI-ZWL">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HJS-Iq-dlM" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="UKO-3Q-dYT" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="t3h-1x-LyB">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
                         <segue destination="P8R-Kz-aPs" kind="relationship" relationship="rootViewController" id="LMq-Ij-HaZ"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HJS-Iq-dlM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-369" y="2294"/>
+            <point key="canvasLocation" x="-609" y="1578"/>
         </scene>
     </scenes>
     <resources>

@@ -14,6 +14,8 @@ class MyPostsViewController: UIViewController {
     var data: [Listing] = []
     var dataController: [UIViewController] = []
     
+    var currentListing: Listing?
+    
     @IBOutlet weak var containerView: UIView!
     
     @IBAction func closeButtonPressed(_ sender: UIButton) {
@@ -43,7 +45,7 @@ class MyPostsViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = false
     }
     
@@ -52,6 +54,11 @@ class MyPostsViewController: UIViewController {
             self.pageController = controller
             self.pageController.delegate = self as PageControlDelegate
             self.pageController.dataSource = self as PageControlDataSource
+        }
+        
+        if let controller = segue.destination as? RequestsTableViewController {
+            print("segueing to request table view")
+            controller.key = (currentListing?.key)!
         }
     }
 
@@ -71,6 +78,10 @@ extension MyPostsViewController: CardDelegate {
         self.pageController.updateData()
     }
     
+    func viewRequests(_ listing: Listing) {
+        self.currentListing = listing
+        performSegue(withIdentifier: "showRequests", sender: self)
+    }
 }
 
 extension MyPostsViewController: PageControlDelegate {

@@ -119,7 +119,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //            currentListings = Array(ListingsDataSource.sharedInstance.selfListings.values).sorted(by: { (listing1, listing2) -> Bool in
 //                return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
 //            })
-            
+            currentListings.removeAll()
             break
         case 3:
             currentListings = Array(ListingsDataSource.sharedInstance.requestListings.values).sorted(by: { (listing1, listing2) -> Bool in
@@ -130,8 +130,6 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             break
         }
         tableView.reloadData()
-        
-        
     }
 
     
