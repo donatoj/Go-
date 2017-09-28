@@ -33,7 +33,6 @@ class RequestsTableViewController: UITableViewController {
         // self.clearsSelectionOnViewWillAppear = false
     }
     
-    
     override func viewDidAppear(_ animated: Bool) {
         clearData()
         registerRequestsObserver()
@@ -42,6 +41,11 @@ class RequestsTableViewController: UITableViewController {
     override func viewDidDisappear(_ animated: Bool) {
         
         ref?.child(Keys.Requests.rawValue).child(key).removeAllObservers()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
     func registerRequestsObserver() {
@@ -71,11 +75,6 @@ class RequestsTableViewController: UITableViewController {
                 
             })
         })
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func clearData() {

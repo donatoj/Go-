@@ -98,10 +98,12 @@ class ListingsDataSource {
                     print("update radius " + (self.query?.radius.description)!)
                 } else {
                     let stopLoading: String
+                    print("stoploading 1")
                 }
                 
             } else {
                 let stopLoading: String
+                print("stop loading 2")
             }
         })
     }

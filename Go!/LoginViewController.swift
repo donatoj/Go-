@@ -11,7 +11,7 @@ import FBSDKLoginKit
 import Firebase
 import FirebaseDatabase
 
-class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
+class LoginViewController: UIViewController {
     
     var ref: DatabaseReference!
     
@@ -37,12 +37,37 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         
     }
     
+    
+    
+    func presentHomeView () {
+        // create viewController code...
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        //let homeViewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
+        let mainViewController = storyboard.instantiateViewController(withIdentifier: "nvc") as! UINavigationController
+        let leftViewController = storyboard.instantiateViewController(withIdentifier: "Menu") as! UITableViewController
+        let rightViewController = storyboard.instantiateViewController(withIdentifier: "ActiveTableViewController") as! ActiveTableViewController
+        
+        let slideMenuController = SlideMenuController(mainViewController: mainViewController, leftMenuViewController: leftViewController, rightMenuViewController: rightViewController)
+        UIApplication.shared.keyWindow?.backgroundColor = UIColor.white
+        UIApplication.shared.keyWindow?.rootViewController = slideMenuController
+        //self.present(slideMenuController, animated: true, completion: nil)
+    }
+    
+    deinit {
+        print("LoginViewController Deinitialized")
+    }
+    
+}
+
+extension LoginViewController : FBSDKLoginButtonDelegate {
+    
     func showFBLoginButton() {
         let loginButton = FBSDKLoginButton()
         loginButton.center = self.view.center
         loginButton.readPermissions = ["public_profile", "email", "user_friends"]
         loginButton.delegate = self
-
+        
         self.view.addSubview(loginButton)
     }
     
@@ -73,7 +98,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 if error != nil {
                     if let error = error {
                         print("firebase credential error \(error.localizedDescription)  ")
-
+                        
                     }
                 } else {
                     
@@ -93,25 +118,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 }
             })
         }
-    }
-    
-    func presentHomeView () {
-        // create viewController code...
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        //let homeViewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
-        let mainViewController = storyboard.instantiateViewController(withIdentifier: "nvc") as! UINavigationController
-        let leftViewController = storyboard.instantiateViewController(withIdentifier: "Menu") as! UITableViewController
-        let rightViewController = storyboard.instantiateViewController(withIdentifier: "ActiveTableViewController") as! ActiveTableViewController
-        
-        let slideMenuController = SlideMenuController(mainViewController: mainViewController, leftMenuViewController: leftViewController, rightMenuViewController: rightViewController)
-        UIApplication.shared.keyWindow?.backgroundColor = UIColor.white
-        UIApplication.shared.keyWindow?.rootViewController = slideMenuController
-        //self.present(slideMenuController, animated: true, completion: nil)
-    }
-    
-    deinit {
-        print("LoginViewController Deinitialized")
     }
     
 }

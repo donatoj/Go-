@@ -11,7 +11,7 @@ import Firebase
 import CoreLocation
 import GeoFire
 
-class PostViewController: UIViewController, CLLocationManagerDelegate {
+class PostViewController: UIViewController {
 
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
@@ -72,21 +72,6 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    func getUserLocation() -> CLLocation {
-        
-        let lat = userLocation.latitude
-        let long = userLocation.longitude
-        let location = CLLocation(latitude: lat, longitude: long)
-        
-        return location
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        let location = locations[0]
-        userLocation = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -96,7 +81,6 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -123,6 +107,15 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    func getUserLocation() -> CLLocation {
+        
+        let lat = userLocation.latitude
+        let long = userLocation.longitude
+        let location = CLLocation(latitude: lat, longitude: long)
+        
+        return location
+    }
+    
     deinit {
         print("PostViewController Deinitialized")
     }
@@ -138,4 +131,13 @@ class PostViewController: UIViewController, CLLocationManagerDelegate {
     }
     */
 
+}
+
+extension PostViewController : CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        let location = locations[0]
+        userLocation = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
+    }
 }
