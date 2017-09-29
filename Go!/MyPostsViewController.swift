@@ -8,6 +8,11 @@
 
 import UIKit
 
+protocol MyPostsDataSource {
+    
+    func getSelfListings() -> [String : Listing]
+}
+
 class MyPostsViewController: UIViewController {
 
     var pageController: PageControlViewController!
@@ -15,6 +20,7 @@ class MyPostsViewController: UIViewController {
     var dataController: [UIViewController] = []
     
     var currentListing: Listing?
+    var dataSource: MyPostsDataSource!
     
     @IBOutlet weak var containerView: UIView!
     
@@ -31,7 +37,7 @@ class MyPostsViewController: UIViewController {
         
         view.backgroundColor = UIColor.black.withAlphaComponent(0.8) //view only black coloured transparent
 
-        self.data = Array(ListingsDataSource.sharedInstance.selfListings.values)
+        self.data = Array(self.dataSource.getSelfListings().values)
         
         for us in self.data {
             let vc = CardItemViewController()

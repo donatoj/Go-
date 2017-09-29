@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		171BF02E1F366F520048A222 /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171BF02D1F366F520048A222 /* Listing.swift */; };
 		171BF0321F3AF42C0048A222 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 171BF0311F3AF42C0048A222 /* CoreLocation.framework */; };
-		171BF0381F42D9970048A222 /* ListingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171BF0371F42D9970048A222 /* ListingsDataSource.swift */; };
 		172C1B541F62548A001826CE /* ActiveTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B531F62548A001826CE /* ActiveTableViewController.swift */; };
 		172C1B561F625532001826CE /* ActiveTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B551F625532001826CE /* ActiveTableViewCell.swift */; };
 		172C1B621F67B923001826CE /* ActiveDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B611F67B923001826CE /* ActiveDetailViewController.swift */; };
@@ -39,7 +38,6 @@
 		02AC6BAFC46EA41978B8F2A9 /* Pods-Go!.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Go!.release.xcconfig"; path = "Pods/Target Support Files/Pods-Go!/Pods-Go!.release.xcconfig"; sourceTree = "<group>"; };
 		171BF02D1F366F520048A222 /* Listing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Listing.swift; sourceTree = "<group>"; };
 		171BF0311F3AF42C0048A222 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		171BF0371F42D9970048A222 /* ListingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListingsDataSource.swift; sourceTree = "<group>"; };
 		172C1B531F62548A001826CE /* ActiveTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTableViewController.swift; sourceTree = "<group>"; };
 		172C1B551F625532001826CE /* ActiveTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTableViewCell.swift; sourceTree = "<group>"; };
 		172C1B611F67B923001826CE /* ActiveDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveDetailViewController.swift; sourceTree = "<group>"; };
@@ -86,9 +84,25 @@
 			children = (
 				175F2E8A1F47183300931A9B /* Keys.swift */,
 				171BF02D1F366F520048A222 /* Listing.swift */,
-				171BF0371F42D9970048A222 /* ListingsDataSource.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		172B9CE31F7E3F5F00C3AA74 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				17662EDA1F73ABE50005CCEF /* SlideMenuController.swift */,
+				17979F271F736F0D00F82596 /* PageControl.swift */,
+			);
+			name = Controls;
+			sourceTree = "<group>";
+		};
+		172B9CE41F7E3FD000C3AA74 /* Xibs */ = {
+			isa = PBXGroup;
+			children = (
+				17979F251F736EF200F82596 /* CardItemViewController.xib */,
+			);
+			name = Xibs;
 			sourceTree = "<group>";
 		};
 		172C1B5A1F627279001826CE /* TableViewCells */ = {
@@ -104,11 +118,12 @@
 		172C1B5B1F627293001826CE /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				17662EDE1F73BE450005CCEF /* SlideMenuControl */,
-				17979F221F736D9500F82596 /* PageControl */,
+				172B9CE31F7E3F5F00C3AA74 /* Controls */,
 				172C1B611F67B923001826CE /* ActiveDetailViewController.swift */,
+				17979F231F736ED100F82596 /* CardItemViewController.swift */,
 				177E6E891EC2E87C003F017E /* LoginViewController.swift */,
 				178296531ECC3877008C64BA /* HomeViewController.swift */,
+				17979F201F733D7C00F82596 /* MyPostsViewController.swift */,
 				17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */,
 				178296581ED17964008C64BA /* PostViewController.swift */,
 			);
@@ -123,14 +138,6 @@
 				175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */,
 			);
 			name = TableViewControllers;
-			sourceTree = "<group>";
-		};
-		17662EDE1F73BE450005CCEF /* SlideMenuControl */ = {
-			isa = PBXGroup;
-			children = (
-				17662EDA1F73ABE50005CCEF /* SlideMenuController.swift */,
-			);
-			name = SlideMenuControl;
 			sourceTree = "<group>";
 		};
 		176860381F28A131000D9AC8 /* Views */ = {
@@ -167,6 +174,7 @@
 				171BF0301F366F930048A222 /* Models */,
 				176860381F28A131000D9AC8 /* Views */,
 				178296551ED16662008C64BA /* Controllers */,
+				172B9CE41F7E3FD000C3AA74 /* Xibs */,
 				178296571ED166B5008C64BA /* Plists */,
 				177E6E8E1EC2E87C003F017E /* Assets.xcassets */,
 			);
@@ -198,17 +206,6 @@
 				177E6E991EC2E9A7003F017E /* GoogleService-Info.plist */,
 			);
 			name = Plists;
-			sourceTree = "<group>";
-		};
-		17979F221F736D9500F82596 /* PageControl */ = {
-			isa = PBXGroup;
-			children = (
-				17979F231F736ED100F82596 /* CardItemViewController.swift */,
-				17979F251F736EF200F82596 /* CardItemViewController.xib */,
-				17979F271F736F0D00F82596 /* PageControl.swift */,
-				17979F201F733D7C00F82596 /* MyPostsViewController.swift */,
-			);
-			name = PageControl;
 			sourceTree = "<group>";
 		};
 		7AD843FE6BF91B562AD50EAA /* Frameworks */ = {
@@ -401,7 +398,6 @@
 				172C1B541F62548A001826CE /* ActiveTableViewController.swift in Sources */,
 				17979F241F736ED100F82596 /* CardItemViewController.swift in Sources */,
 				176860371F28A126000D9AC8 /* PostTableViewCell.swift in Sources */,
-				171BF0381F42D9970048A222 /* ListingsDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
