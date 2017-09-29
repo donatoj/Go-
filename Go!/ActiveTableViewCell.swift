@@ -12,8 +12,8 @@ class ActiveTableViewCell: UITableViewCell {
 
     
     @IBOutlet weak var profileButton: UIButton!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    
+    @IBOutlet weak var userNameLabel: UILabel!
+    @IBOutlet weak var amountLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -17,7 +17,7 @@ class ActiveTableViewController: UITableViewController {
     var activeUsers = [String]()
     var activeUserPhotos = [UIImage]()
     var activeUserIDs = [String]()
-    var activeDescriptions = [String]()
+    var activeAmounts = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +33,7 @@ class ActiveTableViewController: UITableViewController {
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 111
+        tableView.tableFooterView = UIView()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -86,15 +87,15 @@ class ActiveTableViewController: UITableViewController {
                 let data = try? Data(contentsOf: url!)
                 let photo = UIImage(data: data!)
                 
-                self.ref?.child(Keys.Listings.rawValue).child(listingKey).child(Keys.Description.rawValue).observeSingleEvent(of: .value, with: { (description) in
+                self.ref?.child(Keys.Listings.rawValue).child(listingKey).child(Keys.Amount.rawValue).observeSingleEvent(of: .value, with: { (amount) in
                     
-                    print("description " + description.value.debugDescription)
-                    let description = description.value as! String
+                    print("description " + amount.value.debugDescription)
+                    let amount = amount.value as! String
                     
                     self.activeUsers.append(username as! String)
                     self.activeUserPhotos.append(photo!)
                     self.activeUserIDs.append(userID)
-                    self.activeDescriptions.append(description)
+                    self.activeAmounts.append(amount)
                     
                     self.tableView.reloadData()
                 })
@@ -110,7 +111,7 @@ class ActiveTableViewController: UITableViewController {
         self.activeUsers.removeAll()
         self.activeUserPhotos.removeAll()
         self.activeUserIDs.removeAll()
-        self.activeDescriptions.removeAll()
+        self.activeAmounts.removeAll()
     }
 
     override func didReceiveMemoryWarning() {
@@ -120,6 +121,24 @@ class ActiveTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Active Listings"
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerview = UIView()
+        headerview.backgroundColor = UIColor(hue: 155/360, saturation: 1, brightness: 0.98, alpha: 1)
+        
+        let headerLabel = UILabel(frame: CGRect(x: 10, y: 7.5, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
+        headerLabel.font = UIFont(name: "Verdana", size: 20)
+        headerLabel.textColor = UIColor.white
+        headerLabel.text = self.tableView(self.tableView, titleForHeaderInSection: section)
+        headerLabel.sizeToFit()
+        headerview.addSubview(headerLabel)
+        
+        return headerview
     }
 
     // MARK: - Table view data source
@@ -143,22 +162,10 @@ class ActiveTableViewController: UITableViewController {
         cell.profileButton.layer.cornerRadius = (cell.profileButton.frame.size.width) / 2;
         cell.profileButton.clipsToBounds = true;
         
-        let boldText  = activeUsers[indexPath.row]
-        let attrs = [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 15)]
-        let attributedString = NSMutableAttributedString(string:boldText, attributes:attrs)
+        cell.userNameLabel.text = activeUsers[indexPath.row]
+        cell.amountLabel.text = "$" + activeAmounts[indexPath.row]
+        cell.amountLabel.textColor = UIColor(hue: 155/360, saturation: 1, brightness: 0.98, alpha: 1)
         
-        let italicText = activeDescriptions[indexPath.row]
-        let attrsIt = [NSAttributedStringKey.font : UIFont.italicSystemFont(ofSize: 18)]
-        let attributedItString = NSMutableAttributedString(string:italicText, attributes:attrsIt)
-        
-        let normalText = " is working on \n"
-        let normalString = NSMutableAttributedString(string:normalText)
-        normalString.append(attributedItString)
-        
-        attributedString.append(normalString)
-        
-        cell.descriptionLabel.attributedText = attributedString
-
         return cell
     }
  
