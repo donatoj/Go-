@@ -130,9 +130,7 @@ class HomeViewController: UIViewController {
     
     @objc func onRequestPressed(_ sender: UIButton) {
         let listingItem = currentListings[sender.tag]
-        
         updateRequests(forKey: listingItem.key, updateChild: !listingItem.requested)
-        updateListings(segmentChanged: false)
     }
     
     deinit {
@@ -201,17 +199,23 @@ extension HomeViewController : UITableViewDataSource {
         
         cell.requestButton.setTitle("$" + listingItem.amount, for: UIControlState.normal)
         cell.requestButton.layer.borderWidth = 1
-        cell.requestButton.layer.borderColor = seafoam.cgColor
         cell.requestButton.layer.cornerRadius = 8
         cell.requestButton.clipsToBounds = true
         cell.requestButton.tag = indexPath.section
         cell.requestButton.addTarget(self, action: #selector(onRequestPressed(_:)), for: .touchUpInside)
         
         if listingItem.requested {
-            cell.requestButton.backgroundColor = seafoam
+            if segmentControl.selectedSegmentIndex == 3 {
+                cell.requestButton.backgroundColor = UIColor.red
+                cell.requestButton.layer.borderColor = UIColor.red.cgColor
+            } else {
+                cell.requestButton.backgroundColor = seafoam
+                cell.requestButton.layer.borderColor = seafoam.cgColor
+            }
             cell.requestButton.setTitleColor(UIColor.white, for: .normal)
         } else {
             cell.requestButton.backgroundColor = UIColor.white
+            cell.requestButton.layer.borderColor = seafoam.cgColor
             cell.requestButton.setTitleColor(seafoam, for: .normal)
         }
         
@@ -258,7 +262,6 @@ extension HomeViewController : CLLocationManagerDelegate {
         
         //print(userLocation)
         query?.center = userLocation
-        updateListings(segmentChanged: false)
     }
 }
 
@@ -340,11 +343,13 @@ extension HomeViewController {
                     print("update radius " + (self.query?.radius.description)!)
                 } else {
                     let stopLoading: String
+                    self.updateListings(segmentChanged: false)
                     print("stoploading 1")
                 }
                 
             } else {
                 let stopLoading: String
+                self.updateListings(segmentChanged: false)
                 print("stop loading 2")
             }
         })
@@ -537,26 +542,29 @@ extension HomeViewController {
     
     func updateRequests(forKey : String, updateChild : Bool) {
         
+        var request = [String : Any]()
+
         if updateChild {
-            
-            var request = [String : Any]()
             request["/\(Keys.Listings.rawValue)/\(forKey)/\(Keys.Requests.rawValue)/\((Auth.auth().currentUser?.uid)!)"] = false
             request["/\(Keys.Requests.rawValue)/\((Auth.auth().currentUser?.uid)!)/\(forKey)"] = false
-            ref?.updateChildValues(request)
             
-            worldListings[forKey]?.requested = true
-            followingistings[forKey]?.requested = true
-            requestListings[forKey]?.requested = true
+            ref?.updateChildValues(request, withCompletionBlock: { (error, ref) in
+                self.worldListings[forKey]?.requested = true
+                self.followingistings[forKey]?.requested = true
+                self.requestListings[forKey]?.requested = true
+                self.updateListings(segmentChanged: false)
+            })
         } else {
-            
-            var request = [String : Any]()
             request["/\(Keys.Listings.rawValue)/\(forKey)/\(Keys.Requests.rawValue)/\((Auth.auth().currentUser?.uid)!)"] = NSNull()
             request["/\(Keys.Requests.rawValue)/\((Auth.auth().currentUser?.uid)!)/\(forKey)"] = NSNull()
-            ref?.updateChildValues(request)
             
-            worldListings[forKey]?.requested = false
-            followingistings[forKey]?.requested = false
-            requestListings[forKey]?.requested = false
+            ref?.updateChildValues(request, withCompletionBlock: { (error, ref) in
+                
+                self.worldListings[forKey]?.requested = false
+                self.followingistings[forKey]?.requested = false
+                self.requestListings[forKey]?.requested = false
+                self.updateListings(segmentChanged: false)
+            })
         }
     }
 }
