@@ -28,6 +28,7 @@ class RequestsTableViewController: UITableViewController {
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 111
+        tableView.tableFooterView = UIView()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -119,7 +120,10 @@ class RequestsTableViewController: UITableViewController {
         cell.userNameButton.tag = indexPath.row
         
         cell.approveButton.tag = indexPath.row
+        cell.approveButton.layer.cornerRadius = 10
+        cell.approveButton.backgroundColor = UIColor(hue: 155/360, saturation: 1, brightness: 0.98, alpha: 1)
         cell.approveButton.addTarget(self, action: #selector(OnApproveButtonPressed(_:)), for: .touchUpInside)
+        
         cell.profileImageView.image = requestingUserPhotos[indexPath.row]
         cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
         cell.profileImageView.clipsToBounds = true;
