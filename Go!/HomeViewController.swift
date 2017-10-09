@@ -93,7 +93,7 @@ class HomeViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-        print("MEMORY WARNING")
+        print("***********MEMORY WARNING*************")
     }
 
     func updateListings(segmentChanged : Bool) {
@@ -403,37 +403,37 @@ extension HomeViewController {
         })
     }
     
-    func registerFollowingPostAdded() {
-        
-        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followerPostSnapshot) in
-            print("Following post added " + followerPostSnapshot.key)
-            let listingKey = followerPostSnapshot.key
-            
-            self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
-                self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
-                    
-                    if let listingItem = listingSnapshot.value as? [String : Any] {
-                        let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-                        self.followingistings[listingKey] = newListing
-                    }
-                    
-                })
-                
-            })
-            
-        })
-    }
-    
-    func registerFollowingPostRemoved() {
-        
-        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followerPostSnapshot) in
-            print("Following post removed " + followerPostSnapshot.key)
-            self.followingistings.removeValue(forKey: followerPostSnapshot.key)
-        })
-    }
+//    func registerFollowingPostAdded() {
+//
+//        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followerPostSnapshot) in
+//            print("Following post added " + followerPostSnapshot.key)
+//            let listingKey = followerPostSnapshot.key
+//
+//            self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
+//                self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
+//
+//                    if let listingItem = listingSnapshot.value as? [String : Any] {
+//                        let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
+//                        self.followingistings[listingKey] = newListing
+//                    }
+//
+//                })
+//
+//            })
+//
+//        })
+//    }
+//
+//    func registerFollowingPostRemoved() {
+//
+//        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followerPostSnapshot) in
+//            print("Following post removed " + followerPostSnapshot.key)
+//            self.followingistings.removeValue(forKey: followerPostSnapshot.key)
+//        })
+//    }
     
     func registerFollowingAdded() {
-        
+        followingistings.removeAll()
         ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).observe(.childAdded, with: { (followingSnapshot) in
             print("Following child added " + followingSnapshot.key)
             let uid = followingSnapshot.key
@@ -441,27 +441,40 @@ extension HomeViewController {
                 
                 if let listings = userPostSnapshot.value as? [String : Bool] {
                     for listingKey in listings.keys {
-                        self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).updateChildValues([listingKey : true])
+                        //self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).updateChildValues([listingKey : true])
+                        self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
+                            self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
+                                
+                                if let listingItem = listingSnapshot.value as? [String : Any] {
+                                    let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
+                                    print("adding to following listings " + (newListing?.key)!)
+                                    self.followingistings[listingKey] = newListing
+                                }
+                                
+                            })
+                            
+                        })
                     }
                 }
             })
         })
     }
     
-    func registerFollowingRemoved() {
-        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).observe(.childRemoved, with: { (followingSnapshot) in
-            print("Following removed " + followingSnapshot.key)
-            let uid = followingSnapshot.key
-            self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
-                
-                if let listings = userPostSnapshot.value as? [String : Bool] {
-                    for listingKey in listings.keys {
-                        self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).child(listingKey).removeValue()
-                    }
-                }
-            })
-        })
-    }
+//    func registerFollowingRemoved() {
+//        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).observe(.childRemoved, with: { (followingSnapshot) in
+//            print("Following removed " + followingSnapshot.key)
+//            let uid = followingSnapshot.key
+//            self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
+//
+//                if let listings = userPostSnapshot.value as? [String : Bool] {
+//                    for listingKey in listings.keys {
+//                        //self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).child(listingKey).removeValue()
+//                        self.followingistings.removeValue(forKey: listingKey)
+//                    }
+//                }
+//            })
+//        })
+//    }
     
     func registerRequestsAdded() {
         ref?.child(Keys.Requests.rawValue).child((Auth.auth().currentUser?.uid)!).observe(DataEventType.childAdded, with: { (requestSnapshot) in
@@ -508,11 +521,11 @@ extension HomeViewController {
         registerUserPostAdded()
         registerListingRemoved()
         
-        registerFollowingPostAdded()
-        registerFollowingPostRemoved()
+        //registerFollowingPostAdded()
+        //registerFollowingPostRemoved()
         
         registerFollowingAdded()
-        registerFollowingRemoved()
+        //registerFollowingRemoved()
         
         registerRequestsAdded()
         registerRequestsRemoved()
@@ -525,7 +538,7 @@ extension HomeViewController {
         
         ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
         ref?.child(Keys.Listings.rawValue).removeAllObservers()
-        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
+        //ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
         ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).removeAllObservers()
         ref?.child(Keys.Requests.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
     }
