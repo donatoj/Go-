@@ -76,17 +76,19 @@ class HomeViewController: UIViewController {
         
         self.addLeftBarButtonWithImage(UIImage(named: "ic_menu_black_24dp")!)
         self.addRightBarButtonWithImage(UIImage(named: "icons8-Running Filled-50")!)
+        
+        registerObservers(userLocation: userLocation)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         print("View Did Appear")
-        registerObservers(userLocation: userLocation)
+        
         manager.startUpdatingLocation()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         print("View Did disappear")
-        removeAllObservers()
+        //removeAllObservers()
         manager.stopUpdatingLocation()
     }
     
@@ -374,7 +376,7 @@ extension HomeViewController {
         })
     }
     
-    func registerListingRemoved() {
+    func registerUserPostRemoved() {
         
         ref?.child(Keys.Listings.rawValue).observe(.childRemoved, with: { (listingSnapshot) in
             
@@ -394,46 +396,45 @@ extension HomeViewController {
                         for followerKey in followers.keys {
                             print("found follower post to remove from " + followerKey)
                             childUpdates["/\(Keys.FollowingPosts.rawValue)/\(followerKey)/\(listingSnapshot.key)"] = NSNull()
-                            
-                            self.ref?.updateChildValues(childUpdates)
                         }
                     }
+                    self.ref?.updateChildValues(childUpdates)
                 })
             }
         })
     }
     
-//    func registerFollowingPostAdded() {
-//
-//        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followerPostSnapshot) in
-//            print("Following post added " + followerPostSnapshot.key)
-//            let listingKey = followerPostSnapshot.key
-//
-//            self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
-//                self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
-//
-//                    if let listingItem = listingSnapshot.value as? [String : Any] {
-//                        let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-//                        self.followingistings[listingKey] = newListing
-//                    }
-//
-//                })
-//
-//            })
-//
-//        })
-//    }
-//
-//    func registerFollowingPostRemoved() {
-//
-//        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followerPostSnapshot) in
-//            print("Following post removed " + followerPostSnapshot.key)
-//            self.followingistings.removeValue(forKey: followerPostSnapshot.key)
-//        })
-//    }
+    func registerFollowingPostAdded() {
+
+        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followerPostSnapshot) in
+            print("Following post added " + followerPostSnapshot.key)
+            let listingKey = followerPostSnapshot.key
+
+            self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
+                self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
+
+                    if let listingItem = listingSnapshot.value as? [String : Any] {
+                        let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
+                        self.followingistings[listingKey] = newListing
+                    }
+
+                })
+
+            })
+
+        })
+    }
+
+    func registerFollowingPostRemoved() {
+
+        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followerPostSnapshot) in
+            print("Following post removed " + followerPostSnapshot.key)
+            self.followingistings.removeValue(forKey: followerPostSnapshot.key)
+        })
+    }
     
     func registerFollowingAdded() {
-        followingistings.removeAll()
+        
         ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).observe(.childAdded, with: { (followingSnapshot) in
             print("Following child added " + followingSnapshot.key)
             let uid = followingSnapshot.key
@@ -441,40 +442,27 @@ extension HomeViewController {
                 
                 if let listings = userPostSnapshot.value as? [String : Bool] {
                     for listingKey in listings.keys {
-                        //self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).updateChildValues([listingKey : true])
-                        self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
-                            self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
-                                
-                                if let listingItem = listingSnapshot.value as? [String : Any] {
-                                    let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-                                    print("adding to following listings " + (newListing?.key)!)
-                                    self.followingistings[listingKey] = newListing
-                                }
-                                
-                            })
-                            
-                        })
+                        self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).updateChildValues([listingKey : true])
                     }
                 }
             })
         })
     }
     
-//    func registerFollowingRemoved() {
-//        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).observe(.childRemoved, with: { (followingSnapshot) in
-//            print("Following removed " + followingSnapshot.key)
-//            let uid = followingSnapshot.key
-//            self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
-//
-//                if let listings = userPostSnapshot.value as? [String : Bool] {
-//                    for listingKey in listings.keys {
-//                        //self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).child(listingKey).removeValue()
-//                        self.followingistings.removeValue(forKey: listingKey)
-//                    }
-//                }
-//            })
-//        })
-//    }
+    func registerFollowingRemoved() {
+        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).observe(.childRemoved, with: { (followingSnapshot) in
+            print("Following removed " + followingSnapshot.key)
+            let uid = followingSnapshot.key
+            self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
+
+                if let listings = userPostSnapshot.value as? [String : Bool] {
+                    for listingKey in listings.keys {
+                        self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).child(listingKey).removeValue()
+                    }
+                }
+            })
+        })
+    }
     
     func registerRequestsAdded() {
         ref?.child(Keys.Requests.rawValue).child((Auth.auth().currentUser?.uid)!).observe(DataEventType.childAdded, with: { (requestSnapshot) in
@@ -519,13 +507,13 @@ extension HomeViewController {
         registerGeoQueryObserveReady()
         
         registerUserPostAdded()
-        registerListingRemoved()
+        registerUserPostRemoved()
         
-        //registerFollowingPostAdded()
-        //registerFollowingPostRemoved()
+        registerFollowingPostAdded()
+        registerFollowingPostRemoved()
         
         registerFollowingAdded()
-        //registerFollowingRemoved()
+        registerFollowingRemoved()
         
         registerRequestsAdded()
         registerRequestsRemoved()
@@ -538,7 +526,7 @@ extension HomeViewController {
         
         ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
         ref?.child(Keys.Listings.rawValue).removeAllObservers()
-        //ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
+        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
         ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).removeAllObservers()
         ref?.child(Keys.Requests.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
     }

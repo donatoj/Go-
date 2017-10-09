@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 protocol MyPostsDataSource {
     
@@ -15,6 +16,8 @@ protocol MyPostsDataSource {
 
 class MyPostsViewController: UIViewController {
 
+    var ref : DatabaseReference?
+    
     var pageController: PageControlViewController!
     var data: [Listing] = []
     var dataController: [UIViewController] = []
@@ -34,6 +37,9 @@ class MyPostsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // get reference to database
+        ref = Database.database().reference()
         
         view.backgroundColor = UIColor.black.withAlphaComponent(0.8) //view only black coloured transparent
 
@@ -78,6 +84,8 @@ extension MyPostsViewController: CardDelegate {
             if dataListing.uid == listing.uid {
                 self.data.remove(at: position)
                 self.dataController.remove(at: position)
+                print("removing listing uid " + listing.key)
+                self.ref?.child(Keys.Listings.rawValue).child(listing.key).removeValue()
                 break
             }
         }

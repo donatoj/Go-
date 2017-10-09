@@ -49,7 +49,7 @@ class ActiveTableViewController: UITableViewController {
     
     func registerActivesObserver() {
         
-        let createActivesDataSource: String
+        let deactivateDeleteButtonInUserPostWhenActive: String
         
         ref?.child(Keys.Active.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (snapshot) in
             
@@ -89,7 +89,7 @@ class ActiveTableViewController: UITableViewController {
                 
                 self.ref?.child(Keys.Listings.rawValue).child(listingKey).child(Keys.Amount.rawValue).observeSingleEvent(of: .value, with: { (amount) in
                     
-                    print("description " + amount.value.debugDescription)
+                    print("description " + amount.value.debugDescription + " listing key " + listingKey)
                     let amount = amount.value as! String
                     
                     self.activeUsers.append(username as! String)
