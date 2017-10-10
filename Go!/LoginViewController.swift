@@ -45,8 +45,10 @@ class LoginViewController: UIViewController {
         
         //let homeViewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
         let mainViewController = storyboard.instantiateViewController(withIdentifier: "nvc") as! UINavigationController
-        let leftViewController = storyboard.instantiateViewController(withIdentifier: "Menu") as! UITableViewController
+        let leftViewController = storyboard.instantiateViewController(withIdentifier: "Menu") as! MenuTableViewController
         let rightViewController = storyboard.instantiateViewController(withIdentifier: "ActiveTableViewController") as! ActiveTableViewController
+        
+        leftViewController.homeViewController = mainViewController
         
         let slideMenuController = SlideMenuController(mainViewController: mainViewController, leftMenuViewController: leftViewController, rightMenuViewController: rightViewController)
         UIApplication.shared.keyWindow?.backgroundColor = UIColor.white

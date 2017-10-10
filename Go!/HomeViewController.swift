@@ -41,11 +41,6 @@ class HomeViewController: UIViewController {
     
     var myPostsViewController : MyPostsViewController!
     
-    let oceanBlue = UIColor(displayP3Red: 0.0, green: 84.0/255.0, blue: 146.0/255.0, alpha: 1)
-    let seafomGreen = UIColor(displayP3Red: 0.0, green: 255.0/255.0, blue: 128.0/255.0, alpha: 1)
-    let mercury = UIColor(displayP3Red: 230.0/255.0, green: 230.0/255.0, blue: 230.0/255.0, alpha: 1)
-    let seafoam = UIColor(hue: 155/360, saturation: 1, brightness: 0.98, alpha: 1)
-    
     @IBAction func OnSegmentValueChanged(_ sender: Any) {
         updateListings(segmentChanged: true)
     }
@@ -210,14 +205,14 @@ extension HomeViewController : UITableViewDataSource {
                 cell.requestButton.backgroundColor = UIColor.red
                 cell.requestButton.layer.borderColor = UIColor.red.cgColor
             } else {
-                cell.requestButton.backgroundColor = seafoam
-                cell.requestButton.layer.borderColor = seafoam.cgColor
+                cell.requestButton.backgroundColor = UIColor.seafoam
+                cell.requestButton.layer.borderColor = UIColor.seafoam.cgColor
             }
             cell.requestButton.setTitleColor(UIColor.white, for: .normal)
         } else {
             cell.requestButton.backgroundColor = UIColor.white
-            cell.requestButton.layer.borderColor = seafoam.cgColor
-            cell.requestButton.setTitleColor(seafoam, for: .normal)
+            cell.requestButton.layer.borderColor = UIColor.seafoam.cgColor
+            cell.requestButton.setTitleColor(UIColor.seafoam, for: .normal)
         }
         
         cell.layer.cornerRadius = 10
