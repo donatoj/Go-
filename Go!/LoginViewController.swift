@@ -24,7 +24,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
 
-        if (FBSDKAccessToken.current() != nil) {
+        if (FBSDKAccessToken.current() != nil && Auth.auth().currentUser != nil) {
             // User is logged in, do work such as go to next view controller.
             
             print("user already signed in fb")
