@@ -15,6 +15,8 @@ class NotificationsViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         self.addLeftBarButtonWithImage(UIImage(named: "ic_menu_black_24dp")!)
+        
+        self.navigationItem.title = "Notifications"
     }
 
     override func didReceiveMemoryWarning() {
