@@ -30,6 +30,8 @@
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Allow app to access your location</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

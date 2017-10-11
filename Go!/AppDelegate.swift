@@ -30,6 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // change navigation item title color
         navigationBarAppearance.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
         
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+        
         return true
     }
     
