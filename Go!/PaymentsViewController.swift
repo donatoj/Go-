@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Stripe
 
 class PaymentsViewController: UIViewController {
 
@@ -17,6 +18,7 @@ class PaymentsViewController: UIViewController {
         self.addLeftBarButtonWithImage(UIImage(named: "ic_menu_black_24dp")!)
         
         self.navigationItem.title = "Payments"
+        
     }
 
     override func didReceiveMemoryWarning() {
