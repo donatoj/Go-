@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import FBSDKCoreKit
+import Stripe
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        STPPaymentConfiguration.shared().publishableKey = "pk_test_Poy3a2Y5v783NCnx9zg19KhU"
         
         let navigationBarAppearance = UINavigationBar.appearance()
         navigationBarAppearance.tintColor = UIColor.white
