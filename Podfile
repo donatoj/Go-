@@ -18,4 +18,7 @@ pod 'FBSDKShareKit'
 pod 'FBSDKLoginKit'
 
 pod 'Stripe'
+
+pod 'Alamofire'
+
 end
