@@ -458,9 +458,8 @@
                                     <outlet property="delegate" destination="0gY-dL-7rk" id="GgL-3M-Epx"/>
                                 </connections>
                             </tableView>
-                            <toolbar clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4qR-jj-TjL">
+                            <toolbar clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4qR-jj-TjL">
                                 <rect key="frame" x="0.0" y="692" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
                                     <barButtonItem style="done" systemItem="organize" id="qAM-Bo-PGf">
                                         <color key="tintColor" red="0.0" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -482,8 +481,11 @@
                         <color key="backgroundColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="4qR-jj-TjL" firstAttribute="trailing" secondItem="G3d-bE-ulF" secondAttribute="trailing" id="1bC-ah-Eno"/>
                             <constraint firstItem="nAP-tP-BgS" firstAttribute="leading" secondItem="G3d-bE-ulF" secondAttribute="leading" id="4tY-tQ-tBp"/>
+                            <constraint firstItem="4qR-jj-TjL" firstAttribute="bottom" secondItem="G3d-bE-ulF" secondAttribute="bottom" id="7vt-Nx-Leg"/>
                             <constraint firstItem="nAP-tP-BgS" firstAttribute="top" secondItem="7A0-pr-pbH" secondAttribute="top" id="Ius-f9-9rc"/>
+                            <constraint firstItem="4qR-jj-TjL" firstAttribute="leading" secondItem="G3d-bE-ulF" secondAttribute="leading" id="T1y-Ut-Bgs"/>
                             <constraint firstItem="G3d-bE-ulF" firstAttribute="trailing" secondItem="nAP-tP-BgS" secondAttribute="trailing" id="Xgg-Ko-O0V"/>
                             <constraint firstItem="G3d-bE-ulF" firstAttribute="bottom" secondItem="nAP-tP-BgS" secondAttribute="bottom" id="oGv-gc-mwJ"/>
                         </constraints>
