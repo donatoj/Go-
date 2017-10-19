@@ -24,14 +24,8 @@ class ProfileViewController: UIViewController {
     
     var following : Bool = false
     
-    var fromMenu : Bool = false
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if fromMenu {
-            self.addLeftBarButtonWithImage(UIImage(named: "ic_menu_black_24dp")!)
-        }
         
         setUserData()
     }

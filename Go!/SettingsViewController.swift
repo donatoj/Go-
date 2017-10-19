@@ -14,7 +14,6 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.addLeftBarButtonWithImage(UIImage(named: "ic_menu_black_24dp")!)
         
         self.navigationItem.title = "Settings"
     }

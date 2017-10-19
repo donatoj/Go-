@@ -34,6 +34,8 @@ class ActiveTableViewController: UITableViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 111
         tableView.tableFooterView = UIView()
+        
+        self.navigationController?.isNavigationBarHidden = true
     }
 
     override func viewDidAppear(_ animated: Bool) {

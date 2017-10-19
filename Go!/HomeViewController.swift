@@ -79,6 +79,25 @@ class HomeViewController: UIViewController {
         definesPresentationContext = true
     }
     
+    fileprivate func setupMenu() {
+        // Define the menus
+        let menuLeftNavigationController = storyboard!.instantiateViewController(withIdentifier: "LeftMenuNavigationController") as! UISideMenuNavigationController
+        let menuRightNavigationController = storyboard!.instantiateViewController(withIdentifier: "RightMenuNavigationController") as! UISideMenuNavigationController
+        // UISideMenuNavigationController is a subclass of UINavigationController, so do any additional configuration
+        // of it here like setting its viewControllers. If you're using storyboards, you'll want to do something like:
+        // let menuLeftNavigationController = storyboard!.instantiateViewController(withIdentifier: "LeftMenuNavigationController") as! UISideMenuNavigationController
+        SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
+        SideMenuManager.default.menuRightNavigationController = menuRightNavigationController
+        // Enable gestures. The left and/or right menus must be set up above for these to work.
+        // Note that these continue to work on the Navigation Controller independent of the View Controller it displays!
+        SideMenuManager.default.menuAddPanGestureToPresent(toView: self.navigationController!.navigationBar)
+        SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
+        SideMenuManager.default.menuPushStyle = .preserveAndHideBackButton
+        SideMenuManager.default.menuFadeStatusBar = false
+        SideMenuManager.default.menuBlurEffectStyle = UIBlurEffectStyle.dark
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -91,9 +110,7 @@ class HomeViewController: UIViewController {
         manager.requestWhenInUseAuthorization()
         
         showSearchBar()
-        
-        self.addLeftBarButtonWithImage(UIImage(named: "ic_menu_black_24dp")!)
-        self.addRightBarButtonWithImage(UIImage(named: "icons8-Running Filled-50")!)
+        setupMenu()
         
         registerObservers(userLocation: userLocation)
     }
@@ -176,7 +193,9 @@ class HomeViewController: UIViewController {
             }
         }
         
-        if let controller = segue.destination as? UINavigationController {
+        if segue.destination is UISideMenuNavigationController {
+            print("going to menu view controller")
+        } else if let controller = segue.destination as? UINavigationController {
             print("going to my posts view controller")
             myPostsViewController = controller.viewControllers.first as! MyPostsViewController
             myPostsViewController.dataSource = self as MyPostsDataSource

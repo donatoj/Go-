@@ -28,32 +28,12 @@ class LoginViewController: UIViewController {
             // User is logged in, do work such as go to next view controller.
             
             print("user already signed in fb")
-            //performSegue(withIdentifier: "showMain", sender: self)
-            presentHomeView()
+            performSegue(withIdentifier: "showMain", sender: self)
         } else {
             print("access token is nil")
             showFBLoginButton()
         }
         
-    }
-    
-    
-    
-    func presentHomeView () {
-        // create viewController code...
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        //let homeViewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
-        let mainViewController = storyboard.instantiateViewController(withIdentifier: "nvc") as! UINavigationController
-        let leftViewController = storyboard.instantiateViewController(withIdentifier: "Menu") as! MenuTableViewController
-        let rightViewController = storyboard.instantiateViewController(withIdentifier: "ActiveTableViewController") as! ActiveTableViewController
-        
-        leftViewController.homeViewController = mainViewController
-        
-        let slideMenuController = SlideMenuController(mainViewController: mainViewController, leftMenuViewController: leftViewController, rightMenuViewController: rightViewController)
-        UIApplication.shared.keyWindow?.backgroundColor = UIColor.white
-        UIApplication.shared.keyWindow?.rootViewController = slideMenuController
-        //self.present(slideMenuController, animated: true, completion: nil)
     }
     
     deinit {
@@ -113,10 +93,7 @@ extension LoginViewController : FBSDKLoginButtonDelegate {
                     
                     self.ref?.child("Users").child((user?.uid)!).updateChildValues(userDict)
                     
-                    //self.performSegue(withIdentifier: "showMain", sender: self)
-                    self.presentHomeView()
-                    
-                    
+                    self.performSegue(withIdentifier: "showMain", sender: self)
                 }
             })
         }

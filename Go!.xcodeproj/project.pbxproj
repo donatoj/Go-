@@ -16,8 +16,12 @@
 		175F2E8B1F47183300931A9B /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F2E8A1F47183300931A9B /* Keys.swift */; };
 		175F2E8D1F4ECA5600931A9B /* RequestsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */; };
 		175F2E8F1F4ECAF200931A9B /* RequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F2E8E1F4ECAF200931A9B /* RequestTableViewCell.swift */; };
-		17662EDB1F73ABE50005CCEF /* SlideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17662EDA1F73ABE50005CCEF /* SlideMenuController.swift */; };
 		17662EE61F74ECE30005CCEF /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17662EE51F74ECE30005CCEF /* MenuTableViewController.swift */; };
+		1767C98E1F989EFD000DDF08 /* SideMenuManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1767C9891F989EFC000DDF08 /* SideMenuManager.swift */; };
+		1767C98F1F989EFD000DDF08 /* UISideMenuNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1767C98B1F989EFC000DDF08 /* UISideMenuNavigationController.swift */; };
+		1767C9901F989EFD000DDF08 /* UITableViewVibrantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1767C98C1F989EFD000DDF08 /* UITableViewVibrantCell.swift */; };
+		1767C9911F989EFD000DDF08 /* SideMenuTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1767C98D1F989EFD000DDF08 /* SideMenuTransition.swift */; };
+		1767C9941F98BFC9000DDF08 /* RightMenuNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1767C9931F98BFC9000DDF08 /* RightMenuNavigationController.swift */; };
 		176860371F28A126000D9AC8 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176860361F28A126000D9AC8 /* PostTableViewCell.swift */; };
 		177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177E6E871EC2E87C003F017E /* AppDelegate.swift */; };
 		177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177E6E891EC2E87C003F017E /* LoginViewController.swift */; };
@@ -51,8 +55,13 @@
 		175F2E8A1F47183300931A9B /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestsTableViewController.swift; sourceTree = "<group>"; };
 		175F2E8E1F4ECAF200931A9B /* RequestTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTableViewCell.swift; sourceTree = "<group>"; };
-		17662EDA1F73ABE50005CCEF /* SlideMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideMenuController.swift; sourceTree = "<group>"; };
 		17662EE51F74ECE30005CCEF /* MenuTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
+		1767C9891F989EFC000DDF08 /* SideMenuManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuManager.swift; sourceTree = "<group>"; };
+		1767C98A1F989EFC000DDF08 /* SideMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SideMenu.h; sourceTree = "<group>"; };
+		1767C98B1F989EFC000DDF08 /* UISideMenuNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISideMenuNavigationController.swift; sourceTree = "<group>"; };
+		1767C98C1F989EFD000DDF08 /* UITableViewVibrantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewVibrantCell.swift; sourceTree = "<group>"; };
+		1767C98D1F989EFD000DDF08 /* SideMenuTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuTransition.swift; sourceTree = "<group>"; };
+		1767C9931F98BFC9000DDF08 /* RightMenuNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightMenuNavigationController.swift; sourceTree = "<group>"; };
 		176860361F28A126000D9AC8 /* PostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		177E6E841EC2E87C003F017E /* Go!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Go!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		177E6E871EC2E87C003F017E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -100,13 +109,13 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
-		172B9CE31F7E3F5F00C3AA74 /* Controls */ = {
+		172B9CE31F7E3F5F00C3AA74 /* Third Party Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				17662EDA1F73ABE50005CCEF /* SlideMenuController.swift */,
+				1767C9921F989FFE000DDF08 /* SideMenu */,
 				17979F271F736F0D00F82596 /* PageControl.swift */,
 			);
-			name = Controls;
+			name = "Third Party Libraries";
 			sourceTree = "<group>";
 		};
 		172B9CE41F7E3FD000C3AA74 /* Xibs */ = {
@@ -134,7 +143,6 @@
 				17C775AA1F8C7DB600826848 /* SettingsViewController.swift */,
 				17C775AC1F8C7DC600826848 /* HistoryViewController.swift */,
 				17C775AE1F8C7DD700826848 /* PaymentsViewController.swift */,
-				172B9CE31F7E3F5F00C3AA74 /* Controls */,
 				172C1B611F67B923001826CE /* ActiveDetailViewController.swift */,
 				17979F231F736ED100F82596 /* CardItemViewController.swift */,
 				177E6E891EC2E87C003F017E /* LoginViewController.swift */,
@@ -154,6 +162,19 @@
 				175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */,
 			);
 			name = TableViewControllers;
+			sourceTree = "<group>";
+		};
+		1767C9921F989FFE000DDF08 /* SideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				1767C98A1F989EFC000DDF08 /* SideMenu.h */,
+				1767C9891F989EFC000DDF08 /* SideMenuManager.swift */,
+				1767C98D1F989EFD000DDF08 /* SideMenuTransition.swift */,
+				1767C98B1F989EFC000DDF08 /* UISideMenuNavigationController.swift */,
+				1767C98C1F989EFD000DDF08 /* UITableViewVibrantCell.swift */,
+				1767C9931F98BFC9000DDF08 /* RightMenuNavigationController.swift */,
+			);
+			name = SideMenu;
 			sourceTree = "<group>";
 		};
 		176860381F28A131000D9AC8 /* Views */ = {
@@ -191,6 +212,7 @@
 				171BF0301F366F930048A222 /* Models */,
 				176860381F28A131000D9AC8 /* Views */,
 				178296551ED16662008C64BA /* Controllers */,
+				172B9CE31F7E3F5F00C3AA74 /* Third Party Libraries */,
 				17C775B01F8C807F00826848 /* Extensions */,
 				172B9CE41F7E3FD000C3AA74 /* Xibs */,
 				178296571ED166B5008C64BA /* Plists */,
@@ -412,19 +434,22 @@
 			files = (
 				17C775A91F8C7D9C00826848 /* NotificationsViewController.swift in Sources */,
 				172C1B561F625532001826CE /* ActiveTableViewCell.swift in Sources */,
+				1767C98F1F989EFD000DDF08 /* UISideMenuNavigationController.swift in Sources */,
 				178296591ED17964008C64BA /* PostViewController.swift in Sources */,
 				17C775AB1F8C7DB600826848 /* SettingsViewController.swift in Sources */,
 				1796A3C71F936A5C0047B323 /* MainAPIClient.swift in Sources */,
 				17979F281F736F0D00F82596 /* PageControl.swift in Sources */,
 				17662EE61F74ECE30005CCEF /* MenuTableViewController.swift in Sources */,
+				1767C9901F989EFD000DDF08 /* UITableViewVibrantCell.swift in Sources */,
 				171BF02E1F366F520048A222 /* Listing.swift in Sources */,
-				17662EDB1F73ABE50005CCEF /* SlideMenuController.swift in Sources */,
 				177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */,
 				175F2E8B1F47183300931A9B /* Keys.swift in Sources */,
 				17C775B61F8C95F400826848 /* UIColor.swift in Sources */,
 				17979F211F733D7C00F82596 /* MyPostsViewController.swift in Sources */,
 				17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */,
+				1767C98E1F989EFD000DDF08 /* SideMenuManager.swift in Sources */,
 				17C775AD1F8C7DC600826848 /* HistoryViewController.swift in Sources */,
+				1767C9911F989EFD000DDF08 /* SideMenuTransition.swift in Sources */,
 				177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */,
 				178296541ECC3877008C64BA /* HomeViewController.swift in Sources */,
 				172C1B621F67B923001826CE /* ActiveDetailViewController.swift in Sources */,
@@ -432,6 +457,7 @@
 				175F2E8F1F4ECAF200931A9B /* RequestTableViewCell.swift in Sources */,
 				172C1B541F62548A001826CE /* ActiveTableViewController.swift in Sources */,
 				17C775AF1F8C7DD700826848 /* PaymentsViewController.swift in Sources */,
+				1767C9941F98BFC9000DDF08 /* RightMenuNavigationController.swift in Sources */,
 				17979F241F736ED100F82596 /* CardItemViewController.swift in Sources */,
 				176860371F28A126000D9AC8 /* PostTableViewCell.swift in Sources */,
 			);

@@ -1,21 +1,27 @@
 //
-//  HistoryViewController.swift
+//  RightMenuNavigationController.swift
 //  Go!
 //
-//  Created by Jordan Donato on 10/9/17.
+//  Created by Jordan Donato on 10/19/17.
 //  Copyright © 2017 Go!. All rights reserved.
 //
 
 import UIKit
 
-class HistoryViewController: UIViewController {
+class RightMenuNavigationController: UISideMenuNavigationController {
 
+    var customSideMenuManager = SideMenuManager()
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        sideMenuManager = customSideMenuManager
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
-        self.navigationItem.title = "History"
     }
 
     override func didReceiveMemoryWarning() {
