@@ -45,6 +45,40 @@ class HomeViewController: UIViewController {
         updateListings(segmentChanged: true)
     }
     
+    fileprivate func showSearchBar() {
+        searchController = UISearchController(searchResultsController:  nil)
+        
+        searchController.searchResultsUpdater = self
+        searchController.delegate = self
+        searchController.searchBar.delegate = self
+        
+        searchController.hidesNavigationBarDuringPresentation = true
+        searchController.dimsBackgroundDuringPresentation = true
+        
+        if #available(iOS 11.0, *) {
+            if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+                
+                if let backgroundview = textfield.subviews.first {
+                    
+                    // Background color
+                    backgroundview.backgroundColor = UIColor.white
+                    
+                    // Rounded corner
+                    backgroundview.layer.cornerRadius = 10;
+                    backgroundview.clipsToBounds = true;
+                    
+                }
+            }
+            
+            navigationItem.searchController = searchController
+            navigationItem.searchController?.isActive = true
+        } else {
+            tableView.tableHeaderView = searchController.searchBar
+        }
+        
+        definesPresentationContext = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -56,18 +90,7 @@ class HomeViewController: UIViewController {
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
         
-        searchController = UISearchController(searchResultsController:  nil)
-        
-        searchController.searchResultsUpdater = self
-        searchController.delegate = self
-        searchController.searchBar.delegate = self
-        
-        searchController.hidesNavigationBarDuringPresentation = true
-        searchController.dimsBackgroundDuringPresentation = true
-        
-        //navigationItem.titleView = searchController.searchBar
-        tableView.tableHeaderView = searchController.searchBar
-        definesPresentationContext = true
+        showSearchBar()
         
         self.addLeftBarButtonWithImage(UIImage(named: "ic_menu_black_24dp")!)
         self.addRightBarButtonWithImage(UIImage(named: "icons8-Running Filled-50")!)
