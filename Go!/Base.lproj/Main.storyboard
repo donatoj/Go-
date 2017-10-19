@@ -302,16 +302,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Payment" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1PJ-Oh-hor">
-                                <rect key="frame" x="137" y="358" width="141" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RAU-Hz-Gq1">
+                                <rect key="frame" x="158.66666666666666" y="357.66666666666669" width="97" height="22"/>
+                                <state key="normal" title="Payment" image="Payment"/>
+                                <connections>
+                                    <action selector="handlePaymentButtonTapped:" destination="qmw-17-FqE" eventType="touchUpInside" id="Qtu-q3-2K1"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="RAU-Hz-Gq1" firstAttribute="centerY" secondItem="GZh-su-2fa" secondAttribute="centerY" id="1vS-Qb-4To"/>
+                            <constraint firstItem="RAU-Hz-Gq1" firstAttribute="centerX" secondItem="GZh-su-2fa" secondAttribute="centerX" id="2hl-rH-fc6"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="paymentButton" destination="RAU-Hz-Gq1" id="YGS-XV-0k1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="84d-uW-RVB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -896,6 +903,7 @@
     </scenes>
     <resources>
         <image name="13124983_10208322737879995_4162558373145947497_n" width="100" height="100"/>
+        <image name="Payment" width="26" height="18"/>
         <image name="icons8-Data Transfer-48" width="24" height="24"/>
         <image name="icons8-Invite-64" width="32" height="32"/>
         <image name="icons8-Near Me-50" width="25" height="25"/>

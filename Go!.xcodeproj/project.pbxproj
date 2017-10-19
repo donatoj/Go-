@@ -27,6 +27,7 @@
 		177E6E9A1EC2E9A7003F017E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 177E6E991EC2E9A7003F017E /* GoogleService-Info.plist */; };
 		178296541ECC3877008C64BA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178296531ECC3877008C64BA /* HomeViewController.swift */; };
 		178296591ED17964008C64BA /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178296581ED17964008C64BA /* PostViewController.swift */; };
+		1796A3C71F936A5C0047B323 /* MainAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1796A3C61F936A5B0047B323 /* MainAPIClient.swift */; };
 		17979F211F733D7C00F82596 /* MyPostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17979F201F733D7C00F82596 /* MyPostsViewController.swift */; };
 		17979F241F736ED100F82596 /* CardItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17979F231F736ED100F82596 /* CardItemViewController.swift */; };
 		17979F261F736EF200F82596 /* CardItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17979F251F736EF200F82596 /* CardItemViewController.xib */; };
@@ -63,6 +64,7 @@
 		177E6E991EC2E9A7003F017E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		178296531ECC3877008C64BA /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		178296581ED17964008C64BA /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		1796A3C61F936A5B0047B323 /* MainAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAPIClient.swift; sourceTree = "<group>"; };
 		17979F201F733D7C00F82596 /* MyPostsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPostsViewController.swift; sourceTree = "<group>"; };
 		17979F231F736ED100F82596 /* CardItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardItemViewController.swift; sourceTree = "<group>"; };
 		17979F251F736EF200F82596 /* CardItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemViewController.xib; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				177E6E871EC2E87C003F017E /* AppDelegate.swift */,
+				1796A3C61F936A5B0047B323 /* MainAPIClient.swift */,
 				178296561ED16691008C64BA /* Storyboards */,
 				171BF0301F366F930048A222 /* Models */,
 				176860381F28A131000D9AC8 /* Views */,
@@ -411,6 +414,7 @@
 				172C1B561F625532001826CE /* ActiveTableViewCell.swift in Sources */,
 				178296591ED17964008C64BA /* PostViewController.swift in Sources */,
 				17C775AB1F8C7DB600826848 /* SettingsViewController.swift in Sources */,
+				1796A3C71F936A5C0047B323 /* MainAPIClient.swift in Sources */,
 				17979F281F736F0D00F82596 /* PageControl.swift in Sources */,
 				17662EE61F74ECE30005CCEF /* MenuTableViewController.swift in Sources */,
 				171BF02E1F366F520048A222 /* Listing.swift in Sources */,
