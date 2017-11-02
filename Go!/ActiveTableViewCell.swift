@@ -15,6 +15,8 @@ class ActiveTableViewCell: UITableViewCell {
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var amountLabel: UILabel!
     
+    var listingKey: String?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

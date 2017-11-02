@@ -17,7 +17,14 @@ class ActiveTableViewController: UITableViewController {
     var activeUsers = [String]()
     var activeUserPhotos = [UIImage]()
     var activeUserIDs = [String]()
+    var otherUserIDs = [String]()
     var activeAmounts = [String]()
+    var listingKeys = [String]()
+    
+    var listingSelected: String?
+    var posterSelected: String?
+    var approvedSelected: String?
+    var otherId: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +42,7 @@ class ActiveTableViewController: UITableViewController {
         tableView.estimatedRowHeight = 111
         tableView.tableFooterView = UIView()
         
-        self.navigationController?.isNavigationBarHidden = true
+        self.navigationItem.title = "Active Listings"
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -57,7 +64,7 @@ class ActiveTableViewController: UITableViewController {
             
             let listingKey = snapshot.key
             print("listing key " + listingKey)
-            
+
             if let values = snapshot.value as? [String : String] {
                 print("values " + values.debugDescription)
                 let approved =  values["Approved"]
@@ -67,17 +74,18 @@ class ActiveTableViewController: UITableViewController {
                 
                 if (Auth.auth().currentUser?.uid)! != poster {
                     // use poster id
-                    self.getUserData(userID: poster!, listingKey: listingKey)
+                    self.getUserData(userID: poster!, otherID: approved!,listingKey: listingKey)
                 }
                 else {
                     // use approved id
-                    self.getUserData(userID: approved!, listingKey: listingKey)
+                    self.getUserData(userID: approved!, otherID: poster!, listingKey: listingKey)
                 }
             }
+            
         })
     }
     
-    func getUserData(userID : String, listingKey : String) {
+    func getUserData(userID : String, otherID : String, listingKey : String) {
         print("getting user data for " + userID)
         self.ref?.child(Keys.Users.rawValue).child(userID).observeSingleEvent(of: .value, with: { (usersSnapshot) in
             print(usersSnapshot)
@@ -97,7 +105,9 @@ class ActiveTableViewController: UITableViewController {
                     self.activeUsers.append(username as! String)
                     self.activeUserPhotos.append(photo!)
                     self.activeUserIDs.append(userID)
+                    self.otherUserIDs.append(otherID)
                     self.activeAmounts.append(amount)
+                    self.listingKeys.append(listingKey)
                     
                     self.tableView.reloadData()
                 })
@@ -114,6 +124,7 @@ class ActiveTableViewController: UITableViewController {
         self.activeUserPhotos.removeAll()
         self.activeUserIDs.removeAll()
         self.activeAmounts.removeAll()
+        self.listingKeys.removeAll()
     }
 
     override func didReceiveMemoryWarning() {
@@ -121,27 +132,27 @@ class ActiveTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Active Listings"
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerview = UIView()
-        headerview.backgroundColor = UIColor(hue: 155/360, saturation: 1, brightness: 0.98, alpha: 1)
-        
-        let headerLabel = UILabel(frame: CGRect(x: 10, y: 7.5, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
-        headerLabel.font = UIFont(name: "Verdana", size: 20)
-        headerLabel.textColor = UIColor.white
-        headerLabel.text = self.tableView(self.tableView, titleForHeaderInSection: section)
-        headerLabel.sizeToFit()
-        headerview.addSubview(headerLabel)
-        
-        return headerview
-    }
+//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return "Active Listings"
+//    }
+//
+//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 40
+//    }
+//
+//    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let headerview = UIView()
+//        headerview.backgroundColor = UIColor(hue: 155/360, saturation: 1, brightness: 0.98, alpha: 1)
+//
+//        let headerLabel = UILabel(frame: CGRect(x: 10, y: 7.5, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
+//        headerLabel.font = UIFont(name: "Verdana", size: 20)
+//        headerLabel.textColor = UIColor.white
+//        headerLabel.text = self.tableView(self.tableView, titleForHeaderInSection: section)
+//        headerLabel.sizeToFit()
+//        headerview.addSubview(headerLabel)
+//
+//        return headerview
+//    }
 
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -168,7 +179,19 @@ class ActiveTableViewController: UITableViewController {
         cell.amountLabel.text = "$" + activeAmounts[indexPath.row]
         cell.amountLabel.textColor = UIColor(hue: 155/360, saturation: 1, brightness: 0.98, alpha: 1)
         
+        cell.listingKey = listingKeys[indexPath.row]
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let currentCell = tableView.cellForRow(at: indexPath) as! ActiveTableViewCell
+        listingSelected = listingKeys[indexPath.row]
+        approvedSelected = activeUserIDs[indexPath.row]
+        otherId = otherUserIDs[indexPath.row]
+        
+        print("selected cell approved selected " + approvedSelected!)
+        performSegue(withIdentifier: "showActiveDetail", sender: self)
     }
  
     deinit {
@@ -210,14 +233,21 @@ class ActiveTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if let vc = segue.destination as? ActiveDetailViewController {
+            vc.listingKey = listingSelected
+            vc.approvedId = approvedSelected
+            vc.posterId = otherId
+            
+            print("listing key " + listingSelected! + " approved id " + approvedSelected!)
+        }
     }
-    */
+ 
 
 }

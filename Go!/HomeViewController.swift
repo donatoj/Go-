@@ -82,17 +82,17 @@ class HomeViewController: UIViewController {
     fileprivate func setupMenu() {
         // Define the menus
         let menuLeftNavigationController = storyboard!.instantiateViewController(withIdentifier: "LeftMenuNavigationController") as! UISideMenuNavigationController
-        let menuRightNavigationController = storyboard!.instantiateViewController(withIdentifier: "RightMenuNavigationController") as! UISideMenuNavigationController
+        //let menuRightNavigationController = storyboard!.instantiateViewController(withIdentifier: "RightMenuNavigationController") as! UISideMenuNavigationController
         // UISideMenuNavigationController is a subclass of UINavigationController, so do any additional configuration
         // of it here like setting its viewControllers. If you're using storyboards, you'll want to do something like:
         // let menuLeftNavigationController = storyboard!.instantiateViewController(withIdentifier: "LeftMenuNavigationController") as! UISideMenuNavigationController
         SideMenuManager.default.menuLeftNavigationController = menuLeftNavigationController
-        SideMenuManager.default.menuRightNavigationController = menuRightNavigationController
+        //SideMenuManager.default.menuRightNavigationController = menuRightNavigationController
         // Enable gestures. The left and/or right menus must be set up above for these to work.
         // Note that these continue to work on the Navigation Controller independent of the View Controller it displays!
         SideMenuManager.default.menuAddPanGestureToPresent(toView: self.navigationController!.navigationBar)
         SideMenuManager.default.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
-        SideMenuManager.default.menuPushStyle = .preserveAndHideBackButton
+        SideMenuManager.default.menuPushStyle = .preserve
         SideMenuManager.default.menuFadeStatusBar = false
         SideMenuManager.default.menuBlurEffectStyle = UIBlurEffectStyle.dark
         
@@ -139,14 +139,13 @@ class HomeViewController: UIViewController {
         switch segmentControl.selectedSegmentIndex {
         case 0:
             currentListings = Array(worldListings.values).sorted(by: { (listing1, listing2) -> Bool in
-                return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
+                return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
             })
             
             break
         case 1:
             currentListings = Array(followingistings.values).sorted(by: { (listing1, listing2) -> Bool in
-                return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
-            })
+                return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()            })
             
             break
         case 2:
@@ -155,8 +154,7 @@ class HomeViewController: UIViewController {
             break
         case 3:
             currentListings = Array(requestListings.values).sorted(by: { (listing1, listing2) -> Bool in
-                return listing1.distance(to: userLocation) < listing2.distance(to: userLocation)
-            })
+                return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()            })
             
         default:
             break
@@ -414,7 +412,7 @@ extension HomeViewController {
     }
     
     func registerUserPostRemoved() {
-        
+        let removeActiveListingsIfapplicable : String
         ref?.child(Keys.Listings.rawValue).observe(.childRemoved, with: { (listingSnapshot) in
             
             print("Listing removed " + listingSnapshot.key)

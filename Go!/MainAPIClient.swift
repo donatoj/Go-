@@ -28,6 +28,8 @@ class MainAPIClient: NSObject, STPEphemeralKeyProvider {
         
         let ref = Database.database().reference()
         
+        
+        
         let endpoint = "/createEphemeralKeys"
         print("Create customer key with api " + apiVersion )
         guard
@@ -39,7 +41,7 @@ class MainAPIClient: NSObject, STPEphemeralKeyProvider {
                 return
         }
         print("current user id " + (Auth.auth().currentUser?.uid)!)
-        ref.child("stripe_customers").child((Auth.auth().currentUser?.uid)!).queryOrderedByKey().queryEqual(toValue: "customer_id").observeSingleEvent(of: .childAdded) { (snapshot) in
+        ref.child("Stripe").child((Auth.auth().currentUser?.uid)!).queryOrderedByKey().queryEqual(toValue: "customerId").observeSingleEvent(of: .childAdded) { (snapshot) in
             print("customer id " + snapshot.value.debugDescription)
             if let customerId = snapshot.value as? String {
             

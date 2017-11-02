@@ -61,6 +61,21 @@ struct Listing {
         return truncatedDistance.description + " mi away"
         
     }
+    
+    func timeAgoSinceDate() -> Int? {
+        
+        let calendar = NSCalendar.current
+        let unitFlags: Set<Calendar.Component> = [.minute, .hour, .day, .weekOfYear, .month, .year, .second]
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ssZ"
+        let date = dateFormatter.date(from: datePosted)
+        let earliest = now < date! ? now : date
+        let latest = (earliest == now) ? date : now
+        let components = calendar.dateComponents(unitFlags, from: earliest!,  to: latest!)
+        
+        return components.second
+    }
 
     func timeAgoSinceDate(_ numericDates:Bool = false) -> String {
         let calendar = NSCalendar.current

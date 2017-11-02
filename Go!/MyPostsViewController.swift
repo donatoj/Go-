@@ -81,7 +81,7 @@ extension MyPostsViewController: CardDelegate {
     func removeCard(_ listing: Listing) {
         for position in 0..<self.data.count {
             let dataListing = self.data[position]
-            if dataListing.uid == listing.uid {
+            if dataListing.key == listing.key {
                 self.data.remove(at: position)
                 self.dataController.remove(at: position)
                 print("removing listing uid " + listing.key)
