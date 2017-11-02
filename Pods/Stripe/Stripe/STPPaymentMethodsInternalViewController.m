@@ -14,15 +14,16 @@
 #import "STPCoreTableViewController.h"
 #import "STPCoreTableViewController+Private.h"
 #import "STPCustomerContext.h"
-#import "STPCustomerContext+Private.h"
 #import "STPImageLibrary.h"
 #import "STPImageLibrary+Private.h"
 #import "STPLocalizationUtils.h"
 #import "STPPaymentMethodTableViewCell.h"
 #import "STPPaymentMethodTuple.h"
+#import "STPPromise.h"
 #import "STPSourceProtocol.h"
 #import "UITableViewCell+Stripe_Borders.h"
 #import "UIViewController+Stripe_NavigationItemProxy.h"
+#import "UIViewController+Stripe_Promises.h"
 
 static NSString * const PaymentMethodCellReuseIdentifier = @"PaymentMethodCellReuseIdentifier";
 
@@ -32,7 +33,7 @@ static NSInteger const PaymentMethodSectionAddCard = 1;
 @interface STPPaymentMethodsInternalViewController () <UITableViewDataSource, UITableViewDelegate, STPAddCardViewControllerDelegate>
 
 @property (nonatomic, strong, readwrite) STPPaymentConfiguration *configuration;
-@property (nonatomic, strong, nullable, readwrite) STPCustomerContext *customerContext;
+@property (nonatomic, strong, nullable, readwrite) id<STPBackendAPIAdapter> apiAdapter;
 @property (nonatomic, strong, nullable, readwrite) STPUserInformation *prefilledInformation;
 @property (nonatomic, strong, nullable, readwrite) STPAddress *shippingAddress;
 @property (nonatomic, strong, readwrite) NSArray<id<STPPaymentMethod>> *paymentMethods;
@@ -55,7 +56,8 @@ static NSInteger const PaymentMethodSectionAddCard = 1;
     self = [super initWithTheme:theme];
     if (self) {
         _configuration = configuration;
-        _customerContext = customerContext;
+        // This parameter may be a custom API adapter, and not a CustomerContext.
+        _apiAdapter = customerContext;
         _prefilledInformation = prefilledInformation;
         _shippingAddress = shippingAddress;
         _paymentMethods = tuple.paymentMethods;
@@ -89,6 +91,17 @@ static NSInteger const PaymentMethodSectionAddCard = 1;
     // Table view editing state
     [self.tableView setEditing:NO animated:NO];
     [self reloadRightBarButtonItemWithTableViewIsEditing:self.tableView.isEditing animated:NO];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+
+    // Resetting it re-calculates the size based on new view width
+    // UITableView requires us to call setter again to actually pick up frame
+    // change on footers
+    if (self.tableView.tableFooterView) {
+        self.customFooterView = self.tableView.tableFooterView;
+    }
 }
 
 - (void)reloadRightBarButtonItemWithTableViewIsEditing:(BOOL)tableViewIsEditing animated:(BOOL)animated {
@@ -128,8 +141,14 @@ static NSInteger const PaymentMethodSectionAddCard = 1;
         return NO;
     }
 
-    if (!self.customerContext) {
+    if (!self.apiAdapter) {
         // Cannot detach payment methods without customer context
+        return NO;
+    }
+
+    if (![self.apiAdapter respondsToSelector:@selector(detachSourceFromCustomer:completion:)]) {
+        // Cannot detach payment methods if customerContext is an apiAdapter
+        // that doesn't implement detachSource
         return NO;
     }
 
@@ -164,6 +183,16 @@ static NSInteger const PaymentMethodSectionAddCard = 1;
     // Reload card list section
     NSMutableIndexSet *sections = [NSMutableIndexSet indexSetWithIndex:PaymentMethodSectionCardList];
     [self.tableView reloadSections:sections withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)setCustomFooterView:(UIView *)footerView {
+    _customFooterView = footerView;
+    [self.stp_willAppearPromise voidOnSuccess:^{
+        CGSize size = [footerView sizeThatFits:CGSizeMake(self.view.bounds.size.width, CGFLOAT_MAX)];
+        footerView.frame = CGRectMake(0, 0, size.width, size.height);
+
+        self.tableView.tableFooterView = footerView;
+    }];
 }
 
 #pragma mark - Button Handlers
@@ -259,7 +288,7 @@ static NSInteger const PaymentMethodSectionAddCard = 1;
         id<STPSourceProtocol> source = (id<STPSourceProtocol>)paymentMethodToDelete;
 
         // Kickoff request to delete source from customer
-        [self.customerContext detachSourceFromCustomer:source completion:nil];
+        [self.apiAdapter detachSourceFromCustomer:source completion:nil];
 
         // Optimistically remove payment method from data source
         NSMutableArray *paymentMethods = [self.paymentMethods mutableCopy];

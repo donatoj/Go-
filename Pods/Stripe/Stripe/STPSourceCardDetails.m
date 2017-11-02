@@ -40,17 +40,18 @@
     self = [super init];
     if (self) {
         _last4 = dict[@"last4"];
+        _brand = [STPCard brandFromString:dict[@"brand"]];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated"
-        // These are only intended to be deprecated publicly.
+        // This is only intended to be deprecated publicly.
         // When removed from public header, can remove these pragmas
-        _brand = [STPCard brandFromString:dict[@"brand"]];
         _funding = [STPCard fundingFromString:dict[@"funding"]];
 #pragma clang diagnostic pop
         _country = dict[@"country"];
         _expMonth = [dict[@"exp_month"] intValue];
         _expYear = [dict[@"exp_year"] intValue];
         _threeDSecure = [self.class threeDSecureStatusFromString:dict[@"three_d_secure"]];
+        _isApplePayCard = [dict[@"tokenization_method"] isEqual:@"apple_pay"];
 
         _allResponseFields = dict.copy;
     }

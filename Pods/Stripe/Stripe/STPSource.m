@@ -10,6 +10,8 @@
 #import "STPSource.h"
 #import "STPSource+Private.h"
 
+#import "STPImageLibrary.h"
+#import "STPLocalizationUtils.h"
 #import "STPSourceOwner.h"
 #import "STPSourceReceiver.h"
 #import "STPSourceRedirect.h"
@@ -26,7 +28,7 @@
 @property (nonatomic, nullable) NSString *currency;
 @property (nonatomic) STPSourceFlow flow;
 @property (nonatomic) BOOL livemode;
-@property (nonatomic, nullable) NSDictionary *metadata;
+@property (nonatomic, copy, nullable, readwrite) NSDictionary<NSString *, NSString *> *metadata;
 @property (nonatomic, nullable) STPSourceOwner *owner;
 @property (nonatomic, nullable) STPSourceReceiver *receiver;
 @property (nonatomic, nullable) STPSourceRedirect *redirect;
@@ -230,7 +232,7 @@
     source.currency = dict[@"currency"];
     source.flow = [[self class] flowFromString:dict[@"flow"]];
     source.livemode = [dict[@"livemode"] boolValue];
-    source.metadata = dict[@"metadata"];
+    source.metadata = [dict[@"metadata"] stp_dictionaryByRemovingNonStrings];
     source.owner = [STPSourceOwner decodedObjectFromAPIResponse:dict[@"owner"]];
     source.receiver = [STPSourceReceiver decodedObjectFromAPIResponse:dict[@"receiver"]];
     source.redirect = [STPSourceRedirect decodedObjectFromAPIResponse:dict[@"redirect"]];
@@ -251,5 +253,39 @@
 
     return source;
 }
+
+#pragma mark - STPPaymentMethod
+
+- (UIImage *)image {
+    if (self.type == STPSourceTypeCard
+        && self.cardDetails != nil) {
+        return [STPImageLibrary brandImageForCardBrand:self.cardDetails.brand];
+    }
+    else {
+        return [STPImageLibrary brandImageForCardBrand:STPCardBrandUnknown];
+    }
+}
+
+- (UIImage *)templateImage {
+    if (self.type == STPSourceTypeCard
+        && self.cardDetails != nil) {
+        return [STPImageLibrary templatedBrandImageForCardBrand:self.cardDetails.brand];
+    }
+    else {
+        return [STPImageLibrary templatedBrandImageForCardBrand:STPCardBrandUnknown];
+    }
+}
+
+- (NSString *)label {
+    if (self.type == STPSourceTypeCard
+        && self.cardDetails != nil) {
+        NSString *brand = [STPCard stringFromBrand:self.cardDetails.brand];
+        return [NSString stringWithFormat:@"%@ %@", brand, self.cardDetails.last4];;
+    }
+    else {
+        return [STPCard stringFromBrand:STPCardBrandUnknown];
+    }
+}
+
 
 @end

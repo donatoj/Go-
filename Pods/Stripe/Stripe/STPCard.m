@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readwrite) NSUInteger expMonth;
 @property (nonatomic, assign, readwrite) NSUInteger expYear;
 @property (nonatomic, strong, readwrite) STPAddress *address;
+@property (nonatomic, copy, nullable, readwrite) NSDictionary<NSString *, NSString *> *metadata;
 @property (nonatomic, copy, readwrite) NSDictionary *allResponseFields;
 
 // See STPCard+Private.h
@@ -152,6 +153,7 @@ NS_ASSUME_NONNULL_BEGIN
                        [NSString stringWithFormat:@"currency = %@", self.currency],
                        [NSString stringWithFormat:@"dynamicLast4 = %@", self.dynamicLast4],
                        [NSString stringWithFormat:@"isApplePayCard = %@", (self.isApplePayCard) ? @"YES" : @"NO"],
+                       [NSString stringWithFormat:@"metadata = %@", (self.metadata) ? @"<redacted>" : nil],
 
                        // Cardholder details
                        [NSString stringWithFormat:@"name = %@", (self.name) ? @"<redacted>" : nil],
@@ -184,12 +186,11 @@ NS_ASSUME_NONNULL_BEGIN
     card.name = dict[@"name"];
     card.last4 = dict[@"last4"];
     card.dynamicLast4 = dict[@"dynamic_last4"];
+    card.brand = [self.class brandFromString:dict[@"brand"]];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated"
-    // These are only intended to be deprecated publicly.
+    // This is only intended to be deprecated publicly.
     // When removed from public header, can remove these pragmas
-
-    card.brand = [self.class brandFromString:dict[@"brand"]];
     card.funding = [self.class fundingFromString:dict[@"funding"]];
 #pragma clang diagnostic pop
 
@@ -197,6 +198,7 @@ NS_ASSUME_NONNULL_BEGIN
     card.currency = dict[@"currency"];
     card.expMonth = [dict[@"exp_month"] intValue];
     card.expYear = [dict[@"exp_year"] intValue];
+    card.metadata = [dict[@"metadata"] stp_dictionaryByRemovingNonStrings];
 
     card.address.name = card.name;
     card.address.line1 = dict[@"address_line1"];
