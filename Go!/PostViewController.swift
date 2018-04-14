@@ -43,7 +43,7 @@ class PostViewController: UIViewController {
         if let key = ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).childByAutoId().key {
             
             geoFireRef = ref?.child(Keys.GeoLocations.rawValue)
-            geoFire = GeoFire(firebaseRef: geoFireRef)
+			geoFire = GeoFire(firebaseRef: geoFireRef!)
             geoFire?.setLocation(getUserLocation(), forKey: key)
             
             let checkfornullfieldsandcreatealertwithactivitybar : String

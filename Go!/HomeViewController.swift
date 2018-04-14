@@ -339,7 +339,7 @@ extension HomeViewController {
         
         geoQueryHandle = query?.observe(.keyEntered, with: { (key, location) in
             
-            print("key entered " + key! + " location " + (location?.description)!)
+			print("key entered " + key + " location " + (location.description))
             
             self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: key).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
                 
@@ -347,7 +347,7 @@ extension HomeViewController {
                 if let listingItem = listingSnapshot.value as? [String : Any] {
                     
                     if listingItem[Keys.UserID.rawValue] as? String != Auth.auth().currentUser?.uid {
-                        let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
+						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location)
                         self.worldListings[listingKey] = newListing
                         print("World listing updated")
                         
@@ -361,8 +361,8 @@ extension HomeViewController {
         
         query?.observe(.keyExited, with: { (key, location) in
             
-            print("key exited " + key!)
-            self.worldListings.removeValue(forKey: key!)
+			print("key exited " + key)
+			self.worldListings.removeValue(forKey: key)
         })
     }
     
@@ -534,7 +534,7 @@ extension HomeViewController {
         ref = Database.database().reference()
         
         geoFireRef = ref?.child(Keys.GeoLocations.rawValue)
-        geoFire = GeoFire(firebaseRef: geoFireRef)
+		geoFire = GeoFire(firebaseRef: geoFireRef!)
         query = geoFire?.query(at: userLocation, withRadius: 5)
         
         registerGeoQueryKeyEntered()
