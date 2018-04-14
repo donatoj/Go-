@@ -44,7 +44,12 @@ struct Listing {
         
         let url = URL(string: photoURL)
         let data = try? Data(contentsOf: url!)
-        self.profilePhoto = UIImage(data: data!)
+		if let data = data {
+			self.profilePhoto = UIImage(data: data)
+		} else {
+			self.profilePhoto = UIImage(named: "profilepic")
+		}
+		
     }
     
     func distance(to location: CLLocation) -> CLLocationDistance {

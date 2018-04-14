@@ -30,7 +30,7 @@ class HomeViewController: UIViewController {
     var requestListings = [String : Listing]()
     
     var listingLimit = 5
-    let distanceLimit = 700.0
+    let distanceLimit = 2000.0
     
     var currentListings = [Listing]()
     

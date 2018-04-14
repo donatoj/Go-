@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -116,11 +116,11 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="219.66666666666666"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="13124983_10208322737879995_4162558373145947497_n" translatesAutoresizingMaskIntoConstraints="NO" id="cME-yF-CIO">
-                                                    <rect key="frame" x="157" y="60" width="100" height="100"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profilepic" translatesAutoresizingMaskIntoConstraints="NO" id="cME-yF-CIO">
+                                                    <rect key="frame" x="-305" y="60" width="1024" height="768"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jordan Donato" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Hg-Ny-tou">
-                                                    <rect key="frame" x="52" y="168" width="310" height="21"/>
+                                                    <rect key="frame" x="52" y="836" width="310" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                                     <nil key="highlightedColor"/>
@@ -307,25 +307,9 @@
                     <view key="view" contentMode="scaleToFill" id="GZh-su-2fa">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RAU-Hz-Gq1">
-                                <rect key="frame" x="158.66666666666666" y="357.66666666666669" width="97" height="22"/>
-                                <state key="normal" title="Payment" image="Payment"/>
-                                <connections>
-                                    <action selector="handlePaymentButtonTapped:" destination="qmw-17-FqE" eventType="touchUpInside" id="Qtu-q3-2K1"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="RAU-Hz-Gq1" firstAttribute="centerY" secondItem="GZh-su-2fa" secondAttribute="centerY" id="1vS-Qb-4To"/>
-                            <constraint firstItem="RAU-Hz-Gq1" firstAttribute="centerX" secondItem="Dd9-if-yJd" secondAttribute="centerX" id="2hl-rH-fc6"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Dd9-if-yJd"/>
                     </view>
-                    <connections>
-                        <outlet property="paymentButton" destination="RAU-Hz-Gq1" id="YGS-XV-0k1"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="84d-uW-RVB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -821,9 +805,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1XS-Nw-U0e">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="64"/>
+                                <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="64" id="yJK-ZG-uAs"/>
+                                    <constraint firstAttribute="height" constant="44" id="yJK-ZG-uAs"/>
                                 </constraints>
                                 <color key="barTintColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <items>
@@ -853,21 +837,24 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad" keyboardAppearance="light"/>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" keyboardDismissMode="interactive" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="9aB-pl-EEN">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="9aB-pl-EEN">
                                 <rect key="frame" x="0.0" y="104" width="414" height="632"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" enablesReturnKeyAutomatically="YES"/>
                             </textView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="1XS-Nw-U0e" firstAttribute="top" secondItem="KNS-Le-uKo" secondAttribute="top" id="3OV-Sx-6nE"/>
+                            <constraint firstItem="1XS-Nw-U0e" firstAttribute="top" secondItem="8kX-oF-zXR" secondAttribute="top" id="3OV-Sx-6nE"/>
+                            <constraint firstItem="9aB-pl-EEN" firstAttribute="leading" secondItem="8kX-oF-zXR" secondAttribute="leading" id="6Ir-GT-ucU"/>
+                            <constraint firstItem="9aB-pl-EEN" firstAttribute="top" secondItem="LUX-lP-hkh" secondAttribute="bottom" id="Au8-XR-iTM"/>
                             <constraint firstItem="1XS-Nw-U0e" firstAttribute="leading" secondItem="8kX-oF-zXR" secondAttribute="leading" id="CQW-Cr-vqo"/>
                             <constraint firstItem="LUX-lP-hkh" firstAttribute="leading" secondItem="8kX-oF-zXR" secondAttribute="leading" id="F0Z-mz-PqI"/>
                             <constraint firstItem="LUX-lP-hkh" firstAttribute="top" secondItem="1XS-Nw-U0e" secondAttribute="bottom" id="K9D-MZ-uMW"/>
                             <constraint firstItem="8kX-oF-zXR" firstAttribute="trailing" secondItem="LUX-lP-hkh" secondAttribute="trailing" id="L6s-nN-XGU"/>
+                            <constraint firstItem="9aB-pl-EEN" firstAttribute="trailing" secondItem="8kX-oF-zXR" secondAttribute="trailing" id="cg0-Xo-58Y"/>
                             <constraint firstItem="8kX-oF-zXR" firstAttribute="trailing" secondItem="1XS-Nw-U0e" secondAttribute="trailing" id="eIY-2v-s3Y"/>
+                            <constraint firstItem="9aB-pl-EEN" firstAttribute="bottom" secondItem="8kX-oF-zXR" secondAttribute="bottom" id="wA1-j2-emW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="8kX-oF-zXR"/>
                     </view>
@@ -918,7 +905,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="13124983_10208322737879995_4162558373145947497_n" width="100" height="100"/>
         <image name="Payment" width="26" height="18"/>
         <image name="ic_menu_black_24dp" width="24" height="24"/>
         <image name="icons8-Data Transfer-48" width="24" height="24"/>
@@ -926,6 +912,7 @@
         <image name="icons8-Near Me-50" width="25" height="25"/>
         <image name="icons8-Running Filled-50" width="25" height="25"/>
         <image name="icons8-User Group Man Man Filled-50" width="25" height="25"/>
+        <image name="profilepic" width="1024" height="768"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="0ge-ex-c9U"/>
