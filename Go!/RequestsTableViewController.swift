@@ -96,6 +96,9 @@ class RequestsTableViewController: UITableViewController {
         let childUpdates = ["/\(requestingUID)/\(key)" : activeUsers,
                             "/\((Auth.auth().currentUser?.uid)!)/\(key)" : activeUsers]
         ref?.child(Keys.Active.rawValue).updateChildValues(childUpdates)
+		
+		sender.backgroundColor = UIColor.darkGray
+		sender.setTitle("Approved", for: UIControlState.disabled)
         
     }
 
