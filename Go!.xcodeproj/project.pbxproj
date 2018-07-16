@@ -16,6 +16,7 @@
 		172BEA4220FA98FD0036D5A6 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172BEA4120FA98FD0036D5A6 /* MapViewController.swift */; };
 		172C1B621F67B923001826CE /* ActiveDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B611F67B923001826CE /* ActiveDetailViewController.swift */; };
 		17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */; };
+		175CFCF420FC1E5C00600970 /* ListingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175CFCF320FC1E5C00600970 /* ListingManager.swift */; };
 		175F2E8B1F47183300931A9B /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F2E8A1F47183300931A9B /* Keys.swift */; };
 		175F2E8D1F4ECA5600931A9B /* RequestsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */; };
 		175F2E8F1F4ECAF200931A9B /* RequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F2E8E1F4ECAF200931A9B /* RequestTableViewCell.swift */; };
@@ -49,6 +50,7 @@
 		172BEA4120FA98FD0036D5A6 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		172C1B611F67B923001826CE /* ActiveDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveDetailViewController.swift; sourceTree = "<group>"; };
 		17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		175CFCF320FC1E5C00600970 /* ListingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingManager.swift; sourceTree = "<group>"; };
 		175F2E8A1F47183300931A9B /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestsTableViewController.swift; sourceTree = "<group>"; };
 		175F2E8E1F4ECAF200931A9B /* RequestTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTableViewCell.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 			children = (
 				175F2E8A1F47183300931A9B /* Keys.swift */,
 				171BF02D1F366F520048A222 /* Listing.swift */,
+				175CFCF320FC1E5C00600970 /* ListingManager.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -439,6 +442,7 @@
 				172BEA3F20FA92BC0036D5A6 /* UIView+constrainToParent.swift in Sources */,
 				175F2E8F1F4ECAF200931A9B /* RequestTableViewCell.swift in Sources */,
 				17979F241F736ED100F82596 /* CardItemViewController.swift in Sources */,
+				175CFCF420FC1E5C00600970 /* ListingManager.swift in Sources */,
 				176860371F28A126000D9AC8 /* PostTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

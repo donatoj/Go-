@@ -7,10 +7,7 @@
 //
 
 import UIKit
-import FirebaseDatabase
 import Firebase
-import CoreLocation
-import GeoFire
 
 class HomeViewController: UIViewController {
 	
@@ -18,33 +15,15 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
 	
-	// MARK: - Firebase Refs
-    var ref : DatabaseReference?
-    var geoFireRef : DatabaseReference?
-    var geoFire : GeoFire?
-    var query : GFCircleQuery?
-    var geoQueryHandle : DatabaseHandle?
-	
-	// MARK: - Listings
-    var worldListings = [String : Listing]()
-    var followingistings = [String : Listing]()
-    var selfListings = [String : Listing]()
-    var requestListings = [String : Listing]()
-	var activeListings = [String: Listing]()
-	var currentListings = [Listing]()
-	
-	// MARK: - Limits
-	var listingLimit = 5
-	let distanceLimit = 2000.0
-	
 	// MARK: - Members
-    let manager = CLLocationManager()
-    var userLocation = CLLocation()
+	var listingManager = ListingManager()
     var searchController : UISearchController!
+	var currentListings = [Listing]()
+	var currentUserId : String?
 	
 	// MARK: - Actions
     @IBAction func OnSegmentValueChanged(_ sender: Any) {
-        updateListings(segmentChanged: true)
+        updateListings()
     }
 	
 	// MARK: - ViewController LifeCycle
@@ -55,26 +34,25 @@ class HomeViewController: UIViewController {
         // Do any additional setup after loading the view.
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 111
-        
-        manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.requestWhenInUseAuthorization()
-        
+		
+		listingManager.delegate = self
+        listingManager.registerObservers()
+		
         showSearchBar()
-        
-        registerObservers(userLocation: userLocation)
+		
+		currentUserId = Auth.auth().currentUser?.uid
     }
     
     override func viewDidAppear(_ animated: Bool) {
         print("View Did Appear")
         
-        manager.startUpdatingLocation()
+        listingManager.startUpdatingLocation()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         print("View Did disappear")
-        //removeAllObservers()
-        manager.stopUpdatingLocation()
+        //listingManager.removeAllObservers()
+        listingManager.stopUpdatingLocation()
     }
     
     override func didReceiveMemoryWarning() {
@@ -143,57 +121,22 @@ class HomeViewController: UIViewController {
 		
 		definesPresentationContext = true
 	}
-
-    func updateListings(segmentChanged : Bool) {
-        print("Update listings")
-
-        switch segmentControl.selectedSegmentIndex {
-        case 0:
-            currentListings = Array(worldListings.values).sorted(by: { (listing1, listing2) -> Bool in
-                return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
-            })
-            break
-        case 1:
-            currentListings = Array(followingistings.values).sorted(by: { (listing1, listing2) -> Bool in
-                return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
-			})
-            break
-        case 2:
-            let needDirectListings : String
-            currentListings.removeAll()
-            break
-        case 3:
-            currentListings = Array(requestListings.values).sorted(by: { (listing1, listing2) -> Bool in
-                return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
-			})
-			break
-		case 4:
-			currentListings = Array(selfListings.values).sorted(by: { (listing1, listing2) -> Bool in
-				return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
-			})
-            break
-		case 5:
-			currentListings = Array(activeListings.values).sorted(by: { (listing1, listing2) -> Bool in
-				return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
-			})
-			break
-        default:
-            break
-        }
-        tableView.reloadData()
-    }
+	
+	fileprivate func setCurrentListings(_ withListings: [String : Listing]) {
+		currentListings = Array(withListings.values).sorted(by: { (listing1, listing2) -> Bool in
+			return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
+		})
+	}
     
     @objc func onRequestPressed(_ sender: UIButton) {
         let listingItem = currentListings[sender.tag]
 		
-		if listingItem.uid != Auth.auth().currentUser?.uid {
-			updateRequests(forKey: listingItem.key, updateChild: !listingItem.requested)
+		if listingItem.uid != currentUserId {
+			listingManager.updateRequests(forKey: listingItem.key, updateChild: !listingItem.requested)
 		} else {
 			performSegue(withIdentifier: "showRequests", sender: sender)
 		}
     }
-    
-	
 }
 
 // MARK: - TableView extensions
@@ -226,7 +169,7 @@ extension HomeViewController : UITableViewDataSource {
         cell.profileImageView.clipsToBounds = true;
         
         cell.timeAgo.text = listingItem.timeAgoSinceDate(true)
-        cell.distance.text = listingItem.getDistanceFromListing(userLocation: userLocation)
+        cell.distance.text = listingItem.getDistanceFromListing(userLocation: listingManager.userLocation)
         
         cell.requestButton.setTitle("$" + listingItem.amount, for: UIControlState.normal)
         cell.requestButton.layer.borderWidth = 1
@@ -235,7 +178,7 @@ extension HomeViewController : UITableViewDataSource {
         cell.requestButton.tag = indexPath.section
         cell.requestButton.addTarget(self, action: #selector(onRequestPressed(_:)), for: .touchUpInside)
 		
-		if listingItem.uid == Auth.auth().currentUser?.uid {
+		if listingItem.uid == currentUserId {
 			cell.requestButton.setTitle("View Requests", for: UIControlState.normal)
 			cell.requestButton.backgroundColor = UIColor.white
 			cell.requestButton.layer.borderColor = UIColor.blue.cgColor
@@ -256,15 +199,12 @@ extension HomeViewController : UITableViewDataSource {
 				cell.requestButton.setTitleColor(UIColor.seafoam, for: .normal)
 			}
 		}
-        
 		
-        
         cell.layer.cornerRadius = 10
         cell.selectionStyle = UITableViewCellSelectionStyle.none
         
         return cell
     }
-    
 }
 
 extension HomeViewController : UITableViewDelegate {
@@ -274,7 +214,7 @@ extension HomeViewController : UITableViewDelegate {
         let lastElement = currentListings.count - 1
         if indexPath.section == lastElement  {
             
-            updateListingLimit()
+            listingManager.updateListingLimit()
         }
     }
     
@@ -292,21 +232,6 @@ extension HomeViewController : UITableViewDelegate {
     }
 }
 
-// MARK: - Location extensions
-
-extension HomeViewController : CLLocationManagerDelegate {
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        let location = locations[0]
-        let userLocationCoordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        userLocation = CLLocation(latitude: userLocationCoordinate.latitude, longitude: userLocationCoordinate.longitude)
-        
-        //print(userLocation)
-        query?.center = userLocation
-    }
-}
-
 // MARK: - Search extensions
 
 extension HomeViewController : UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
@@ -314,334 +239,6 @@ extension HomeViewController : UISearchControllerDelegate, UISearchResultsUpdati
     func updateSearchResults(for searchController: UISearchController) {
         
         print("update search results")
-    }
-}
-
-// MARK: -  Database listeners
-extension HomeViewController {
-    
-    // Get a new listing
-    func getNewListing(forKey : String, withSnapshotValue: [String : Any], location : CLLocation) -> Listing? {
-        
-        var newListing : Listing?
-        
-        let requests = withSnapshotValue["Requests"] as? [String: Bool]
-        let requested = requests?[(Auth.auth().currentUser?.uid)!] != nil
-        
-        newListing = Listing(userName: withSnapshotValue[Keys.Username.rawValue]! as! String,
-                             uid: withSnapshotValue[Keys.UserID.rawValue]! as! String,
-                             description: withSnapshotValue[Keys.Description.rawValue]! as! String,
-                             amount: withSnapshotValue[Keys.Amount.rawValue]! as! String,
-                             photoURL: withSnapshotValue[Keys.ProfileURL.rawValue]! as! String,
-                             datePosted: withSnapshotValue[Keys.DatePosted.rawValue]! as! String,
-                             latitude: location.coordinate.latitude,
-                             longitude: location.coordinate.longitude,
-                             key: forKey,
-                             requested: requested
-        )
-        
-        return newListing
-    }
-    
-    func registerGeoQueryKeyEntered() {
-        
-        geoQueryHandle = query?.observe(.keyEntered, with: { (key, location) in
-            
-			print("key entered " + key + " location " + (location.description))
-            
-            self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: key).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
-                
-                let listingKey = listingSnapshot.key
-                if let listingItem = listingSnapshot.value as? [String : Any] {
-                    
-                    if listingItem[Keys.UserID.rawValue] as? String != Auth.auth().currentUser?.uid {
-						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location)
-                        self.worldListings[listingKey] = newListing
-                        print("World listing updated")
-                        
-                    }
-                }
-            })
-        })
-    }
-    
-    func registerGeoQueryKeyExit() {
-        
-        query?.observe(.keyExited, with: { (key, location) in
-            
-			print("key exited " + key)
-			self.worldListings.removeValue(forKey: key)
-        })
-    }
-    
-    func registerGeoQueryObserveReady() {
-        
-        query?.observeReady({
-            
-            print("Query observe Ready")
-            
-            if self.worldListings.count < self.listingLimit {
-                
-                if (self.query?.radius.isLessThanOrEqualTo(self.distanceLimit))! {
-                    self.query?.radius += 5
-                    print("update radius " + (self.query?.radius.description)!)
-                } else {
-                    let stopLoading: String
-                    self.updateListings(segmentChanged: false)
-                    print("stoploading 1")
-                }
-                
-            } else {
-                let stopLoading: String
-                self.updateListings(segmentChanged: false)
-                print("stop loading 2")
-            }
-        })
-    }
-    
-    func registerUserPostAdded() {
-        
-        ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (userPostSnapshot) in
-            print("User post added " + userPostSnapshot.key)
-            let listingKey = userPostSnapshot.key
-            
-            self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
-                
-                self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
-                    
-                    if let listingItem = listingSnapshot.value as? [String : Any] {
-                        let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-                        self.selfListings[listingKey] = newListing
-                    }
-                    
-                })
-            })
-        })
-    }
-    
-    func registerUserPostRemoved() {
-        let removeActiveListingsIfapplicable : String
-        ref?.child(Keys.Listings.rawValue).observe(.childRemoved, with: { (listingSnapshot) in
-            
-            print("Listing removed " + listingSnapshot.key)
-            
-            var childUpdates = [String : NSNull]()
-            
-            childUpdates["/\(Keys.GeoLocations.rawValue)/\(listingSnapshot.key)"] = NSNull()
-            
-            if let listingValue = listingSnapshot.value as? [String : Any] {
-                
-                childUpdates["/\(Keys.UserPosts.rawValue)/\(listingValue["UserID"]! as! String)/\(listingSnapshot.key)"] = NSNull()
-                self.selfListings.removeValue(forKey: listingSnapshot.key)
-                
-                self.ref?.child(Keys.Users.rawValue).child(listingValue["UserID"]! as! String).child(Keys.Followers.rawValue).observeSingleEvent(of: .value, with: { (followerSnapshot) in
-                    if let followers = followerSnapshot.value as? [String : Bool] {
-                        for followerKey in followers.keys {
-                            print("found follower post to remove from " + followerKey)
-                            childUpdates["/\(Keys.FollowingPosts.rawValue)/\(followerKey)/\(listingSnapshot.key)"] = NSNull()
-                        }
-                    }
-                    self.ref?.updateChildValues(childUpdates)
-                })
-            }
-        })
-    }
-    
-    func registerFollowingPostAdded() {
-
-        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (followerPostSnapshot) in
-            print("Following post added " + followerPostSnapshot.key)
-            let listingKey = followerPostSnapshot.key
-
-            self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
-                self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
-
-                    if let listingItem = listingSnapshot.value as? [String : Any] {
-                        let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-                        self.followingistings[listingKey] = newListing
-                    }
-
-                })
-
-            })
-
-        })
-    }
-
-    func registerFollowingPostRemoved() {
-
-        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followerPostSnapshot) in
-            print("Following post removed " + followerPostSnapshot.key)
-            self.followingistings.removeValue(forKey: followerPostSnapshot.key)
-        })
-    }
-    
-    func registerFollowingAdded() {
-        
-        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).observe(.childAdded, with: { (followingSnapshot) in
-            print("Following child added " + followingSnapshot.key)
-            let uid = followingSnapshot.key
-            self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
-                
-                if let listings = userPostSnapshot.value as? [String : Bool] {
-                    for listingKey in listings.keys {
-                        self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).updateChildValues([listingKey : true])
-                    }
-                }
-            })
-        })
-    }
-    
-    func registerFollowingRemoved() {
-        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).observe(.childRemoved, with: { (followingSnapshot) in
-            print("Following removed " + followingSnapshot.key)
-            let uid = followingSnapshot.key
-            self.ref?.child(Keys.UserPosts.rawValue).child(uid).observeSingleEvent(of: .value, with: { (userPostSnapshot) in
-
-                if let listings = userPostSnapshot.value as? [String : Bool] {
-                    for listingKey in listings.keys {
-                        self.ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).child(listingKey).removeValue()
-                    }
-                }
-            })
-        })
-    }
-    
-    func registerRequestsAdded() {
-        ref?.child(Keys.Requests.rawValue).child((Auth.auth().currentUser?.uid)!).observe(DataEventType.childAdded, with: { (requestSnapshot) in
-            
-            let listingKey = requestSnapshot.key
-            self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
-                self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
-                    
-                    if let listingItem = listingSnapshot.value as? [String : Any] {
-                        let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-                        print("request added " + listingKey)
-                        self.requestListings[listingKey] = newListing
-                    }
-                    
-                })
-                
-            })
-            
-        })
-    }
-    
-    func registerRequestsRemoved() {
-        
-        ref?.child(Keys.Requests.rawValue).child((Auth.auth().currentUser?.uid)!).observe(DataEventType.childRemoved, with: { (requestSnapshot) in
-            print("request removed " + requestSnapshot.key)
-            let listingKey = requestSnapshot.key
-            self.requestListings.removeValue(forKey: listingKey)
-        })
-    }
-	
-	func registerActiveAdded() {
-		ref?.child(Keys.Active.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (snapshot) in
-			
-			let listingKey = snapshot.key
-			print("listing key " + listingKey)
-			
-			self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
-				self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
-					
-					if let listingItem = listingSnapshot.value as? [String : Any] {
-						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-						print("request added " + listingKey)
-						self.activeListings[listingKey] = newListing
-					}
-					
-				})
-				
-			})
-			
-		})
-	}
-	
-	func registerActiveRemoved() {
-		ref?.child(Keys.Active.rawValue).child((Auth.auth().currentUser?.uid)!).observe(DataEventType.childRemoved, with: { (requestSnapshot) in
-			print("request removed " + requestSnapshot.key)
-			let listingKey = requestSnapshot.key
-			self.activeListings.removeValue(forKey: listingKey)
-		})
-	}
-    
-    func registerObservers(userLocation : CLLocation)  {
-        
-        // get reference to database
-        ref = Database.database().reference()
-        
-        geoFireRef = ref?.child(Keys.GeoLocations.rawValue)
-		geoFire = GeoFire(firebaseRef: geoFireRef!)
-        query = geoFire?.query(at: userLocation, withRadius: 5)
-        
-        registerGeoQueryKeyEntered()
-        registerGeoQueryKeyExit()
-        registerGeoQueryObserveReady()
-        
-        registerUserPostAdded()
-        registerUserPostRemoved()
-        
-        registerFollowingPostAdded()
-        registerFollowingPostRemoved()
-        
-        registerFollowingAdded()
-        registerFollowingRemoved()
-        
-        registerRequestsAdded()
-        registerRequestsRemoved()
-		
-		registerActiveAdded()
-		registerActiveRemoved()
-        
-    }
-    
-    func removeAllObservers() {
-        
-        query?.removeAllObservers()
-        
-        ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
-        ref?.child(Keys.Listings.rawValue).removeAllObservers()
-        ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
-        ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Following.rawValue).removeAllObservers()
-        ref?.child(Keys.Requests.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
-    }
-    
-    func updateListingLimit() {
-        
-        if worldListings.count >= listingLimit {
-            listingLimit = worldListings.count + 5
-            print("Will Display Cell last element index path row ")
-            let startLoading: String
-        }
-    }
-    
-    func updateRequests(forKey : String, updateChild : Bool) {
-        
-        var request = [String : Any]()
-
-        if updateChild {
-            request["/\(Keys.Listings.rawValue)/\(forKey)/\(Keys.Requests.rawValue)/\((Auth.auth().currentUser?.uid)!)"] = false
-            request["/\(Keys.Requests.rawValue)/\((Auth.auth().currentUser?.uid)!)/\(forKey)"] = false
-            
-            ref?.updateChildValues(request, withCompletionBlock: { (error, ref) in
-                self.worldListings[forKey]?.requested = true
-                self.followingistings[forKey]?.requested = true
-                self.requestListings[forKey]?.requested = true
-                self.updateListings(segmentChanged: false)
-            })
-        } else {
-            request["/\(Keys.Listings.rawValue)/\(forKey)/\(Keys.Requests.rawValue)/\((Auth.auth().currentUser?.uid)!)"] = NSNull()
-            request["/\(Keys.Requests.rawValue)/\((Auth.auth().currentUser?.uid)!)/\(forKey)"] = NSNull()
-            
-            ref?.updateChildValues(request, withCompletionBlock: { (error, ref) in
-                
-                self.worldListings[forKey]?.requested = false
-                self.followingistings[forKey]?.requested = false
-                self.requestListings[forKey]?.requested = false
-                self.updateListings(segmentChanged: false)
-            })
-        }
     }
 }
 
@@ -665,5 +262,43 @@ extension HomeViewController: PulleyDrawerViewControllerDelegate {
 	
 	func supportedDrawerPositions() -> [PulleyPosition] {
 		return PulleyPosition.all // You can specify the drawer positions you support. This is the same as: [.open, .partiallyRevealed, .collapsed, .closed]
+	}
+}
+
+// MARK: - ListingManager extension
+extension HomeViewController: ListingManagerDelegate {
+	func updateListings() {
+		print("Update listings")
+		
+		switch segmentControl.selectedSegmentIndex {
+			case 0:
+				setCurrentListings(listingManager.worldListings)
+				break
+			case 1:
+				setCurrentListings(listingManager.followingistings)
+				break
+			case 2:
+				let needDirectListings : String
+				currentListings.removeAll()
+				break
+			case 3:
+				setCurrentListings(listingManager.requestListings)
+				break
+			case 4:
+				setCurrentListings(listingManager.selfListings)
+				break
+			case 5:
+				setCurrentListings(listingManager.activeListings)
+				break
+			default:
+				break
+		}
+		tableView.reloadData()
+	}
+	func startLoading() {
+		
+	}
+	func stopLoading() {
+		
 	}
 }
