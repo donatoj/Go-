@@ -61,14 +61,14 @@ class RequestsTableViewController: UITableViewController {
                 if let values = usersSnapshot.value as? [String : Any] {
                     print("update table data with snapshot baluye " + values.debugDescription)
                     let username = values[Keys.Username.rawValue]!
-                    let profileURL = values[Keys.ProfileURL.rawValue]!
-                    
-                    let url = URL(string: profileURL as! String)
-                    let data = try? Data(contentsOf: url!)
-                    let photo = UIImage(data: data!)
-                    
+//                    let profileURL = values[Keys.ProfileURL.rawValue]!
+//
+//                    let url = URL(string: profileURL as! String)
+//                    let data = try? Data(contentsOf: url!)
+//                    let photo = UIImage(data: data!)
+					
                     self.requestingUsers.append(username as! String)
-                    self.requestingUserPhotos.append(photo!)
+                    //self.requestingUserPhotos.append(photo!)
                     self.requestingUserIDs.append(userID)
                     
                     self.tableView.reloadData()
@@ -93,8 +93,7 @@ class RequestsTableViewController: UITableViewController {
         
         let activeUsers = ["Poster": (Auth.auth().currentUser?.uid)!, "Approved": requestingUID]
         
-        let childUpdates = ["/\(requestingUID)/\(key)" : activeUsers,
-                            "/\((Auth.auth().currentUser?.uid)!)/\(key)" : activeUsers]
+        let childUpdates = ["/\(requestingUID)/\(key)" : activeUsers]
         ref?.child(Keys.Active.rawValue).updateChildValues(childUpdates)
 		
 		sender.backgroundColor = UIColor.darkGray
@@ -127,9 +126,9 @@ class RequestsTableViewController: UITableViewController {
         cell.approveButton.backgroundColor = UIColor(hue: 155/360, saturation: 1, brightness: 0.98, alpha: 1)
         cell.approveButton.addTarget(self, action: #selector(OnApproveButtonPressed(_:)), for: .touchUpInside)
         
-        cell.profileImageView.image = requestingUserPhotos[indexPath.row]
-        cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
-        cell.profileImageView.clipsToBounds = true;
+//        cell.profileImageView.image = requestingUserPhotos[indexPath.row]
+//        cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
+//        cell.profileImageView.clipsToBounds = true;
         
         return cell
     }

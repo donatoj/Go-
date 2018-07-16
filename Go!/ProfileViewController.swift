@@ -77,7 +77,6 @@ class ProfileViewController: UIViewController {
         // not from UI button
         if uid == "" || uid == Auth.auth().currentUser?.uid{
             getCurrentUserData()
-            
         } else {
             getOtherUserData()
         }
@@ -89,10 +88,11 @@ class ProfileViewController: UIViewController {
         
         let user = Auth.auth().currentUser
         userNameLabel.text = user?.displayName
-        
+
+		let urlCallTooSlowUseCaching : String
         let url = (user?.providerData[0].photoURL)!
         setUserProfilePhoto(url: url)
-        
+
         // allow logout
         showFBLoginButton()
         followButton.isHidden = true

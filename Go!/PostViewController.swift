@@ -12,23 +12,26 @@ import CoreLocation
 import GeoFire
 
 class PostViewController: UIViewController {
-
+	
+	// MARK: - Outlets
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
-    
+	
+	// MARK: - Firebase Refs
     var ref : DatabaseReference?
     var geoFireRef : DatabaseReference?
     var geoFire : GeoFire?
-    
-    var postDict = [String : String]()
-    
+	
+	// MARK: - Keys
+	var postDict = [String : String]()
+	var followerKeyList = [String]()
+	
+	// MARK: - Location Members
     let manager = CLLocationManager()
     var userLocation : CLLocationCoordinate2D!
-    
-    var followerKeyList = [String]()
-    
+	
+	// MARK: - Actions
     @IBAction func cancelPressed(_ sender: Any) {
-        
         // create alert before canceling
         amountTextField.text = ""
         descriptionTextView.text = ""
@@ -39,7 +42,6 @@ class PostViewController: UIViewController {
     }
     
     @IBAction func savePressed(_ sender: Any) {
-        
         if let key = ref?.child(Keys.UserPosts.rawValue).child((Auth.auth().currentUser?.uid)!).childByAutoId().key {
             
             geoFireRef = ref?.child(Keys.GeoLocations.rawValue)
@@ -71,7 +73,8 @@ class PostViewController: UIViewController {
             let keyFailed: String
         }
     }
-    
+	
+    // MARK: - ViewController LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -84,14 +87,12 @@ class PostViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
         ref?.child(Keys.Users.rawValue).child((Auth.auth().currentUser?.uid)!).child(Keys.Followers.rawValue).queryOrderedByKey().observe( .childAdded, with: { (friendSnapshot) in
             
             print("follower snapshot " + friendSnapshot.key)
             self.followerKeyList.append(friendSnapshot.key)
             
         })
-        
         manager.startUpdatingLocation()
     }
     
@@ -106,20 +107,20 @@ class PostViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+	
+	deinit {
+		print("PostViewController Deinitialized")
+	}
+	
+	// MARK: - Private functions
+	
     func getUserLocation() -> CLLocation {
-        
         let lat = userLocation.latitude
         let long = userLocation.longitude
         let location = CLLocation(latitude: lat, longitude: long)
         
         return location
     }
-    
-    deinit {
-        print("PostViewController Deinitialized")
-    }
-    
 
     /*
     // MARK: - Navigation
@@ -132,7 +133,7 @@ class PostViewController: UIViewController {
     */
 
 }
-
+// MARK: - Location Extension
 extension PostViewController : CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

@@ -12,9 +12,12 @@ import Firebase
 import FirebaseDatabase
 
 class LoginViewController: UIViewController {
-    
+	
+	// MARK: - Members
     var ref: DatabaseReference!
-    
+	
+	// MARK: - ViewController LifeCycle
+	
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -41,7 +44,7 @@ class LoginViewController: UIViewController {
     }
     
 }
-
+// MARK: - Facebook Extension
 extension LoginViewController : FBSDKLoginButtonDelegate {
     
     func showFBLoginButton() {

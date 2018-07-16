@@ -9,8 +9,11 @@
 /* Begin PBXBuildFile section */
 		171BF02E1F366F520048A222 /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171BF02D1F366F520048A222 /* Listing.swift */; };
 		171BF0321F3AF42C0048A222 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 171BF0311F3AF42C0048A222 /* CoreLocation.framework */; };
-		172C1B541F62548A001826CE /* ActiveTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B531F62548A001826CE /* ActiveTableViewController.swift */; };
-		172C1B561F625532001826CE /* ActiveTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B551F625532001826CE /* ActiveTableViewCell.swift */; };
+		172BEA3C20FA92BC0036D5A6 /* PulleyPassthroughScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172BEA3720FA92BB0036D5A6 /* PulleyPassthroughScrollView.swift */; };
+		172BEA3D20FA92BC0036D5A6 /* UIViewController+PulleyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172BEA3820FA92BC0036D5A6 /* UIViewController+PulleyViewController.swift */; };
+		172BEA3E20FA92BC0036D5A6 /* PulleyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172BEA3920FA92BC0036D5A6 /* PulleyViewController.swift */; };
+		172BEA3F20FA92BC0036D5A6 /* UIView+constrainToParent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172BEA3B20FA92BC0036D5A6 /* UIView+constrainToParent.swift */; };
+		172BEA4220FA98FD0036D5A6 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172BEA4120FA98FD0036D5A6 /* MapViewController.swift */; };
 		172C1B621F67B923001826CE /* ActiveDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B611F67B923001826CE /* ActiveDetailViewController.swift */; };
 		17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */; };
 		175F2E8B1F47183300931A9B /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F2E8A1F47183300931A9B /* Keys.swift */; };
@@ -30,7 +33,6 @@
 		17979F241F736ED100F82596 /* CardItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17979F231F736ED100F82596 /* CardItemViewController.swift */; };
 		17979F261F736EF200F82596 /* CardItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17979F251F736EF200F82596 /* CardItemViewController.xib */; };
 		17979F281F736F0D00F82596 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17979F271F736F0D00F82596 /* PageControl.swift */; };
-		17C775AF1F8C7DD700826848 /* PaymentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C775AE1F8C7DD700826848 /* PaymentsViewController.swift */; };
 		17C775B61F8C95F400826848 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C775B21F8C80B000826848 /* UIColor.swift */; };
 		B87600B1132F9E1D080CC378 /* Pods_Go_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E545964835185630097A811 /* Pods_Go_.framework */; };
 /* End PBXBuildFile section */
@@ -39,8 +41,12 @@
 		02AC6BAFC46EA41978B8F2A9 /* Pods-Go!.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Go!.release.xcconfig"; path = "Pods/Target Support Files/Pods-Go!/Pods-Go!.release.xcconfig"; sourceTree = "<group>"; };
 		171BF02D1F366F520048A222 /* Listing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Listing.swift; sourceTree = "<group>"; };
 		171BF0311F3AF42C0048A222 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		172C1B531F62548A001826CE /* ActiveTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTableViewController.swift; sourceTree = "<group>"; };
-		172C1B551F625532001826CE /* ActiveTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTableViewCell.swift; sourceTree = "<group>"; };
+		172BEA3720FA92BB0036D5A6 /* PulleyPassthroughScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PulleyPassthroughScrollView.swift; sourceTree = "<group>"; };
+		172BEA3820FA92BC0036D5A6 /* UIViewController+PulleyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+PulleyViewController.swift"; sourceTree = "<group>"; };
+		172BEA3920FA92BC0036D5A6 /* PulleyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PulleyViewController.swift; sourceTree = "<group>"; };
+		172BEA3A20FA92BC0036D5A6 /* Pulley.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pulley.h; sourceTree = "<group>"; };
+		172BEA3B20FA92BC0036D5A6 /* UIView+constrainToParent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+constrainToParent.swift"; sourceTree = "<group>"; };
+		172BEA4120FA98FD0036D5A6 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		172C1B611F67B923001826CE /* ActiveDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveDetailViewController.swift; sourceTree = "<group>"; };
 		17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		175F2E8A1F47183300931A9B /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
@@ -62,7 +68,6 @@
 		17979F231F736ED100F82596 /* CardItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardItemViewController.swift; sourceTree = "<group>"; };
 		17979F251F736EF200F82596 /* CardItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemViewController.xib; sourceTree = "<group>"; };
 		17979F271F736F0D00F82596 /* PageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageControl.swift; sourceTree = "<group>"; };
-		17C775AE1F8C7DD700826848 /* PaymentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentsViewController.swift; sourceTree = "<group>"; };
 		17C775B21F8C80B000826848 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		8E545964835185630097A811 /* Pods_Go_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Go_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D910C2A56AE47EA01F4FA51 /* Pods-Go!.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Go!.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Go!/Pods-Go!.debug.xcconfig"; sourceTree = "<group>"; };
@@ -93,7 +98,7 @@
 		172B9CE31F7E3F5F00C3AA74 /* Third Party Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				17979F271F736F0D00F82596 /* PageControl.swift */,
+				172BEA4020FA92C90036D5A6 /* Pulley */,
 			);
 			name = "Third Party Libraries";
 			sourceTree = "<group>";
@@ -106,10 +111,31 @@
 			name = Xibs;
 			sourceTree = "<group>";
 		};
+		172BEA4020FA92C90036D5A6 /* Pulley */ = {
+			isa = PBXGroup;
+			children = (
+				172BEA3A20FA92BC0036D5A6 /* Pulley.h */,
+				172BEA3720FA92BB0036D5A6 /* PulleyPassthroughScrollView.swift */,
+				172BEA3920FA92BC0036D5A6 /* PulleyViewController.swift */,
+				172BEA3B20FA92BC0036D5A6 /* UIView+constrainToParent.swift */,
+				172BEA3820FA92BC0036D5A6 /* UIViewController+PulleyViewController.swift */,
+			);
+			name = Pulley;
+			sourceTree = "<group>";
+		};
+		172BEA4620FB38530036D5A6 /* Depracated */ = {
+			isa = PBXGroup;
+			children = (
+				17979F201F733D7C00F82596 /* MyPostsViewController.swift */,
+				17979F231F736ED100F82596 /* CardItemViewController.swift */,
+				17979F271F736F0D00F82596 /* PageControl.swift */,
+			);
+			name = Depracated;
+			sourceTree = "<group>";
+		};
 		172C1B5A1F627279001826CE /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				172C1B551F625532001826CE /* ActiveTableViewCell.swift */,
 				175F2E8E1F4ECAF200931A9B /* RequestTableViewCell.swift */,
 				176860361F28A126000D9AC8 /* PostTableViewCell.swift */,
 			);
@@ -119,14 +145,12 @@
 		172C1B5B1F627293001826CE /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				17C775AE1F8C7DD700826848 /* PaymentsViewController.swift */,
 				172C1B611F67B923001826CE /* ActiveDetailViewController.swift */,
-				17979F231F736ED100F82596 /* CardItemViewController.swift */,
 				177E6E891EC2E87C003F017E /* LoginViewController.swift */,
 				178296531ECC3877008C64BA /* HomeViewController.swift */,
-				17979F201F733D7C00F82596 /* MyPostsViewController.swift */,
 				17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */,
 				178296581ED17964008C64BA /* PostViewController.swift */,
+				172BEA4120FA98FD0036D5A6 /* MapViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -134,7 +158,6 @@
 		172C1B5C1F6272A7001826CE /* TableViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				172C1B531F62548A001826CE /* ActiveTableViewController.swift */,
 				175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */,
 			);
 			name = TableViewControllers;
@@ -175,6 +198,7 @@
 				171BF0301F366F930048A222 /* Models */,
 				176860381F28A131000D9AC8 /* Views */,
 				178296551ED16662008C64BA /* Controllers */,
+				172BEA4620FB38530036D5A6 /* Depracated */,
 				172B9CE31F7E3F5F00C3AA74 /* Third Party Libraries */,
 				17C775B01F8C807F00826848 /* Extensions */,
 				172B9CE41F7E3FD000C3AA74 /* Xibs */,
@@ -395,23 +419,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				172C1B561F625532001826CE /* ActiveTableViewCell.swift in Sources */,
 				178296591ED17964008C64BA /* PostViewController.swift in Sources */,
 				1796A3C71F936A5C0047B323 /* MainAPIClient.swift in Sources */,
 				17979F281F736F0D00F82596 /* PageControl.swift in Sources */,
+				172BEA3C20FA92BC0036D5A6 /* PulleyPassthroughScrollView.swift in Sources */,
 				171BF02E1F366F520048A222 /* Listing.swift in Sources */,
 				177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */,
 				175F2E8B1F47183300931A9B /* Keys.swift in Sources */,
+				172BEA3D20FA92BC0036D5A6 /* UIViewController+PulleyViewController.swift in Sources */,
+				172BEA4220FA98FD0036D5A6 /* MapViewController.swift in Sources */,
 				17C775B61F8C95F400826848 /* UIColor.swift in Sources */,
 				17979F211F733D7C00F82596 /* MyPostsViewController.swift in Sources */,
 				17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */,
 				177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */,
 				178296541ECC3877008C64BA /* HomeViewController.swift in Sources */,
+				172BEA3E20FA92BC0036D5A6 /* PulleyViewController.swift in Sources */,
 				172C1B621F67B923001826CE /* ActiveDetailViewController.swift in Sources */,
 				175F2E8D1F4ECA5600931A9B /* RequestsTableViewController.swift in Sources */,
+				172BEA3F20FA92BC0036D5A6 /* UIView+constrainToParent.swift in Sources */,
 				175F2E8F1F4ECAF200931A9B /* RequestTableViewCell.swift in Sources */,
-				172C1B541F62548A001826CE /* ActiveTableViewController.swift in Sources */,
-				17C775AF1F8C7DD700826848 /* PaymentsViewController.swift in Sources */,
 				17979F241F736ED100F82596 /* CardItemViewController.swift in Sources */,
 				176860371F28A126000D9AC8 /* PostTableViewCell.swift in Sources */,
 			);

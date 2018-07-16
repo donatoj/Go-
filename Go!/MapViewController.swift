@@ -1,27 +1,26 @@
 //
-//  PaymentsViewController.swift
+//  MapViewController.swift
 //  Go!
 //
-//  Created by Jordan Donato on 10/9/17.
-//  Copyright © 2017 Go!. All rights reserved.
+//  Created by Jordan Donato on 7/14/18.
+//  Copyright © 2018 Go!. All rights reserved.
 //
 
 import UIKit
 
-class PaymentsViewController: UIViewController {
-    
+class MapViewController: UIViewController {
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
-        self.navigationItem.title = "Payments"
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
 
     /*
     // MARK: - Navigation

@@ -13,71 +13,41 @@ import CoreLocation
 import GeoFire
 
 class HomeViewController: UIViewController {
-    
+	
+	// MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
-    
+	
+	// MARK: - Firebase Refs
     var ref : DatabaseReference?
-    
     var geoFireRef : DatabaseReference?
     var geoFire : GeoFire?
     var query : GFCircleQuery?
     var geoQueryHandle : DatabaseHandle?
-    
+	
+	// MARK: - Listings
     var worldListings = [String : Listing]()
     var followingistings = [String : Listing]()
     var selfListings = [String : Listing]()
     var requestListings = [String : Listing]()
-    
-    var listingLimit = 5
-    let distanceLimit = 2000.0
-    
-    var currentListings = [Listing]()
-    
+	var activeListings = [String: Listing]()
+	var currentListings = [Listing]()
+	
+	// MARK: - Limits
+	var listingLimit = 5
+	let distanceLimit = 2000.0
+	
+	// MARK: - Members
     let manager = CLLocationManager()
     var userLocation = CLLocation()
-    
     var searchController : UISearchController!
-    
-    var myPostsViewController : MyPostsViewController!
-    
+	
+	// MARK: - Actions
     @IBAction func OnSegmentValueChanged(_ sender: Any) {
         updateListings(segmentChanged: true)
     }
-    
-    fileprivate func showSearchBar() {
-        searchController = UISearchController(searchResultsController:  nil)
-        
-        searchController.searchResultsUpdater = self
-        searchController.delegate = self
-        searchController.searchBar.delegate = self
-        
-        searchController.hidesNavigationBarDuringPresentation = true
-        searchController.dimsBackgroundDuringPresentation = true
-        
-        if #available(iOS 11.0, *) {
-            if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-                
-                if let backgroundview = textfield.subviews.first {
-                    
-                    // Background color
-                    backgroundview.backgroundColor = UIColor.white
-                    
-                    // Rounded corner
-                    backgroundview.layer.cornerRadius = 10;
-                    backgroundview.clipsToBounds = true;
-                    
-                }
-            }
-            
-            navigationItem.searchController = searchController
-            navigationItem.searchController?.isActive = true
-        } else {
-            tableView.tableHeaderView = searchController.searchBar
-        }
-        
-        definesPresentationContext = true
-    }
+	
+	// MARK: - ViewController LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,6 +82,67 @@ class HomeViewController: UIViewController {
         // Dispose of any resources that can be recreated.
         print("***********MEMORY WARNING*************")
     }
+	
+	deinit {
+		print("HomeViewController Deinitialized")
+	}
+	
+	// MARK: - Navigation
+	
+	// In a storyboard-based application, you will often want to do a little preparation before navigation
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		// Get the new view controller using segue.destinationViewController.
+		// Pass the selected object to the new view controller.
+		
+		if let button = sender as? UIButton {
+			let listingItem = currentListings[button.tag]
+			if (button.accessibilityIdentifier?.contains("requestButton"))! {
+				print("sender is request button")
+				let nextScene = segue.destination as! RequestsTableViewController
+				nextScene.key = listingItem.key
+			} else if (button.accessibilityIdentifier?.contains("usernameButton"))!{
+				print("sender is ui button")
+				let nextScene = segue.destination as! ProfileViewController
+				nextScene.uid = listingItem.uid
+			}
+		}
+	}
+	
+	// MARK: - Private functions
+	
+	fileprivate func showSearchBar() {
+		searchController = UISearchController(searchResultsController:  nil)
+		
+		searchController.searchResultsUpdater = self
+		searchController.delegate = self
+		searchController.searchBar.delegate = self
+		
+		searchController.hidesNavigationBarDuringPresentation = true
+		searchController.dimsBackgroundDuringPresentation = true
+		
+		if #available(iOS 11.0, *) {
+			if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+				
+				if let backgroundview = textfield.subviews.first {
+					
+					// Background color
+					backgroundview.backgroundColor = UIColor.white
+					
+					// Rounded corner
+					backgroundview.layer.cornerRadius = 10;
+					backgroundview.clipsToBounds = true;
+					
+				}
+			}
+			
+			navigationItem.searchController = searchController
+			navigationItem.searchController?.isActive = true
+		} else {
+			tableView.tableHeaderView = searchController.searchBar
+		}
+		
+		definesPresentationContext = true
+	}
 
     func updateListings(segmentChanged : Bool) {
         print("Update listings")
@@ -121,12 +152,11 @@ class HomeViewController: UIViewController {
             currentListings = Array(worldListings.values).sorted(by: { (listing1, listing2) -> Bool in
                 return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
             })
-            
             break
         case 1:
             currentListings = Array(followingistings.values).sorted(by: { (listing1, listing2) -> Bool in
-                return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()            })
-            
+                return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
+			})
             break
         case 2:
             let needDirectListings : String
@@ -134,8 +164,19 @@ class HomeViewController: UIViewController {
             break
         case 3:
             currentListings = Array(requestListings.values).sorted(by: { (listing1, listing2) -> Bool in
-                return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()            })
-            
+                return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
+			})
+			break
+		case 4:
+			currentListings = Array(selfListings.values).sorted(by: { (listing1, listing2) -> Bool in
+				return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
+			})
+            break
+		case 5:
+			currentListings = Array(activeListings.values).sorted(by: { (listing1, listing2) -> Bool in
+				return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
+			})
+			break
         default:
             break
         }
@@ -144,42 +185,18 @@ class HomeViewController: UIViewController {
     
     @objc func onRequestPressed(_ sender: UIButton) {
         let listingItem = currentListings[sender.tag]
-        updateRequests(forKey: listingItem.key, updateChild: !listingItem.requested)
+		
+		if listingItem.uid != Auth.auth().currentUser?.uid {
+			updateRequests(forKey: listingItem.key, updateChild: !listingItem.requested)
+		} else {
+			performSegue(withIdentifier: "showRequests", sender: sender)
+		}
     }
     
-    deinit {
-        print("HomeViewController Deinitialized")
-    }
-    
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
-        
-        if let button = sender as? UIButton {
-            let listingItem = currentListings[button.tag]
-            if (button.accessibilityIdentifier?.contains("requestButton"))! {
-                print("sender is request button")
-                let nextScene = segue.destination as! RequestsTableViewController
-                nextScene.key = listingItem.key
-            } else if (button.accessibilityIdentifier?.contains("usernameButton"))!{
-                print("sender is ui button")
-                let nextScene = segue.destination as! ProfileViewController
-                nextScene.uid = listingItem.uid
-            }
-        }
-        
-		if let controller = segue.destination as? UINavigationController {
-            print("going to my posts view controller")
-            myPostsViewController = controller.viewControllers.first as! MyPostsViewController
-            myPostsViewController.dataSource = self as MyPostsDataSource
-        }
-    }
-    
-
+	
 }
+
+// MARK: - TableView extensions
 
 extension HomeViewController : UITableViewDataSource {
     
@@ -217,21 +234,30 @@ extension HomeViewController : UITableViewDataSource {
         cell.requestButton.clipsToBounds = true
         cell.requestButton.tag = indexPath.section
         cell.requestButton.addTarget(self, action: #selector(onRequestPressed(_:)), for: .touchUpInside)
+		
+		if listingItem.uid == Auth.auth().currentUser?.uid {
+			cell.requestButton.setTitle("View Requests", for: UIControlState.normal)
+			cell.requestButton.backgroundColor = UIColor.white
+			cell.requestButton.layer.borderColor = UIColor.blue.cgColor
+			cell.requestButton.setTitleColor(UIColor.blue, for: .normal)
+		} else {
+			if listingItem.requested {
+				if segmentControl.selectedSegmentIndex == 3 {
+					cell.requestButton.backgroundColor = UIColor.red
+					cell.requestButton.layer.borderColor = UIColor.red.cgColor
+				} else {
+					cell.requestButton.backgroundColor = UIColor.seafoam
+					cell.requestButton.layer.borderColor = UIColor.seafoam.cgColor
+				}
+				cell.requestButton.setTitleColor(UIColor.white, for: .normal)
+			} else {
+				cell.requestButton.backgroundColor = UIColor.white
+				cell.requestButton.layer.borderColor = UIColor.seafoam.cgColor
+				cell.requestButton.setTitleColor(UIColor.seafoam, for: .normal)
+			}
+		}
         
-        if listingItem.requested {
-            if segmentControl.selectedSegmentIndex == 3 {
-                cell.requestButton.backgroundColor = UIColor.red
-                cell.requestButton.layer.borderColor = UIColor.red.cgColor
-            } else {
-                cell.requestButton.backgroundColor = UIColor.seafoam
-                cell.requestButton.layer.borderColor = UIColor.seafoam.cgColor
-            }
-            cell.requestButton.setTitleColor(UIColor.white, for: .normal)
-        } else {
-            cell.requestButton.backgroundColor = UIColor.white
-            cell.requestButton.layer.borderColor = UIColor.seafoam.cgColor
-            cell.requestButton.setTitleColor(UIColor.seafoam, for: .normal)
-        }
+		
         
         cell.layer.cornerRadius = 10
         cell.selectionStyle = UITableViewCellSelectionStyle.none
@@ -242,7 +268,7 @@ extension HomeViewController : UITableViewDataSource {
 }
 
 extension HomeViewController : UITableViewDelegate {
-    
+	
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         let lastElement = currentListings.count - 1
@@ -266,6 +292,8 @@ extension HomeViewController : UITableViewDelegate {
     }
 }
 
+// MARK: - Location extensions
+
 extension HomeViewController : CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -279,6 +307,8 @@ extension HomeViewController : CLLocationManagerDelegate {
     }
 }
 
+// MARK: - Search extensions
+
 extension HomeViewController : UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -287,7 +317,7 @@ extension HomeViewController : UISearchControllerDelegate, UISearchResultsUpdati
     }
 }
 
-// Database functions
+// MARK: -  Database listeners
 extension HomeViewController {
     
     // Get a new listing
@@ -505,6 +535,36 @@ extension HomeViewController {
             self.requestListings.removeValue(forKey: listingKey)
         })
     }
+	
+	func registerActiveAdded() {
+		ref?.child(Keys.Active.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childAdded, with: { (snapshot) in
+			
+			let listingKey = snapshot.key
+			print("listing key " + listingKey)
+			
+			self.geoFire?.getLocationForKey(listingKey, withCallback: { (location, error) in
+				self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
+					
+					if let listingItem = listingSnapshot.value as? [String : Any] {
+						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
+						print("request added " + listingKey)
+						self.activeListings[listingKey] = newListing
+					}
+					
+				})
+				
+			})
+			
+		})
+	}
+	
+	func registerActiveRemoved() {
+		ref?.child(Keys.Active.rawValue).child((Auth.auth().currentUser?.uid)!).observe(DataEventType.childRemoved, with: { (requestSnapshot) in
+			print("request removed " + requestSnapshot.key)
+			let listingKey = requestSnapshot.key
+			self.activeListings.removeValue(forKey: listingKey)
+		})
+	}
     
     func registerObservers(userLocation : CLLocation)  {
         
@@ -530,6 +590,9 @@ extension HomeViewController {
         
         registerRequestsAdded()
         registerRequestsRemoved()
+		
+		registerActiveAdded()
+		registerActiveRemoved()
         
     }
     
@@ -582,8 +645,25 @@ extension HomeViewController {
     }
 }
 
-extension HomeViewController : MyPostsDataSource {
-    func getSelfListings() -> [String : Listing] {
-        return selfListings
-    }
+// MARK: - Pully extension
+
+extension HomeViewController: PulleyDrawerViewControllerDelegate {
+	
+	func collapsedDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat
+	{
+		print("collapsed height drawer height " + bottomSafeArea.description)
+		// For devices with a bottom safe area, we want to make our drawer taller. Your implementation may not want to do that. In that case, disregard the bottomSafeArea value.
+		return 168.0 + bottomSafeArea
+	}
+	
+	func partialRevealDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat
+	{
+		print("partial reviewl height drawer height " + bottomSafeArea.description)
+		// For devices with a bottom safe area, we want to make our drawer taller. Your implementation may not want to do that. In that case, disregard the bottomSafeArea value.
+		return 364.0 + bottomSafeArea
+	}
+	
+	func supportedDrawerPositions() -> [PulleyPosition] {
+		return PulleyPosition.all // You can specify the drawer positions you support. This is the same as: [.open, .partiallyRevealed, .collapsed, .closed]
+	}
 }

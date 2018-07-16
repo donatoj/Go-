@@ -11,7 +11,7 @@ import UIKit
 import CoreLocation
 
 struct Listing {
-    
+    // MARK: - Members
     let userName: String
     let uid: String
     let description: String
@@ -21,13 +21,14 @@ struct Listing {
     let latitude: CLLocationDegrees
     let longitude: CLLocationDegrees
     let key: String
+	let profilePhoto: UIImage?
     var requested: Bool
     
     var location: CLLocation {
         return CLLocation(latitude: self.latitude, longitude: self.longitude)
     }
     
-    let profilePhoto: UIImage?
+	// MARK: - Initialization
     
     init(userName: String, uid: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, key: String, requested: Bool) {
         
@@ -51,6 +52,8 @@ struct Listing {
 		}
 		
     }
+	
+	// MARK: - Methods
     
     func distance(to location: CLLocation) -> CLLocationDistance {
         return location.distance(from: self.location)
