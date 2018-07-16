@@ -16,9 +16,9 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var segmentControl: UISegmentedControl!
 	
 	// MARK: - Members
-	var listingManager = ListingManager()
+	var listingManager = ListingManager.sharedInstance
     var searchController : UISearchController!
-	var currentListings = [Listing]()
+	
 	var currentUserId : String?
 	
 	// MARK: - Actions
@@ -35,7 +35,7 @@ class HomeViewController: UIViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 111
 		
-		listingManager.delegate = self
+		listingManager.homeViewDelegate = self
         listingManager.registerObservers()
 		
         showSearchBar()
@@ -73,7 +73,7 @@ class HomeViewController: UIViewController {
 		// Pass the selected object to the new view controller.
 		
 		if let button = sender as? UIButton {
-			let listingItem = currentListings[button.tag]
+			let listingItem = listingManager.currentListings[button.tag]
 			if (button.accessibilityIdentifier?.contains("requestButton"))! {
 				print("sender is request button")
 				let nextScene = segue.destination as! RequestsTableViewController
@@ -121,15 +121,9 @@ class HomeViewController: UIViewController {
 		
 		definesPresentationContext = true
 	}
-	
-	fileprivate func setCurrentListings(_ withListings: [String : Listing]) {
-		currentListings = Array(withListings.values).sorted(by: { (listing1, listing2) -> Bool in
-			return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
-		})
-	}
     
     @objc func onRequestPressed(_ sender: UIButton) {
-        let listingItem = currentListings[sender.tag]
+        let listingItem = listingManager.currentListings[sender.tag]
 		
 		if listingItem.uid != currentUserId {
 			listingManager.updateRequests(forKey: listingItem.key, updateChild: !listingItem.requested)
@@ -145,7 +139,7 @@ extension HomeViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         
-        return currentListings.count
+        return listingManager.currentListings.count
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -156,13 +150,13 @@ extension HomeViewController : UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PostTableViewCell
         
-        let listingItem = currentListings[indexPath.section]
+        let listingItem = listingManager.currentListings[indexPath.section]
         
         // check for only items not from user
         cell.userNameButton.setTitle(listingItem.userName, for: UIControlState.normal)
         cell.userNameButton.tag = indexPath.section
         
-        cell.descriptionLabel.text = listingItem.description
+        cell.descriptionLabel.text = listingItem.listingDescription
         
         cell.profileImageView.image = listingItem.profilePhoto
         cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
@@ -211,7 +205,7 @@ extension HomeViewController : UITableViewDelegate {
 	
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        let lastElement = currentListings.count - 1
+        let lastElement = listingManager.currentListings.count - 1
         if indexPath.section == lastElement  {
             
             listingManager.updateListingLimit()
@@ -269,30 +263,7 @@ extension HomeViewController: PulleyDrawerViewControllerDelegate {
 extension HomeViewController: ListingManagerDelegate {
 	func updateListings() {
 		print("Update listings")
-		
-		switch segmentControl.selectedSegmentIndex {
-			case 0:
-				setCurrentListings(listingManager.worldListings)
-				break
-			case 1:
-				setCurrentListings(listingManager.followingistings)
-				break
-			case 2:
-				let needDirectListings : String
-				currentListings.removeAll()
-				break
-			case 3:
-				setCurrentListings(listingManager.requestListings)
-				break
-			case 4:
-				setCurrentListings(listingManager.selfListings)
-				break
-			case 5:
-				setCurrentListings(listingManager.activeListings)
-				break
-			default:
-				break
-		}
+		listingManager.updateCurrentListings(withIndex: segmentControl.selectedSegmentIndex)
 		tableView.reloadData()
 	}
 	func startLoading() {

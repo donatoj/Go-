@@ -10,11 +10,11 @@ import Foundation
 import UIKit
 import CoreLocation
 
-struct Listing {
+class Listing : NSObject {
     // MARK: - Members
     let userName: String
     let uid: String
-    let description: String
+    let listingDescription: String
     let amount: String
     let photoURL: String
     let datePosted: String
@@ -34,7 +34,7 @@ struct Listing {
         
         self.userName = userName
         self.uid = uid
-        self.description = description
+        self.listingDescription = description
         self.amount = amount
         self.photoURL = photoURL
         self.datePosted = datePosted

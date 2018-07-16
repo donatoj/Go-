@@ -11,14 +11,22 @@ import FirebaseDatabase
 import Firebase
 import GeoFire
 
-protocol ListingManagerDelegate {
-	func updateListings()
-	func startLoading()
-	func stopLoading()
+// MARK: - Protocol methods
+@objc protocol ListingManagerDelegate {
+	@objc optional func didUpdateListings(_ currentListings: [Listing])
+	@objc optional func updateListings()
+	@objc optional func startLoading()
+	@objc optional func stopLoading()
 }
 
+// MARK: - Singleton
 class ListingManager : NSObject {
-	var delegate : ListingManagerDelegate?
+	
+	static let sharedInstance = ListingManager()
+	
+	// MARK: - Delegates
+	var homeViewDelegate : ListingManagerDelegate?
+	var mapViewDelegate : ListingManagerDelegate?
 	
 	// MARK: - Firebase Refs
 	var ref : DatabaseReference?
@@ -33,6 +41,7 @@ class ListingManager : NSObject {
 	var selfListings = [String : Listing]()
 	var requestListings = [String : Listing]()
 	var activeListings = [String: Listing]()
+	var currentListings = [Listing]()
 	
 	// MARK: - Limits
 	var listingLimit = 5
@@ -43,7 +52,7 @@ class ListingManager : NSObject {
 	var userLocation = CLLocation()
 	
 	// MARK: - Initialization
-	override init() {
+	override private init() {
 		super.init()
 		locationManager.delegate = self
 		locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -75,6 +84,13 @@ class ListingManager : NSObject {
 		return newListing
 	}
 	
+	fileprivate func setCurrentListings(_ withListings: [String : Listing]) {
+		currentListings = Array(withListings.values).sorted(by: { (listing1, listing2) -> Bool in
+			return listing1.timeAgoSinceDate() < listing2.timeAgoSinceDate()
+		})
+		self.mapViewDelegate?.didUpdateListings?(currentListings)
+	}
+	
 	// MARK: - Public Methods
 	
 	func startUpdatingLocation() {
@@ -85,14 +101,38 @@ class ListingManager : NSObject {
 		locationManager.stopUpdatingLocation()
 	}
 	
-	
+	func updateCurrentListings(withIndex : Int) {
+		switch withIndex {
+		case 0:
+			setCurrentListings(worldListings)
+			break
+		case 1:
+			setCurrentListings(followingistings)
+			break
+		case 2:
+			let needDirectListings : String
+			currentListings.removeAll()
+			break
+		case 3:
+			setCurrentListings(requestListings)
+			break
+		case 4:
+			setCurrentListings(selfListings)
+			break
+		case 5:
+			setCurrentListings(activeListings)
+			break
+		default:
+			break
+		}
+	}
 	
 	func updateListingLimit() {
 		
 		if worldListings.count >= listingLimit {
 			listingLimit = worldListings.count + 5
 			print("Will Display Cell last element index path row ")
-			self.delegate?.startLoading()
+			self.homeViewDelegate?.startLoading?()
 		}
 	}
 	
@@ -107,7 +147,7 @@ class ListingManager : NSObject {
 			self.worldListings[forKey]?.requested = updateChild
 			self.followingistings[forKey]?.requested = updateChild
 			self.requestListings[forKey]?.requested = updateChild
-			self.delegate?.updateListings()
+			self.homeViewDelegate?.updateListings?()
 		})
 	}
 	
@@ -186,7 +226,7 @@ class ListingManager : NSObject {
 	}
 	
 	fileprivate func registerGeoQueryObserveReady() {
-		
+		var updated = false
 		query?.observeReady({
 			
 			print("Query observe Ready")
@@ -194,17 +234,20 @@ class ListingManager : NSObject {
 			if self.worldListings.count < self.listingLimit {
 				
 				if (self.query?.radius.isLessThanOrEqualTo(self.distanceLimit))! {
+					updated = false
 					self.query?.radius += 5
 					print("update radius " + (self.query?.radius.description)!)
-				} else {
-					self.delegate?.stopLoading()
-					self.delegate?.updateListings()
+				} else if !updated{
+					self.homeViewDelegate?.stopLoading?()
+					self.homeViewDelegate?.updateListings?()
+					updated = true
 					print("stoploading 1")
 				}
 				
-			} else {
-				self.delegate?.stopLoading()
-				self.delegate?.updateListings()
+			} else if !updated {
+				self.homeViewDelegate?.stopLoading?()
+				self.homeViewDelegate?.updateListings?()
+				updated = true
 				print("stop loading 2")
 			}
 		})
@@ -384,7 +427,7 @@ extension ListingManager : CLLocationManagerDelegate {
 		let location = locations[0]
 		let userLocationCoordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
 		userLocation = CLLocation(latitude: userLocationCoordinate.latitude, longitude: userLocationCoordinate.longitude)
-		
+
 		//print(userLocation)
 		query?.center = userLocation
 	}
