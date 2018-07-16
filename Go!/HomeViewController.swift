@@ -163,7 +163,7 @@ extension HomeViewController : UITableViewDataSource {
         cell.profileImageView.clipsToBounds = true;
         
         cell.timeAgo.text = listingItem.timeAgoSinceDate(true)
-        cell.distance.text = listingItem.getDistanceFromListing(userLocation: listingManager.userLocation)
+		cell.distance.text = listingItem.uid != currentUserId ? listingItem.getDistanceFromListing(userLocation: listingManager.userLocation) : ""
         
         cell.requestButton.setTitle("$" + listingItem.amount, for: UIControlState.normal)
         cell.requestButton.layer.borderWidth = 1

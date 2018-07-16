@@ -29,11 +29,11 @@ class ListingManager : NSObject {
 	var mapViewDelegate : ListingManagerDelegate?
 	
 	// MARK: - Firebase Refs
-	var ref : DatabaseReference?
-	var geoFireRef : DatabaseReference?
-	var geoFire : GeoFire?
-	var query : GFCircleQuery?
-	var geoQueryHandle : DatabaseHandle?
+	fileprivate var ref : DatabaseReference?
+	fileprivate var geoFireRef : DatabaseReference?
+	fileprivate var geoFire : GeoFire?
+	fileprivate var query : GFCircleQuery?
+	fileprivate var geoQueryHandle : DatabaseHandle?
 	
 	// MARK: - Listings
 	var worldListings = [String : Listing]()
@@ -45,10 +45,10 @@ class ListingManager : NSObject {
 	
 	// MARK: - Limits
 	var listingLimit = 5
-	let distanceLimit = 2000.0
+	fileprivate let distanceLimit = 2000.0
 	
-	// MARK: - Members
-	let locationManager = CLLocationManager()
+	// MARK: - Location
+	fileprivate let locationManager = CLLocationManager()
 	var userLocation = CLLocation()
 	
 	// MARK: - Initialization
