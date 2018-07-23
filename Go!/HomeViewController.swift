@@ -13,6 +13,9 @@ class HomeViewController: UIViewController {
 	
 	// MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
+	@IBOutlet weak var collectionView: UICollectionView!
+	@IBOutlet weak var searchBar: UISearchBar!
+	@IBOutlet weak var gripperView: UIView!
 	
 	// MARK: - Members
 	var listingManager = ListingManager.sharedInstance
@@ -26,13 +29,15 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-//        tableView.rowHeight = UITableViewAutomaticDimension
-//        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 100
+		
+		gripperView.layer.cornerRadius = 2.5
 		
 		listingManager.homeViewDelegate = self
         listingManager.registerObservers()
 		
-        //showSearchBar()
+        showSearchBar()
 		
 		currentUserId = Auth.auth().currentUser?.uid
 	
@@ -85,34 +90,32 @@ class HomeViewController: UIViewController {
 	
 	fileprivate func showSearchBar() {
 		searchController = UISearchController(searchResultsController:  nil)
-		
 		searchController.searchResultsUpdater = self
 		searchController.delegate = self
 		searchController.searchBar.delegate = self
-		
-		searchController.hidesNavigationBarDuringPresentation = true
 		searchController.dimsBackgroundDuringPresentation = true
+		searchController.searchBar.searchBarStyle = UISearchBarStyle.minimal
 		
-		if #available(iOS 11.0, *) {
-			if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-				
-				if let backgroundview = textfield.subviews.first {
-					
-					// Background color
-					backgroundview.backgroundColor = UIColor.white
-					
-					// Rounded corner
-					backgroundview.layer.cornerRadius = 10;
-					backgroundview.clipsToBounds = true;
-					
-				}
-			}
-			
-			navigationItem.searchController = searchController
-			navigationItem.searchController?.isActive = true
-		} else {
-			tableView.tableHeaderView = searchController.searchBar
-		}
+		tableView.tableHeaderView = searchController.searchBar
+		
+//		if #available(iOS 11.0, *) {
+//			if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+//				
+//				if let backgroundview = textfield.subviews.first {
+//					
+//					// Background color
+//					backgroundview.backgroundColor = UIColor.clear
+//					
+//					// Rounded corner
+//					backgroundview.layer.cornerRadius = 10;
+//					backgroundview.clipsToBounds = true;
+//					
+//				}
+//			}
+//			
+////			navigationItem.searchController = searchController
+////			navigationItem.searchController?.isActive = true
+//		}
 		
 		definesPresentationContext = true
 	}
@@ -137,7 +140,7 @@ class HomeViewController: UIViewController {
 			vc.modalTransitionStyle = .coverVertical
 			present(vc, animated: true, completion: nil)
 		}
-		
+		collectionView.reloadData()
 	}
 }
 // MARK: - CollectionView extensions
@@ -155,7 +158,7 @@ extension HomeViewController: UICollectionViewDataSource {
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MenuCollectionViewCell", for: indexPath) as! MenuCollectionViewCell
 		
 		cell.label.text = menuItemsManager.MenuItems[indexPath.row].name
-		
+		cell.button.layer.borderColor = UIColor.seafoam.cgColor
 		cell.button.layer.borderWidth = 3
 		cell.button.layer.cornerRadius = cell.button.frame.size.width / 2;
 		cell.button.clipsToBounds = true
@@ -167,9 +170,10 @@ extension HomeViewController: UICollectionViewDataSource {
 		if indexPath.row == menuItemsManager.FilterIndex {
 			cell.button.setImage(tintedImage, for: UIControlState.normal)
 			cell.button.tintColor = UIColor.white
-			cell.button.backgroundColor = UIColor.black
+			cell.button.backgroundColor = UIColor.seafoam
 		} else {
-			cell.button.setImage(origImage, for: UIControlState.normal)
+			cell.button.setImage(tintedImage, for: UIControlState.normal)
+			cell.button.tintColor = UIColor.seafoam
 			cell.button.backgroundColor = UIColor.white
 		}
 
@@ -186,26 +190,18 @@ extension HomeViewController : UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return listingManager.currentListings.count + 1
+        return listingManager.currentListings.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-		if(indexPath.row == 0)
-		{
-			let menu = tableView.dequeueReusableCell(withIdentifier: "MenuTableViewCell", for: indexPath) as! MenuTableViewCell
-			print("returning menu cell****")
-			menu.selectionStyle = UITableViewCellSelectionStyle.none
-			return menu
-		}
-		
 		let cell = tableView.dequeueReusableCell(withIdentifier: "PostTableViewCell", for: indexPath) as! PostTableViewCell
 		
-        let listingItem = listingManager.currentListings[indexPath.row - 1]
+        let listingItem = listingManager.currentListings[indexPath.row]
         
         // check for only items not from user
         cell.userNameButton.setTitle(listingItem.userName, for: UIControlState.normal)
-        cell.userNameButton.tag = indexPath.row - 1
+        cell.userNameButton.tag = indexPath.row
         
         cell.descriptionLabel.text = listingItem.listingDescription
         
@@ -220,7 +216,7 @@ extension HomeViewController : UITableViewDataSource {
         cell.requestButton.layer.borderWidth = 1
         cell.requestButton.layer.cornerRadius = 8
         cell.requestButton.clipsToBounds = true
-        cell.requestButton.tag = indexPath.row - 1
+        cell.requestButton.tag = indexPath.row
         cell.requestButton.addTarget(self, action: #selector(onRequestPressed(_:)), for: .touchUpInside)
 		
 		if listingItem.uid == currentUserId {
@@ -230,7 +226,7 @@ extension HomeViewController : UITableViewDataSource {
 			cell.requestButton.setTitleColor(UIColor.blue, for: .normal)
 		} else {
 			if listingItem.requested {
-				if menuItemsManager.FilterIndex == 3 {
+				if menuItemsManager.FilterIndex == 4 {
 					cell.requestButton.backgroundColor = UIColor.red
 					cell.requestButton.layer.borderColor = UIColor.red.cgColor
 				} else {
@@ -262,15 +258,11 @@ extension HomeViewController : UITableViewDelegate {
             listingManager.updateListingLimit()
         }
 		
-		guard let menuTableViewCell = cell as? MenuTableViewCell else {return}
-		print("setting collection view delegate***")
-		menuTableViewCell.setCollectionViewDataSourceDelegate(dataSourceDelegate: self, forRow: indexPath.row)
+//		guard let menuTableViewCell = cell as? MenuTableViewCell else {return}
+//		print("setting collection view delegate***")
+//		menuTableViewCell.setCollectionViewDataSourceDelegate(dataSourceDelegate: self, forRow: indexPath.row)
     }
 	
-	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return CGFloat(100)
-	}
-//
 //    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 //
 //        return 10

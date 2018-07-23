@@ -77,6 +77,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 		} else {
 			profileButton.setImage(UIImage(named: "Profile"), for: UIControlState.normal)
 		}
+		profileButton.layer.borderWidth = 2
+		profileButton.layer.borderColor = UIColor.seafoam.cgColor
 		profileButton.layer.cornerRadius = profileButton.frame.size.width / 2
 		profileButton.clipsToBounds = true
 	}
