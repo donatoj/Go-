@@ -8,10 +8,12 @@
 
 import UIKit
 import MapKit
+import FirebaseAuth
 
 class MapViewController: UIViewController, MKMapViewDelegate {
 	// MARK: - Outlets
 	@IBOutlet weak var mapView: MKMapView!
+	@IBOutlet weak var profileButton: UIButton!
 	
 	// MARK: - Members
 	let locationManager = CLLocationManager()
@@ -29,6 +31,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // Do any additional setup after loading the view.
 		
 		listingManager.mapViewDelegate = self
+		
+		setProfilePhoto()
     }
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -63,6 +67,18 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 		let region: MKCoordinateRegion = MKCoordinateRegionMake(forLocation, span)
 		
 		mapView.setRegion(region, animated: true)
+	}
+	
+	fileprivate func setProfilePhoto() {
+		let user = Auth.auth().currentUser
+		let url = user?.providerData[0].photoURL
+		if let data = try? Data(contentsOf: url!) {
+			profileButton.setImage(UIImage(data: data), for: UIControlState.normal)
+		} else {
+			profileButton.setImage(UIImage(named: "Profile"), for: UIControlState.normal)
+		}
+		profileButton.layer.cornerRadius = profileButton.frame.size.width / 2
+		profileButton.clipsToBounds = true
 	}
 }
 

@@ -26,21 +26,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         STPPaymentConfiguration.shared().publishableKey = "pk_test_Poy3a2Y5v783NCnx9zg19KhU"
         
-        let navigationBarAppearance = UINavigationBar.appearance()
-        navigationBarAppearance.tintColor = UIColor.white
-        navigationBarAppearance.barTintColor = UIColor.seafoam
-        
-        // change navigation item title color
-        navigationBarAppearance.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
-        
-        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+//        let navigationBarAppearance = UINavigationBar.appearance()
+//        navigationBarAppearance.tintColor = UIColor.white
+//        navigationBarAppearance.barTintColor = UIColor.seafoam
+//        
+//        // change navigation item title color
+//        navigationBarAppearance.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
+//        
+//        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
 		
-		window = UIWindow(frame: UIScreen.main.bounds)
-		
-		// To create from a Storyboard
-		window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!
-		
-		window?.makeKeyAndVisible()
+//		window = UIWindow(frame: UIScreen.main.bounds)
+//		
+//		// To create from a Storyboard
+//		window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!
+//		
+//		window?.makeKeyAndVisible()
         
         return true
     }

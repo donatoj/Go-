@@ -48,7 +48,7 @@ class Listing : NSObject {
 		if let data = data {
 			self.profilePhoto = UIImage(data: data)
 		} else {
-			self.profilePhoto = UIImage(named: "profilepic")
+			self.profilePhoto = UIImage(named: "Profile")
 		}
 		
     }

@@ -103,23 +103,23 @@ class ListingManager : NSObject {
 	
 	func updateCurrentListings(withIndex : Int) {
 		switch withIndex {
-		case 0:
+		case 1:
 			setCurrentListings(worldListings)
 			break
-		case 1:
+		case 2:
 			setCurrentListings(followingistings)
 			break
-		case 2:
+		case 3:
 			let needDirectListings : String
 			currentListings.removeAll()
 			break
-		case 3:
+		case 4:
 			setCurrentListings(requestListings)
 			break
-		case 4:
+		case 5:
 			setCurrentListings(selfListings)
 			break
-		case 5:
+		case 6:
 			setCurrentListings(activeListings)
 			break
 		default:

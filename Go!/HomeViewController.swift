@@ -13,18 +13,12 @@ class HomeViewController: UIViewController {
 	
 	// MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var segmentControl: UISegmentedControl!
 	
 	// MARK: - Members
 	var listingManager = ListingManager.sharedInstance
     var searchController : UISearchController!
-	
+	var menuItemsManager = MenuItemManager()
 	var currentUserId : String?
-	
-	// MARK: - Actions
-    @IBAction func OnSegmentValueChanged(_ sender: Any) {
-        updateListings()
-    }
 	
 	// MARK: - ViewController LifeCycle
     
@@ -32,15 +26,16 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 111
+//        tableView.rowHeight = UITableViewAutomaticDimension
+//        tableView.estimatedRowHeight = 100
 		
 		listingManager.homeViewDelegate = self
         listingManager.registerObservers()
 		
-        showSearchBar()
+        //showSearchBar()
 		
 		currentUserId = Auth.auth().currentUser?.uid
+	
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -131,6 +126,55 @@ class HomeViewController: UIViewController {
 			performSegue(withIdentifier: "showRequests", sender: sender)
 		}
     }
+	
+	@objc func menuPressed(_ sender: UIButton) {
+		print("menu button pressed " + sender.tag.description)
+		if sender.tag != 0 {
+			menuItemsManager.setFilterIndex(index: sender.tag)
+			updateListings()
+		} else { // Post button
+			let vc = (storyboard?.instantiateViewController(withIdentifier: "Post"))!
+			vc.modalTransitionStyle = .coverVertical
+			present(vc, animated: true, completion: nil)
+		}
+		
+	}
+}
+// MARK: - CollectionView extensions
+extension HomeViewController: UICollectionViewDelegate {
+
+}
+
+extension HomeViewController: UICollectionViewDataSource {
+
+	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+		return menuItemsManager.MenuItems.count
+	}
+
+	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MenuCollectionViewCell", for: indexPath) as! MenuCollectionViewCell
+		
+		cell.label.text = menuItemsManager.MenuItems[indexPath.row].name
+		
+		cell.button.layer.borderWidth = 3
+		cell.button.layer.cornerRadius = cell.button.frame.size.width / 2;
+		cell.button.clipsToBounds = true
+		cell.button.tag = indexPath.row
+		cell.button.addTarget(self, action: #selector(menuPressed(_:)), for: UIControlEvents.touchUpInside)
+		
+		let origImage = menuItemsManager.FilterImages[indexPath.row]
+		let tintedImage = origImage.withRenderingMode(.alwaysTemplate)
+		if indexPath.row == menuItemsManager.FilterIndex {
+			cell.button.setImage(tintedImage, for: UIControlState.normal)
+			cell.button.tintColor = UIColor.white
+			cell.button.backgroundColor = UIColor.black
+		} else {
+			cell.button.setImage(origImage, for: UIControlState.normal)
+			cell.button.backgroundColor = UIColor.white
+		}
+
+		return cell
+	}
 }
 
 // MARK: - TableView extensions
@@ -138,23 +182,30 @@ class HomeViewController: UIViewController {
 extension HomeViewController : UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        
-        return listingManager.currentListings.count
+        return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return 1
+        return listingManager.currentListings.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PostTableViewCell
-        
-        let listingItem = listingManager.currentListings[indexPath.section]
+
+		if(indexPath.row == 0)
+		{
+			let menu = tableView.dequeueReusableCell(withIdentifier: "MenuTableViewCell", for: indexPath) as! MenuTableViewCell
+			print("returning menu cell****")
+			menu.selectionStyle = UITableViewCellSelectionStyle.none
+			return menu
+		}
+		
+		let cell = tableView.dequeueReusableCell(withIdentifier: "PostTableViewCell", for: indexPath) as! PostTableViewCell
+		
+        let listingItem = listingManager.currentListings[indexPath.row - 1]
         
         // check for only items not from user
         cell.userNameButton.setTitle(listingItem.userName, for: UIControlState.normal)
-        cell.userNameButton.tag = indexPath.section
+        cell.userNameButton.tag = indexPath.row - 1
         
         cell.descriptionLabel.text = listingItem.listingDescription
         
@@ -169,17 +220,17 @@ extension HomeViewController : UITableViewDataSource {
         cell.requestButton.layer.borderWidth = 1
         cell.requestButton.layer.cornerRadius = 8
         cell.requestButton.clipsToBounds = true
-        cell.requestButton.tag = indexPath.section
+        cell.requestButton.tag = indexPath.row - 1
         cell.requestButton.addTarget(self, action: #selector(onRequestPressed(_:)), for: .touchUpInside)
 		
 		if listingItem.uid == currentUserId {
-			cell.requestButton.setTitle("View Requests", for: UIControlState.normal)
+			cell.requestButton.setTitle(" View Requests ", for: UIControlState.normal)
 			cell.requestButton.backgroundColor = UIColor.white
 			cell.requestButton.layer.borderColor = UIColor.blue.cgColor
 			cell.requestButton.setTitleColor(UIColor.blue, for: .normal)
 		} else {
 			if listingItem.requested {
-				if segmentControl.selectedSegmentIndex == 3 {
+				if menuItemsManager.FilterIndex == 3 {
 					cell.requestButton.backgroundColor = UIColor.red
 					cell.requestButton.layer.borderColor = UIColor.red.cgColor
 				} else {
@@ -194,7 +245,7 @@ extension HomeViewController : UITableViewDataSource {
 			}
 		}
 		
-        cell.layer.cornerRadius = 10
+        //cell.layer.cornerRadius = 10
         cell.selectionStyle = UITableViewCellSelectionStyle.none
         
         return cell
@@ -206,24 +257,32 @@ extension HomeViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         let lastElement = listingManager.currentListings.count - 1
-        if indexPath.section == lastElement  {
+        if indexPath.row == lastElement  {
             
             listingManager.updateListingLimit()
         }
+		
+		guard let menuTableViewCell = cell as? MenuTableViewCell else {return}
+		print("setting collection view delegate***")
+		menuTableViewCell.setCollectionViewDataSourceDelegate(dataSourceDelegate: self, forRow: indexPath.row)
     }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        return 10
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        let headerview = UIView()
-        headerview.backgroundColor = UIColor.clear
-        return headerview
-        
-    }
+	
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return CGFloat(100)
+	}
+//
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//
+//        return 10
+//    }
+//
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//
+//        let headerview = UIView()
+//        headerview.backgroundColor = UIColor.clear
+//        return headerview
+//
+//    }
 }
 
 // MARK: - Search extensions
@@ -242,16 +301,14 @@ extension HomeViewController: PulleyDrawerViewControllerDelegate {
 	
 	func collapsedDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat
 	{
-		print("collapsed height drawer height " + bottomSafeArea.description)
 		// For devices with a bottom safe area, we want to make our drawer taller. Your implementation may not want to do that. In that case, disregard the bottomSafeArea value.
-		return 168.0 + bottomSafeArea
+		return 100.0 + bottomSafeArea
 	}
 	
 	func partialRevealDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat
 	{
-		print("partial reviewl height drawer height " + bottomSafeArea.description)
 		// For devices with a bottom safe area, we want to make our drawer taller. Your implementation may not want to do that. In that case, disregard the bottomSafeArea value.
-		return 364.0 + bottomSafeArea
+		return 350.0 + bottomSafeArea
 	}
 	
 	func supportedDrawerPositions() -> [PulleyPosition] {
@@ -263,7 +320,7 @@ extension HomeViewController: PulleyDrawerViewControllerDelegate {
 extension HomeViewController: ListingManagerDelegate {
 	func updateListings() {
 		print("Update listings")
-		listingManager.updateCurrentListings(withIndex: segmentControl.selectedSegmentIndex)
+		listingManager.updateCurrentListings(withIndex: menuItemsManager.FilterIndex)
 		tableView.reloadData()
 	}
 	func startLoading() {

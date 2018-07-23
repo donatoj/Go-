@@ -16,7 +16,8 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var followButton: UIButton!
-    
+	@IBOutlet weak var exitButton: UIButton!
+	
     var ref : DatabaseReference?
     var databaseHandle : DatabaseHandle?
     
@@ -26,11 +27,14 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setUserData()
     }
     
-    @IBAction func onFollowButtonPressed(_ sender: Any) {
+	@IBAction func onExitPressed(_ sender: Any) {
+		
+		presentingViewController?.dismiss(animated: true, completion: nil)
+	}
+	@IBAction func onFollowButtonPressed(_ sender: Any) {
         
         let user = Auth.auth().currentUser
         

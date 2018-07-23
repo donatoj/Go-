@@ -21,6 +21,8 @@
 		175F2E8D1F4ECA5600931A9B /* RequestsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */; };
 		175F2E8F1F4ECAF200931A9B /* RequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F2E8E1F4ECAF200931A9B /* RequestTableViewCell.swift */; };
 		176860371F28A126000D9AC8 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176860361F28A126000D9AC8 /* PostTableViewCell.swift */; };
+		177B2E8B20FE26CE002CD443 /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B2E8A20FE26CE002CD443 /* MenuTableViewCell.swift */; };
+		177B2EBA21004EF8002CD443 /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177B2EB921004EF8002CD443 /* MenuCollectionViewCell.swift */; };
 		177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177E6E871EC2E87C003F017E /* AppDelegate.swift */; };
 		177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177E6E891EC2E87C003F017E /* LoginViewController.swift */; };
 		177E6E8D1EC2E87C003F017E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 177E6E8B1EC2E87C003F017E /* Main.storyboard */; };
@@ -35,6 +37,8 @@
 		17979F261F736EF200F82596 /* CardItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17979F251F736EF200F82596 /* CardItemViewController.xib */; };
 		17979F281F736F0D00F82596 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17979F271F736F0D00F82596 /* PageControl.swift */; };
 		17C775B61F8C95F400826848 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C775B21F8C80B000826848 /* UIColor.swift */; };
+		17E437102101E26F00A67F37 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E4370F2101E26F00A67F37 /* MenuItem.swift */; };
+		17E437122101E3BC00A67F37 /* MenuItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E437112101E3BC00A67F37 /* MenuItemManager.swift */; };
 		B87600B1132F9E1D080CC378 /* Pods_Go_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E545964835185630097A811 /* Pods_Go_.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +59,8 @@
 		175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestsTableViewController.swift; sourceTree = "<group>"; };
 		175F2E8E1F4ECAF200931A9B /* RequestTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTableViewCell.swift; sourceTree = "<group>"; };
 		176860361F28A126000D9AC8 /* PostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
+		177B2E8A20FE26CE002CD443 /* MenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
+		177B2EB921004EF8002CD443 /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
 		177E6E841EC2E87C003F017E /* Go!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Go!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		177E6E871EC2E87C003F017E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		177E6E891EC2E87C003F017E /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -71,6 +77,8 @@
 		17979F251F736EF200F82596 /* CardItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemViewController.xib; sourceTree = "<group>"; };
 		17979F271F736F0D00F82596 /* PageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageControl.swift; sourceTree = "<group>"; };
 		17C775B21F8C80B000826848 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		17E4370F2101E26F00A67F37 /* MenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
+		17E437112101E3BC00A67F37 /* MenuItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemManager.swift; sourceTree = "<group>"; };
 		8E545964835185630097A811 /* Pods_Go_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Go_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D910C2A56AE47EA01F4FA51 /* Pods-Go!.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Go!.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Go!/Pods-Go!.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,6 +102,8 @@
 				175F2E8A1F47183300931A9B /* Keys.swift */,
 				171BF02D1F366F520048A222 /* Listing.swift */,
 				175CFCF320FC1E5C00600970 /* ListingManager.swift */,
+				17E4370F2101E26F00A67F37 /* MenuItem.swift */,
+				17E437112101E3BC00A67F37 /* MenuItemManager.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -104,14 +114,6 @@
 				172BEA4020FA92C90036D5A6 /* Pulley */,
 			);
 			name = "Third Party Libraries";
-			sourceTree = "<group>";
-		};
-		172B9CE41F7E3FD000C3AA74 /* Xibs */ = {
-			isa = PBXGroup;
-			children = (
-				17979F251F736EF200F82596 /* CardItemViewController.xib */,
-			);
-			name = Xibs;
 			sourceTree = "<group>";
 		};
 		172BEA4020FA92C90036D5A6 /* Pulley */ = {
@@ -132,6 +134,7 @@
 				17979F201F733D7C00F82596 /* MyPostsViewController.swift */,
 				17979F231F736ED100F82596 /* CardItemViewController.swift */,
 				17979F271F736F0D00F82596 /* PageControl.swift */,
+				17979F251F736EF200F82596 /* CardItemViewController.xib */,
 			);
 			name = Depracated;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			children = (
 				175F2E8E1F4ECAF200931A9B /* RequestTableViewCell.swift */,
 				176860361F28A126000D9AC8 /* PostTableViewCell.swift */,
+				177B2E8A20FE26CE002CD443 /* MenuTableViewCell.swift */,
 			);
 			name = TableViewCells;
 			sourceTree = "<group>";
@@ -169,9 +173,18 @@
 		176860381F28A131000D9AC8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				177B2E8E20FE283C002CD443 /* CollectionViewCells */,
 				172C1B5A1F627279001826CE /* TableViewCells */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		177B2E8E20FE283C002CD443 /* CollectionViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				177B2EB921004EF8002CD443 /* MenuCollectionViewCell.swift */,
+			);
+			name = CollectionViewCells;
 			sourceTree = "<group>";
 		};
 		177E6E7B1EC2E87C003F017E = {
@@ -204,7 +217,6 @@
 				172BEA4620FB38530036D5A6 /* Depracated */,
 				172B9CE31F7E3F5F00C3AA74 /* Third Party Libraries */,
 				17C775B01F8C807F00826848 /* Extensions */,
-				172B9CE41F7E3FD000C3AA74 /* Xibs */,
 				178296571ED166B5008C64BA /* Plists */,
 				177E6E8E1EC2E87C003F017E /* Assets.xcassets */,
 			);
@@ -431,19 +443,23 @@
 				175F2E8B1F47183300931A9B /* Keys.swift in Sources */,
 				172BEA3D20FA92BC0036D5A6 /* UIViewController+PulleyViewController.swift in Sources */,
 				172BEA4220FA98FD0036D5A6 /* MapViewController.swift in Sources */,
+				177B2E8B20FE26CE002CD443 /* MenuTableViewCell.swift in Sources */,
 				17C775B61F8C95F400826848 /* UIColor.swift in Sources */,
 				17979F211F733D7C00F82596 /* MyPostsViewController.swift in Sources */,
 				17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */,
 				177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */,
 				178296541ECC3877008C64BA /* HomeViewController.swift in Sources */,
 				172BEA3E20FA92BC0036D5A6 /* PulleyViewController.swift in Sources */,
+				17E437122101E3BC00A67F37 /* MenuItemManager.swift in Sources */,
 				172C1B621F67B923001826CE /* ActiveDetailViewController.swift in Sources */,
 				175F2E8D1F4ECA5600931A9B /* RequestsTableViewController.swift in Sources */,
 				172BEA3F20FA92BC0036D5A6 /* UIView+constrainToParent.swift in Sources */,
+				17E437102101E26F00A67F37 /* MenuItem.swift in Sources */,
 				175F2E8F1F4ECAF200931A9B /* RequestTableViewCell.swift in Sources */,
 				17979F241F736ED100F82596 /* CardItemViewController.swift in Sources */,
 				175CFCF420FC1E5C00600970 /* ListingManager.swift in Sources */,
 				176860371F28A126000D9AC8 /* PostTableViewCell.swift in Sources */,
+				177B2EBA21004EF8002CD443 /* MenuCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
