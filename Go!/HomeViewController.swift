@@ -16,12 +16,23 @@ class HomeViewController: UIViewController {
 	@IBOutlet weak var collectionView: UICollectionView!
 	@IBOutlet weak var searchBar: UISearchBar!
 	@IBOutlet weak var gripperView: UIView!
+	@IBOutlet weak var heightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var bottomCollectionViewSeparator: UIView!
 	
 	// MARK: - Members
 	var listingManager = ListingManager.sharedInstance
     var searchController : UISearchController!
 	var menuItemsManager = MenuItemManager()
 	var currentUserId : String?
+	
+	fileprivate var drawerBottomSafeArea: CGFloat = 0.0 {
+		didSet {
+			self.loadViewIfNeeded()
+			
+			// We'll configure our UI to respect the safe area. In our small demo app, we just want to adjust the contentInset for the tableview.
+			tableView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: drawerBottomSafeArea, right: 0.0)
+		}
+	}
 	
 	// MARK: - ViewController LifeCycle
     
@@ -97,6 +108,7 @@ class HomeViewController: UIViewController {
 		searchController.searchBar.searchBarStyle = UISearchBarStyle.minimal
 		
 		tableView.tableHeaderView = searchController.searchBar
+		tableView.tableHeaderView?.isHidden = false
 		
 //		if #available(iOS 11.0, *) {
 //			if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
@@ -257,24 +269,7 @@ extension HomeViewController : UITableViewDelegate {
             
             listingManager.updateListingLimit()
         }
-		
-//		guard let menuTableViewCell = cell as? MenuTableViewCell else {return}
-//		print("setting collection view delegate***")
-//		menuTableViewCell.setCollectionViewDataSourceDelegate(dataSourceDelegate: self, forRow: indexPath.row)
     }
-	
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//
-//        return 10
-//    }
-//
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//
-//        let headerview = UIView()
-//        headerview.backgroundColor = UIColor.clear
-//        return headerview
-//
-//    }
 }
 
 // MARK: - Search extensions
@@ -285,6 +280,10 @@ extension HomeViewController : UISearchControllerDelegate, UISearchResultsUpdati
         
         print("update search results")
     }
+	
+	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+		pulleyViewController?.setDrawerPosition(position: .open, animated: true)
+	}
 }
 
 // MARK: - Pully extension
@@ -305,6 +304,28 @@ extension HomeViewController: PulleyDrawerViewControllerDelegate {
 	
 	func supportedDrawerPositions() -> [PulleyPosition] {
 		return PulleyPosition.all // You can specify the drawer positions you support. This is the same as: [.open, .partiallyRevealed, .collapsed, .closed]
+	}
+	
+	func drawerPositionDidChange(drawer: PulleyViewController, bottomSafeArea: CGFloat) {
+		drawerBottomSafeArea = bottomSafeArea
+
+		tableView.isScrollEnabled = drawer.drawerPosition == .open || drawer.currentDisplayMode == .leftSide
+		
+		if drawer.drawerPosition != .open
+		{
+			searchController.searchBar.resignFirstResponder()
+		}
+		
+		if drawer.drawerPosition == .collapsed
+		{
+			heightConstraint.constant = 100.0 + bottomSafeArea
+			bottomCollectionViewSeparator.isHidden = true
+		}
+		else
+		{
+			bottomCollectionViewSeparator.isHidden = false
+			heightConstraint.constant = 100.0
+		}
 	}
 }
 
