@@ -16,6 +16,7 @@ class PostViewController: UIViewController {
 	// MARK: - Outlets
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
+	@IBOutlet weak var gripperView: UIView!
 	
 	// MARK: - Firebase Refs
     var ref : DatabaseReference?
@@ -84,6 +85,8 @@ class PostViewController: UIViewController {
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
+		
+		gripperView.layer.cornerRadius = 2.5
     }
     
     override func viewDidAppear(_ animated: Bool) {

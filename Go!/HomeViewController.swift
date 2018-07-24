@@ -14,16 +14,16 @@ class HomeViewController: UIViewController {
 	// MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
 	@IBOutlet weak var collectionView: UICollectionView!
-	@IBOutlet weak var searchBar: UISearchBar!
 	@IBOutlet weak var gripperView: UIView!
 	@IBOutlet weak var heightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var bottomCollectionViewSeparator: UIView!
+	@IBOutlet weak var searchContainer: UIView!
 	
 	// MARK: - Members
 	var listingManager = ListingManager.sharedInstance
-    var searchController : UISearchController!
 	var menuItemsManager = MenuItemManager()
 	var currentUserId : String?
+	var searchController : UISearchController!
 	
 	fileprivate var drawerBottomSafeArea: CGFloat = 0.0 {
 		didSet {
@@ -106,28 +106,7 @@ class HomeViewController: UIViewController {
 		searchController.searchBar.delegate = self
 		searchController.dimsBackgroundDuringPresentation = true
 		searchController.searchBar.searchBarStyle = UISearchBarStyle.minimal
-		
-		tableView.tableHeaderView = searchController.searchBar
-		tableView.tableHeaderView?.isHidden = false
-		
-//		if #available(iOS 11.0, *) {
-//			if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
-//				
-//				if let backgroundview = textfield.subviews.first {
-//					
-//					// Background color
-//					backgroundview.backgroundColor = UIColor.clear
-//					
-//					// Rounded corner
-//					backgroundview.layer.cornerRadius = 10;
-//					backgroundview.clipsToBounds = true;
-//					
-//				}
-//			}
-//			
-////			navigationItem.searchController = searchController
-////			navigationItem.searchController?.isActive = true
-//		}
+		searchContainer.addSubview(searchController.searchBar)
 		
 		definesPresentationContext = true
 	}
@@ -148,9 +127,12 @@ class HomeViewController: UIViewController {
 			menuItemsManager.setFilterIndex(index: sender.tag)
 			updateListings()
 		} else { // Post button
+			definesPresentationContext = true
 			let vc = (storyboard?.instantiateViewController(withIdentifier: "Post"))!
 			vc.modalTransitionStyle = .coverVertical
-			present(vc, animated: true, completion: nil)
+			vc.modalPresentationStyle = .overCurrentContext
+			present(vc, animated: false, completion: nil)
+			pulleyViewController?.setDrawerPosition(position: .open, animated: true)
 		}
 		collectionView.reloadData()
 	}
@@ -293,7 +275,7 @@ extension HomeViewController: PulleyDrawerViewControllerDelegate {
 	func collapsedDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat
 	{
 		// For devices with a bottom safe area, we want to make our drawer taller. Your implementation may not want to do that. In that case, disregard the bottomSafeArea value.
-		return 100.0 + bottomSafeArea
+		return 150 + bottomSafeArea
 	}
 	
 	func partialRevealDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat
@@ -318,13 +300,13 @@ extension HomeViewController: PulleyDrawerViewControllerDelegate {
 		
 		if drawer.drawerPosition == .collapsed
 		{
-			heightConstraint.constant = 100.0 + bottomSafeArea
+			heightConstraint.constant = 150 + bottomSafeArea
 			bottomCollectionViewSeparator.isHidden = true
 		}
 		else
 		{
 			bottomCollectionViewSeparator.isHidden = false
-			heightConstraint.constant = 100.0
+			heightConstraint.constant = 150
 		}
 	}
 }
