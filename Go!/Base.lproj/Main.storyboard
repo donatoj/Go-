@@ -214,10 +214,13 @@
                                     <constraint firstAttribute="trailing" secondItem="3fv-Cu-zjP" secondAttribute="trailing" id="opM-Wd-zlc"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kac-dh-GmK" userLabel="GripperView">
-                                <rect key="frame" x="169" y="6" width="36" height="5"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kac-dh-GmK" userLabel="GripperView">
+                                <rect key="frame" x="189" y="6" width="36" height="5"/>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="5" id="St9-g4-XIZ"/>
+                                    <constraint firstAttribute="width" constant="36" id="kaw-jd-JcI"/>
+                                </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" indicatorStyle="black" delaysContentTouches="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nAP-tP-BgS">
                                 <rect key="frame" x="0.0" y="151" width="414" height="585"/>
@@ -324,9 +327,11 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="nAP-tP-BgS" firstAttribute="leading" secondItem="G3d-bE-ulF" secondAttribute="leading" id="4tY-tQ-tBp"/>
+                            <constraint firstItem="kac-dh-GmK" firstAttribute="centerX" secondItem="7A0-pr-pbH" secondAttribute="centerX" id="ChH-Sq-I8H"/>
                             <constraint firstItem="8qJ-6r-M0D" firstAttribute="trailing" secondItem="G3d-bE-ulF" secondAttribute="trailing" id="FYC-hJ-tJt"/>
                             <constraint firstItem="8qJ-6r-M0D" firstAttribute="leading" secondItem="G3d-bE-ulF" secondAttribute="leading" id="Gqc-hH-eWo"/>
                             <constraint firstItem="8qJ-6r-M0D" firstAttribute="top" secondItem="7A0-pr-pbH" secondAttribute="top" id="Kla-j4-fZa"/>
+                            <constraint firstItem="kac-dh-GmK" firstAttribute="top" secondItem="7A0-pr-pbH" secondAttribute="top" constant="6" id="WjX-Gx-D3f"/>
                             <constraint firstItem="G3d-bE-ulF" firstAttribute="trailing" secondItem="nAP-tP-BgS" secondAttribute="trailing" id="Xgg-Ko-O0V"/>
                             <constraint firstItem="nAP-tP-BgS" firstAttribute="top" secondItem="8qJ-6r-M0D" secondAttribute="bottom" constant="1" id="j4U-cz-Aut"/>
                             <constraint firstItem="G3d-bE-ulF" firstAttribute="bottom" secondItem="nAP-tP-BgS" secondAttribute="bottom" id="oGv-gc-mwJ"/>
@@ -393,7 +398,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Djr-Bg-aBy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="400" y="765"/>
+            <point key="canvasLocation" x="1441" y="390"/>
         </scene>
         <!--Requests Table View Controller-->
         <scene sceneID="TAq-Sn-7qh">
