@@ -32,10 +32,6 @@
 		178296541ECC3877008C64BA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178296531ECC3877008C64BA /* HomeViewController.swift */; };
 		178296591ED17964008C64BA /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178296581ED17964008C64BA /* PostViewController.swift */; };
 		1796A3C71F936A5C0047B323 /* MainAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1796A3C61F936A5B0047B323 /* MainAPIClient.swift */; };
-		17979F211F733D7C00F82596 /* MyPostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17979F201F733D7C00F82596 /* MyPostsViewController.swift */; };
-		17979F241F736ED100F82596 /* CardItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17979F231F736ED100F82596 /* CardItemViewController.swift */; };
-		17979F261F736EF200F82596 /* CardItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17979F251F736EF200F82596 /* CardItemViewController.xib */; };
-		17979F281F736F0D00F82596 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17979F271F736F0D00F82596 /* PageControl.swift */; };
 		17C775B61F8C95F400826848 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C775B21F8C80B000826848 /* UIColor.swift */; };
 		17E437102101E26F00A67F37 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E4370F2101E26F00A67F37 /* MenuItem.swift */; };
 		17E437122101E3BC00A67F37 /* MenuItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E437112101E3BC00A67F37 /* MenuItemManager.swift */; };
@@ -72,10 +68,6 @@
 		178296531ECC3877008C64BA /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		178296581ED17964008C64BA /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		1796A3C61F936A5B0047B323 /* MainAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAPIClient.swift; sourceTree = "<group>"; };
-		17979F201F733D7C00F82596 /* MyPostsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPostsViewController.swift; sourceTree = "<group>"; };
-		17979F231F736ED100F82596 /* CardItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardItemViewController.swift; sourceTree = "<group>"; };
-		17979F251F736EF200F82596 /* CardItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardItemViewController.xib; sourceTree = "<group>"; };
-		17979F271F736F0D00F82596 /* PageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageControl.swift; sourceTree = "<group>"; };
 		17C775B21F8C80B000826848 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		17E4370F2101E26F00A67F37 /* MenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
 		17E437112101E3BC00A67F37 /* MenuItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemManager.swift; sourceTree = "<group>"; };
@@ -126,17 +118,6 @@
 				172BEA3820FA92BC0036D5A6 /* UIViewController+PulleyViewController.swift */,
 			);
 			name = Pulley;
-			sourceTree = "<group>";
-		};
-		172BEA4620FB38530036D5A6 /* Depracated */ = {
-			isa = PBXGroup;
-			children = (
-				17979F201F733D7C00F82596 /* MyPostsViewController.swift */,
-				17979F231F736ED100F82596 /* CardItemViewController.swift */,
-				17979F271F736F0D00F82596 /* PageControl.swift */,
-				17979F251F736EF200F82596 /* CardItemViewController.xib */,
-			);
-			name = Depracated;
 			sourceTree = "<group>";
 		};
 		172C1B5A1F627279001826CE /* TableViewCells */ = {
@@ -214,7 +195,6 @@
 				171BF0301F366F930048A222 /* Models */,
 				176860381F28A131000D9AC8 /* Views */,
 				178296551ED16662008C64BA /* Controllers */,
-				172BEA4620FB38530036D5A6 /* Depracated */,
 				172B9CE31F7E3F5F00C3AA74 /* Third Party Libraries */,
 				17C775B01F8C807F00826848 /* Extensions */,
 				178296571ED166B5008C64BA /* Plists */,
@@ -348,7 +328,6 @@
 				177E6E921EC2E87C003F017E /* LaunchScreen.storyboard in Resources */,
 				177E6E9A1EC2E9A7003F017E /* GoogleService-Info.plist in Resources */,
 				177E6E8F1EC2E87C003F017E /* Assets.xcassets in Resources */,
-				17979F261F736EF200F82596 /* CardItemViewController.xib in Resources */,
 				177E6E8D1EC2E87C003F017E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -436,7 +415,6 @@
 			files = (
 				178296591ED17964008C64BA /* PostViewController.swift in Sources */,
 				1796A3C71F936A5C0047B323 /* MainAPIClient.swift in Sources */,
-				17979F281F736F0D00F82596 /* PageControl.swift in Sources */,
 				172BEA3C20FA92BC0036D5A6 /* PulleyPassthroughScrollView.swift in Sources */,
 				171BF02E1F366F520048A222 /* Listing.swift in Sources */,
 				177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */,
@@ -445,7 +423,6 @@
 				172BEA4220FA98FD0036D5A6 /* MapViewController.swift in Sources */,
 				177B2E8B20FE26CE002CD443 /* MenuTableViewCell.swift in Sources */,
 				17C775B61F8C95F400826848 /* UIColor.swift in Sources */,
-				17979F211F733D7C00F82596 /* MyPostsViewController.swift in Sources */,
 				17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */,
 				177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */,
 				178296541ECC3877008C64BA /* HomeViewController.swift in Sources */,
@@ -456,7 +433,6 @@
 				172BEA3F20FA92BC0036D5A6 /* UIView+constrainToParent.swift in Sources */,
 				17E437102101E26F00A67F37 /* MenuItem.swift in Sources */,
 				175F2E8F1F4ECAF200931A9B /* RequestTableViewCell.swift in Sources */,
-				17979F241F736ED100F82596 /* CardItemViewController.swift in Sources */,
 				175CFCF420FC1E5C00600970 /* ListingManager.swift in Sources */,
 				176860371F28A126000D9AC8 /* PostTableViewCell.swift in Sources */,
 				177B2EBA21004EF8002CD443 /* MenuCollectionViewCell.swift in Sources */,
