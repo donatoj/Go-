@@ -38,7 +38,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("Home View did load")
         // Do any additional setup after loading the view.
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 100
@@ -55,13 +55,13 @@ class HomeViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print("View Did Appear")
+        print("Home View Did Appear")
         
         listingManager.startUpdatingLocation()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        print("View Did disappear")
+        print("Home View Did disappear")
         //listingManager.removeAllObservers()
         listingManager.stopUpdatingLocation()
     }
@@ -94,6 +94,12 @@ class HomeViewController: UIViewController {
 				let nextScene = segue.destination as! ProfileViewController
 				nextScene.uid = listingItem.uid
 			}
+		}
+		
+		if segue.destination is ListingDetailTableViewController {
+			let vc = segue.destination as? ListingDetailTableViewController
+			let cell = sender as! ListingTableViewCell
+			vc?.listing = cell.listing
 		}
 	}
 	
@@ -192,7 +198,7 @@ extension HomeViewController : UITableViewDataSource {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "ListingTableViewCell", for: indexPath) as! ListingTableViewCell
 		
         let listingItem = listingManager.currentListings[indexPath.row]
-        
+        cell.listing = listingItem
         // check for only items not from user
         cell.userNameButton.setTitle(listingItem.userName, for: UIControlState.normal)
         cell.userNameButton.tag = indexPath.row
@@ -236,7 +242,7 @@ extension HomeViewController : UITableViewDataSource {
 		}
 		
         //cell.layer.cornerRadius = 10
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
+        cell.selectionStyle = UITableViewCellSelectionStyle.default
         
         return cell
     }
@@ -252,6 +258,27 @@ extension HomeViewController : UITableViewDelegate {
             listingManager.updateListingLimit()
         }
     }
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		tableView.deselectRow(at: indexPath, animated: true)
+		
+		definesPresentationContext = true
+		let vc = (storyboard?.instantiateViewController(withIdentifier: "ListingDetailTableViewController"))!
+		vc.modalTransitionStyle = .coverVertical
+		vc.modalPresentationStyle = .overCurrentContext
+		(vc as! ListingDetailTableViewController).listing = listingManager.currentListings[indexPath.row]
+		present(vc, animated: true, completion: nil)
+		if pulleyViewController?.drawerPosition == PulleyPosition.open {
+			pulleyViewController?.setDrawerPosition(position: .partiallyRevealed, animated: true)
+		}
+		
+//		if let drawer = self.parent as? PulleyViewController
+//		{
+//			let drawerContent = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ListingDetailTableViewController")
+//			(drawerContent as! ListingDetailTableViewController).listing = listingManager.currentListings[indexPath.row]
+//			drawer.setDrawerContentViewController(controller: drawerContent, animated: true)
+//		}
+	}
 }
 
 // MARK: - Search extensions

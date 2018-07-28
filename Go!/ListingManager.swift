@@ -17,6 +17,7 @@ import GeoFire
 	@objc optional func updateListings()
 	@objc optional func startLoading()
 	@objc optional func stopLoading()
+	@objc optional func didUpdateRequests()
 }
 
 // MARK: - Singleton
@@ -27,6 +28,7 @@ class ListingManager : NSObject {
 	// MARK: - Delegates
 	var homeViewDelegate : ListingManagerDelegate?
 	var mapViewDelegate : ListingManagerDelegate?
+	var listingDetailDelegate : ListingManagerDelegate?
 	
 	// MARK: - Firebase Refs
 	fileprivate var ref : DatabaseReference?
@@ -42,6 +44,11 @@ class ListingManager : NSObject {
 	var requestListings = [String : Listing]()
 	var activeListings = [String: Listing]()
 	var currentListings = [Listing]()
+	
+	// MARK: - Requests
+	var requestingUsers = [String]()
+	var requestingUserPhotos = [UIImage]()
+	var requestingUserIDs = [String]()
 	
 	// MARK: - Limits
 	var listingLimit = 5
@@ -418,6 +425,43 @@ class ListingManager : NSObject {
 			let listingKey = requestSnapshot.key
 			self.activeListings.removeValue(forKey: listingKey)
 		})
+	}
+	
+	func registerRequestsObserver(forKey : String) {
+		
+		ref?.child(Keys.Listings.rawValue).child(forKey).child(Keys.Requests.rawValue).observe(.childAdded, with: { (snapshot) in
+			
+			let userID = snapshot.key
+			print("requesting user " + userID)
+			
+			self.ref?.child(Keys.Users.rawValue).child(userID).observeSingleEvent(of: .value, with: { (usersSnapshot) in
+				print(usersSnapshot)
+				if let values = usersSnapshot.value as? [String : Any] {
+					print("update table data with snapshot value " + values.debugDescription)
+					let username = values[Keys.Username.rawValue]!
+					self.requestingUsers.append(username as! String)
+					self.requestingUserIDs.append(userID)
+					
+					let profileURL = values[Keys.ProfileURL.rawValue]!
+					let url = URL(string: profileURL as! String)
+					let data = try? Data(contentsOf: url!)
+					if let data = data {
+						self.requestingUserPhotos.append(UIImage(data: data)!)
+					} else {
+						self.requestingUserPhotos.append(UIImage(named: "Profile")!)
+					}
+					
+					self.listingDetailDelegate?.didUpdateRequests?()
+				}
+			})
+		})
+	}
+	
+	func removeRequestsObserver(forKey : String) {
+		ref?.child(Keys.Requests.rawValue).child(forKey).removeAllObservers()
+		self.requestingUsers.removeAll()
+		self.requestingUserPhotos.removeAll()
+		self.requestingUserIDs.removeAll()
 	}
 }
 

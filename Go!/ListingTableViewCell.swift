@@ -16,6 +16,8 @@ class ListingTableViewCell: UITableViewCell {
     @IBOutlet weak var timeAgo: UILabel!
     @IBOutlet weak var distance: UILabel!
     @IBOutlet weak var requestButton: UIButton!
+	
+	var listing : Listing?
 
     override func awakeFromNib() {
         

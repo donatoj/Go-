@@ -15,6 +15,7 @@
 		172BEA3F20FA92BC0036D5A6 /* UIView+constrainToParent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172BEA3B20FA92BC0036D5A6 /* UIView+constrainToParent.swift */; };
 		172BEA4220FA98FD0036D5A6 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172BEA4120FA98FD0036D5A6 /* MapViewController.swift */; };
 		172C1B621F67B923001826CE /* ActiveDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B611F67B923001826CE /* ActiveDetailViewController.swift */; };
+		174D37A1210D10A2008BC2AB /* RequestsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174D37A0210D10A2008BC2AB /* RequestsCollectionViewCell.swift */; };
 		17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */; };
 		175CFCF420FC1E5C00600970 /* ListingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175CFCF320FC1E5C00600970 /* ListingManager.swift */; };
 		175F2E8B1F47183300931A9B /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F2E8A1F47183300931A9B /* Keys.swift */; };
@@ -35,6 +36,7 @@
 		17C775B61F8C95F400826848 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C775B21F8C80B000826848 /* UIColor.swift */; };
 		17E437102101E26F00A67F37 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E4370F2101E26F00A67F37 /* MenuItem.swift */; };
 		17E437122101E3BC00A67F37 /* MenuItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E437112101E3BC00A67F37 /* MenuItemManager.swift */; };
+		17FEC1CB210C5A9C00423367 /* ListingDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FEC1CA210C5A9C00423367 /* ListingDetailTableViewController.swift */; };
 		B87600B1132F9E1D080CC378 /* Pods_Go_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E545964835185630097A811 /* Pods_Go_.framework */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +51,7 @@
 		172BEA3B20FA92BC0036D5A6 /* UIView+constrainToParent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+constrainToParent.swift"; sourceTree = "<group>"; };
 		172BEA4120FA98FD0036D5A6 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		172C1B611F67B923001826CE /* ActiveDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveDetailViewController.swift; sourceTree = "<group>"; };
+		174D37A0210D10A2008BC2AB /* RequestsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsCollectionViewCell.swift; sourceTree = "<group>"; };
 		17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		175CFCF320FC1E5C00600970 /* ListingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingManager.swift; sourceTree = "<group>"; };
 		175F2E8A1F47183300931A9B /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
@@ -71,6 +74,7 @@
 		17C775B21F8C80B000826848 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		17E4370F2101E26F00A67F37 /* MenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
 		17E437112101E3BC00A67F37 /* MenuItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemManager.swift; sourceTree = "<group>"; };
+		17FEC1CA210C5A9C00423367 /* ListingDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingDetailTableViewController.swift; sourceTree = "<group>"; };
 		8E545964835185630097A811 /* Pods_Go_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Go_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D910C2A56AE47EA01F4FA51 /* Pods-Go!.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Go!.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Go!/Pods-Go!.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -146,6 +150,7 @@
 		172C1B5C1F6272A7001826CE /* TableViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				17FEC1CA210C5A9C00423367 /* ListingDetailTableViewController.swift */,
 				175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */,
 			);
 			name = TableViewControllers;
@@ -164,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				177B2EB921004EF8002CD443 /* MenuCollectionViewCell.swift */,
+				174D37A0210D10A2008BC2AB /* RequestsCollectionViewCell.swift */,
 			);
 			name = CollectionViewCells;
 			sourceTree = "<group>";
@@ -415,6 +421,7 @@
 			files = (
 				178296591ED17964008C64BA /* PostViewController.swift in Sources */,
 				1796A3C71F936A5C0047B323 /* MainAPIClient.swift in Sources */,
+				17FEC1CB210C5A9C00423367 /* ListingDetailTableViewController.swift in Sources */,
 				172BEA3C20FA92BC0036D5A6 /* PulleyPassthroughScrollView.swift in Sources */,
 				171BF02E1F366F520048A222 /* Listing.swift in Sources */,
 				177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */,
@@ -426,6 +433,7 @@
 				17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */,
 				177E6E881EC2E87C003F017E /* AppDelegate.swift in Sources */,
 				178296541ECC3877008C64BA /* HomeViewController.swift in Sources */,
+				174D37A1210D10A2008BC2AB /* RequestsCollectionViewCell.swift in Sources */,
 				172BEA3E20FA92BC0036D5A6 /* PulleyViewController.swift in Sources */,
 				17E437122101E3BC00A67F37 /* MenuItemManager.swift in Sources */,
 				172C1B621F67B923001826CE /* ActiveDetailViewController.swift in Sources */,
