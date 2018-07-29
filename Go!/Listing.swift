@@ -23,6 +23,7 @@ class Listing : NSObject {
     let key: String
 	let profilePhoto: UIImage?
     var requested: Bool
+	var active: Bool
     
     var location: CLLocation {
         return CLLocation(latitude: self.latitude, longitude: self.longitude)
@@ -30,7 +31,7 @@ class Listing : NSObject {
     
 	// MARK: - Initialization
     
-    init(userName: String, uid: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, key: String, requested: Bool) {
+	init(userName: String, uid: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, key: String, requested: Bool, active: Bool) {
         
         self.userName = userName
         self.uid = uid
@@ -42,6 +43,7 @@ class Listing : NSObject {
         self.longitude = longitude
         self.key = key
         self.requested = requested
+		self.active = active
         
         let url = URL(string: photoURL)
         let data = try? Data(contentsOf: url!)

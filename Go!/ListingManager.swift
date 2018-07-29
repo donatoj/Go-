@@ -85,7 +85,8 @@ class ListingManager : NSObject {
 							 latitude: location.coordinate.latitude,
 							 longitude: location.coordinate.longitude,
 							 key: forKey,
-							 requested: requested
+							 requested: requested,
+							 active: withSnapshotValue[Keys.Active.rawValue] as! Bool
 		)
 		
 		return newListing
@@ -158,6 +159,64 @@ class ListingManager : NSObject {
 		})
 	}
 	
+	func registerRequestsObserver(forKey : String) {
+		
+		ref?.child(Keys.Listings.rawValue).child(forKey).child(Keys.Requests.rawValue).observe(.childAdded, with: { (snapshot) in
+			
+			let userID = snapshot.key
+			print("requesting user " + userID)
+			
+			self.ref?.child(Keys.Users.rawValue).child(userID).observeSingleEvent(of: .value, with: { (usersSnapshot) in
+				print(usersSnapshot)
+				if let values = usersSnapshot.value as? [String : Any] {
+					print("update table data with snapshot value " + values.debugDescription)
+					let username = values[Keys.Username.rawValue]!
+					self.requestingUsers.append(username as! String)
+					self.requestingUserIDs.append(userID)
+					
+					let profileURL = values[Keys.ProfileURL.rawValue]!
+					let url = URL(string: profileURL as! String)
+					let data = try? Data(contentsOf: url!)
+					if let data = data {
+						self.requestingUserPhotos.append(UIImage(data: data)!)
+					} else {
+						self.requestingUserPhotos.append(UIImage(named: "Profile")!)
+					}
+					
+					self.listingDetailDelegate?.didUpdateRequests?()
+				}
+			})
+		})
+	}
+	
+	func removeRequestsObserver(forKey : String) {
+		ref?.child(Keys.Requests.rawValue).child(forKey).removeAllObservers()
+		self.requestingUsers.removeAll()
+		self.requestingUserPhotos.removeAll()
+		self.requestingUserIDs.removeAll()
+	}
+	
+	func updateApproved(listing : Listing, forUserId : String) {
+		print("approve button " + forUserId + " pressed")
+		
+		let activeUsers = ["Poster": (Auth.auth().currentUser?.uid)!, "Approved": forUserId]
+		
+		var childUpdates = [String : Any]()
+		childUpdates["/\(Keys.Active.rawValue)/\(forUserId)/\(listing.key)"] = activeUsers
+		childUpdates["/\(Keys.Listings.rawValue)/\(listing.key)/\(Keys.Active.rawValue)"] = true
+		childUpdates["/\(Keys.Listings.rawValue)/\(listing.key)/\(Keys.Approved.rawValue)"] = forUserId
+		
+		ref?.updateChildValues(childUpdates)
+		
+		for id in self.requestingUserIDs {
+			ref?.child(Keys.Requests.rawValue).child(id).child(listing.key).removeValue()
+		}
+	}
+	
+	func removeListing(forKey: String) {
+		ref?.child(Keys.Listings.rawValue).child(forKey).removeValue()
+	}
+	
 	func registerObservers()  {
 		
 		// get reference to database
@@ -212,11 +271,11 @@ class ListingManager : NSObject {
 				let listingKey = listingSnapshot.key
 				if let listingItem = listingSnapshot.value as? [String : Any] {
 					
-					if listingItem[Keys.UserID.rawValue] as? String != Auth.auth().currentUser?.uid {
+					if listingItem[Keys.UserID.rawValue] as? String != Auth.auth().currentUser?.uid
+						&& listingItem[Keys.Active.rawValue] as? Bool == false {
 						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location)
 						self.worldListings[listingKey] = newListing
 						print("World listing updated")
-						
 					}
 				}
 			})
@@ -273,6 +332,7 @@ class ListingManager : NSObject {
 					if let listingItem = listingSnapshot.value as? [String : Any] {
 						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
 						self.selfListings[listingKey] = newListing
+						self.homeViewDelegate?.updateListings?()
 					}
 					
 				})
@@ -303,6 +363,7 @@ class ListingManager : NSObject {
 						}
 					}
 					self.ref?.updateChildValues(childUpdates)
+					self.homeViewDelegate?.updateListings?()
 				})
 			}
 		})
@@ -320,6 +381,7 @@ class ListingManager : NSObject {
 					if let listingItem = listingSnapshot.value as? [String : Any] {
 						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
 						self.followingistings[listingKey] = newListing
+						self.homeViewDelegate?.updateListings?()
 					}
 					
 				})
@@ -334,6 +396,7 @@ class ListingManager : NSObject {
 		ref?.child(Keys.FollowingPosts.rawValue).child((Auth.auth().currentUser?.uid)!).observe(.childRemoved, with: { (followerPostSnapshot) in
 			print("Following post removed " + followerPostSnapshot.key)
 			self.followingistings.removeValue(forKey: followerPostSnapshot.key)
+			self.homeViewDelegate?.updateListings?()
 		})
 	}
 	
@@ -379,6 +442,7 @@ class ListingManager : NSObject {
 						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
 						print("request added " + listingKey)
 						self.requestListings[listingKey] = newListing
+						self.homeViewDelegate?.updateListings?()
 					}
 					
 				})
@@ -394,6 +458,7 @@ class ListingManager : NSObject {
 			print("request removed " + requestSnapshot.key)
 			let listingKey = requestSnapshot.key
 			self.requestListings.removeValue(forKey: listingKey)
+			self.homeViewDelegate?.updateListings?()
 		})
 	}
 	
@@ -408,8 +473,9 @@ class ListingManager : NSObject {
 					
 					if let listingItem = listingSnapshot.value as? [String : Any] {
 						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-						print("request added " + listingKey)
+						print("active added " + listingKey)
 						self.activeListings[listingKey] = newListing
+						self.homeViewDelegate?.updateListings?()
 					}
 					
 				})
@@ -421,47 +487,11 @@ class ListingManager : NSObject {
 	
 	fileprivate func registerActiveRemoved() {
 		ref?.child(Keys.Active.rawValue).child((Auth.auth().currentUser?.uid)!).observe(DataEventType.childRemoved, with: { (requestSnapshot) in
-			print("request removed " + requestSnapshot.key)
+			print("active removed " + requestSnapshot.key)
 			let listingKey = requestSnapshot.key
 			self.activeListings.removeValue(forKey: listingKey)
+			self.homeViewDelegate?.updateListings?()
 		})
-	}
-	
-	func registerRequestsObserver(forKey : String) {
-		
-		ref?.child(Keys.Listings.rawValue).child(forKey).child(Keys.Requests.rawValue).observe(.childAdded, with: { (snapshot) in
-			
-			let userID = snapshot.key
-			print("requesting user " + userID)
-			
-			self.ref?.child(Keys.Users.rawValue).child(userID).observeSingleEvent(of: .value, with: { (usersSnapshot) in
-				print(usersSnapshot)
-				if let values = usersSnapshot.value as? [String : Any] {
-					print("update table data with snapshot value " + values.debugDescription)
-					let username = values[Keys.Username.rawValue]!
-					self.requestingUsers.append(username as! String)
-					self.requestingUserIDs.append(userID)
-					
-					let profileURL = values[Keys.ProfileURL.rawValue]!
-					let url = URL(string: profileURL as! String)
-					let data = try? Data(contentsOf: url!)
-					if let data = data {
-						self.requestingUserPhotos.append(UIImage(data: data)!)
-					} else {
-						self.requestingUserPhotos.append(UIImage(named: "Profile")!)
-					}
-					
-					self.listingDetailDelegate?.didUpdateRequests?()
-				}
-			})
-		})
-	}
-	
-	func removeRequestsObserver(forKey : String) {
-		ref?.child(Keys.Requests.rawValue).child(forKey).removeAllObservers()
-		self.requestingUsers.removeAll()
-		self.requestingUserPhotos.removeAll()
-		self.requestingUserIDs.removeAll()
 	}
 }
 

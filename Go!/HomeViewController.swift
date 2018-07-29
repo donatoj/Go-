@@ -142,6 +142,76 @@ class HomeViewController: UIViewController {
 		}
 		collectionView.reloadData()
 	}
+	// MARK: - Contextual actions
+	func contextualDeleteAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+		let listing = listingManager.currentListings[indexPath.row]
+		let action = UIContextualAction(style: .destructive,
+										title: "Delete") { (contextAction: UIContextualAction, sourceView: UIView, completionHandler: (Bool) -> Void) in
+											self.listingManager.removeListing(forKey: listing.key)
+											completionHandler(true)
+		}
+		action.backgroundColor = UIColor.red
+		return action
+	}
+	
+	func contextualEditAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+		let listing = listingManager.currentListings[indexPath.row]
+		let action = UIContextualAction(style: .normal,
+										title: "Edit") { (contextAction: UIContextualAction, sourceView: UIView, completionHandler: (Bool) -> Void) in
+											
+											
+											// Fill in
+											
+											completionHandler(true)
+		}
+		action.backgroundColor = UIColor.blue
+		return action
+	}
+
+	
+	func contextualRequestAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+		let listing = listingManager.currentListings[indexPath.row]
+		var title = listing.requested ? "Cancel Request" : "Request"
+		let action = UIContextualAction(style: .normal,
+										title: title) { (contextAction: UIContextualAction, sourceView: UIView, completionHandler: (Bool) -> Void) in
+											
+											if listing.uid != self.currentUserId {
+												self.listingManager.updateRequests(forKey: listing.key, updateChild: !listing.requested)
+											}
+											
+											completionHandler(true)
+		}
+		action.backgroundColor = listing.requested ? UIColor.red : UIColor.seafoam
+		return action
+	}
+	
+	func contextualCompleteAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+		let listing = listingManager.currentListings[indexPath.row]
+		let action = UIContextualAction(style: .destructive,
+										title: "Complete") { (contextAction: UIContextualAction, sourceView: UIView, completionHandler: (Bool) -> Void) in
+											
+											
+											// Fill in
+											
+											completionHandler(true)
+		}
+		action.backgroundColor = UIColor.seafoam
+		return action
+	}
+	
+	func contextualCancelAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
+		let listing = listingManager.currentListings[indexPath.row]
+		let action = UIContextualAction(style: .destructive,
+										title: "Cancel") { (contextAction: UIContextualAction, sourceView: UIView, completionHandler: (Bool) -> Void) in
+											
+											// Fill in
+											
+											
+											completionHandler(true)
+		}
+		action.backgroundColor = UIColor.red
+		return action
+	}
 }
 // MARK: - CollectionView extensions
 extension HomeViewController: UICollectionViewDelegate {
@@ -278,6 +348,29 @@ extension HomeViewController : UITableViewDelegate {
 //			(drawerContent as! ListingDetailTableViewController).listing = listingManager.currentListings[indexPath.row]
 //			drawer.setDrawerContentViewController(controller: drawerContent, animated: true)
 //		}
+	}
+	
+	func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+		
+		var swipeConfig : UISwipeActionsConfiguration?
+		let listing = listingManager.currentListings[indexPath.row]
+		
+		if !listing.active {
+			if listing.uid != currentUserId {
+				let requestAction = self.contextualRequestAction(forRowAtIndexPath: indexPath)
+				swipeConfig = UISwipeActionsConfiguration(actions: [requestAction])
+			} else {
+				let editAction = self.contextualEditAction(forRowAtIndexPath: indexPath)
+				let deleteAction = self.contextualDeleteAction(forRowAtIndexPath: indexPath)
+				swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction])
+			}
+		} else {
+			let completeAction = self.contextualCompleteAction(forRowAtIndexPath: indexPath)
+			let cancelAction = self.contextualCancelAction(forRowAtIndexPath: indexPath)
+			swipeConfig = UISwipeActionsConfiguration(actions: [completeAction,cancelAction])
+		}
+		
+		return swipeConfig
 	}
 }
 

@@ -24,7 +24,7 @@ class PostViewController: UIViewController {
     var geoFire : GeoFire?
 	
 	// MARK: - Keys
-	var postDict = [String : String]()
+	var postDict = [String : Any]()
 	var followerKeyList = [String]()
 	
 	// MARK: - Location Members
@@ -57,7 +57,8 @@ class PostViewController: UIViewController {
             postDict[Keys.Description.rawValue] = descriptionTextView.text
             postDict[Keys.Amount.rawValue] = amountTextField.text
             postDict[Keys.DatePosted.rawValue] = Date().description
-            
+            postDict[Keys.Active.rawValue] = false
+			
             var childUpdates = [String : Any]()
             childUpdates["/\(Keys.Listings.rawValue)/\(key)"] = postDict
             childUpdates["/\(Keys.UserPosts.rawValue)/\((Auth.auth().currentUser?.uid)!)/\(key)"] = true

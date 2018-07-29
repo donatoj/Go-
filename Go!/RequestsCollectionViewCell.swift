@@ -12,9 +12,5 @@ class RequestsCollectionViewCell: UICollectionViewCell {
     
 	@IBOutlet weak var userButton: UIButton!
 	@IBOutlet weak var userLabel: UILabel!
-	
-	
-	@IBAction func onUserButtonPressed(_ sender: Any) {
-		
-	}
+
 }

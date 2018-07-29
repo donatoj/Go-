@@ -44,9 +44,23 @@ class ListingDetailTableViewController: UITableViewController {
 		dismiss(animated: true, completion: nil)
 	}
 	
+	@IBAction func onRequestPressed(_ sender: Any) {
+		if listing.uid != currentUser {
+			ListingManager.sharedInstance.updateRequests(forKey: listing.key, updateChild: !listing.requested)
+		}
+		dismiss(animated: true, completion: nil)
+	}
+	
+	
+	@IBAction func onCompletePressed(_ sender: Any) {
+		
+	}
+
+	@IBAction func onCancelPressed(_ sender: Any) {
+		
+	}
+	
 	// MARK: - ViewController Lifecycle
-	
-	
 	override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -95,27 +109,50 @@ class ListingDetailTableViewController: UITableViewController {
 		timeAgoLabel.text = listing.timeAgoSinceDate(true)
 		distanceLabel.text = listing.uid  != currentUser ? listing.getDistanceFromListing(userLocation: ListingManager.sharedInstance.userLocation) : ""
 		
-		if listing.uid != currentUser {
-			if listing.requested {
-				requestButton.setTitle("Cancel Request", for: .normal)
-				requestButton.backgroundColor = UIColor.red
+		if !listing.active {
+			if listing.uid != currentUser {
+				if listing.requested {
+					requestButton.setTitle("Cancel Request", for: .normal)
+					requestButton.backgroundColor = UIColor.red
+					
+				} else {
+					requestButton.setTitle("Request", for: .normal)
+					requestButton.backgroundColor = UIColor.seafoam
+				}
 				
+				requestButton.layer.cornerRadius = 10
+				requestButton.clipsToBounds = true
+				
+				requestButton.isHidden = false
+				requestsCollectionView.isHidden = true
 			} else {
-				requestButton.setTitle("Request", for: .normal)
-				requestButton.backgroundColor = UIColor.seafoam
+				requestButton.isHidden = true
+				requestsCollectionView.isHidden = false
 			}
 			
-			requestButton.layer.cornerRadius = 2.5
-			requestButton.clipsToBounds = true
-			
-			requestsCollectionView.isHidden = true
+			completeButton.isHidden = true
+			cancelButton.isHidden = true
 		} else {
+			completeButton.isHidden = false
+			cancelButton.isHidden = false
+			
+			completeButton.layer.cornerRadius = 10
+			completeButton.clipsToBounds = true
+			cancelButton.layer.cornerRadius = 10
+			cancelButton.layer.cornerRadius = 10
+			
 			requestButton.isHidden = true
-			requestsCollectionView.isHidden = false
+			requestsCollectionView.isHidden = true
 		}
 		
-		completeButton.isHidden = true
-		cancelButton.isHidden = true
+	}
+	
+	@objc fileprivate func onUserButtonPressed(_ sender: UIButton) {
+		let userId = ListingManager.sharedInstance.requestingUserIDs[sender.tag]
+		print("user selected " + userId)
+		
+		ListingManager.sharedInstance.updateApproved(listing: listing, forUserId: userId)
+		
 	}
 
     // MARK: - Table view data source
@@ -183,15 +220,23 @@ class ListingDetailTableViewController: UITableViewController {
     }
     */
 
-    /*
+	
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+		
+		if let button = sender as? UIButton {
+			if (button.accessibilityIdentifier?.contains("usernameButton"))!{
+				print("sender is ui button")
+				let nextScene = segue.destination as! ProfileViewController
+				nextScene.uid = listing.uid
+			}
+		}
     }
-    */
+	
 
 }
 // MARK: - Collection View Extension
@@ -212,6 +257,8 @@ extension ListingDetailTableViewController : UICollectionViewDataSource {
 		cell.userButton.setBackgroundImage(ListingManager.sharedInstance.requestingUserPhotos[indexPath.row], for: UIControlState.normal)
 		cell.userButton.layer.cornerRadius = userImageView.frame.size.width / 2;
 		cell.userButton.clipsToBounds = true;
+		cell.userButton.addTarget(self, action: #selector(onUserButtonPressed(_:)), for: UIControlEvents.touchUpInside)
+		cell.userButton.tag = indexPath.row
 		
 		return cell
 	}
