@@ -69,27 +69,27 @@ class ListingManager : NSObject {
 	// MARK: - Private Methods
 	
 	// Get a new listing
-	fileprivate func getNewListing(forKey : String, withSnapshotValue: [String : Any], location : CLLocation) -> Listing? {
-		
-		var newListing : Listing?
+	fileprivate func getNewListing(forKey : String, withSnapshotValue: [String : Any], location : CLLocation, completion: @escaping (Listing) -> Void)
+		{
 		
 		let requests = withSnapshotValue["Requests"] as? [String: Bool]
 		let requested = requests?[(Auth.auth().currentUser?.uid)!] != nil
 		
-		newListing = Listing(userName: withSnapshotValue[Keys.Username.rawValue]! as! String,
-							 uid: withSnapshotValue[Keys.UserID.rawValue]! as! String,
+		Listing(uid: withSnapshotValue[Keys.UserID.rawValue]! as! String,
 							 description: withSnapshotValue[Keys.Description.rawValue]! as! String,
 							 amount: withSnapshotValue[Keys.Amount.rawValue]! as! String,
-							 photoURL: withSnapshotValue[Keys.ProfileURL.rawValue]! as! String,
 							 datePosted: withSnapshotValue[Keys.DatePosted.rawValue]! as! String,
 							 latitude: location.coordinate.latitude,
 							 longitude: location.coordinate.longitude,
 							 key: forKey,
 							 requested: requested,
-							 active: withSnapshotValue[Keys.Active.rawValue] as! Bool
+							 active: withSnapshotValue[Keys.Active.rawValue] as! Bool,
+							 approvedUser: withSnapshotValue[Keys.Approved.rawValue] as! String?,
+							 completion: { (listing) in
+							
+								completion(listing)
+							}
 		)
-		
-		return newListing
 	}
 	
 	fileprivate func setCurrentListings(_ withListings: [String : Listing]) {
@@ -205,7 +205,9 @@ class ListingManager : NSObject {
 		ref?.updateChildValues(childUpdates)
 		
 		for id in self.requestingUserIDs {
-			ref?.child(Keys.Requests.rawValue).child(id).child(listing.key).removeValue()
+			if let key = listing.key {
+				ref?.child(Keys.Requests.rawValue).child(id).child(key).removeValue()
+			}
 		}
 	}
 	
@@ -273,9 +275,11 @@ class ListingManager : NSObject {
 					if listingItem[Keys.UserID.rawValue] as? String != Auth.auth().currentUser?.uid
 						/*&& listingItem[Keys.Active.rawValue] as? Bool == false
 						&& !requested*/ {
-						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location)
-						self.worldListings[listingKey] = newListing
-						print("World listing updated")
+							self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location, completion: { (listing) in
+								
+								self.worldListings[listingKey] = listing
+								print("World listing updated")
+							})
 					}
 				}
 			})
@@ -330,9 +334,12 @@ class ListingManager : NSObject {
 				self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
 					
 					if let listingItem = listingSnapshot.value as? [String : Any] {
-						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-						self.selfListings[listingKey] = newListing
-						self.homeViewDelegate?.updateListings?()
+						self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!, completion: { (listing) in
+							
+							self.selfListings[listingKey] = listing
+							self.homeViewDelegate?.updateListings?()
+							print("World listing updated")
+						})
 					}
 					
 				})
@@ -379,15 +386,14 @@ class ListingManager : NSObject {
 				self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
 					
 					if let listingItem = listingSnapshot.value as? [String : Any] {
-						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-						self.followingistings[listingKey] = newListing
-						self.homeViewDelegate?.updateListings?()
+						self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!, completion: { (listing) in
+							
+							self.followingistings[listingKey] = listing
+							self.homeViewDelegate?.updateListings?()
+						})
 					}
-					
 				})
-				
 			})
-			
 		})
 	}
 	
@@ -439,16 +445,14 @@ class ListingManager : NSObject {
 				self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
 					
 					if let listingItem = listingSnapshot.value as? [String : Any] {
-						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-						print("request added " + listingKey)
-						self.requestListings[listingKey] = newListing
-						self.homeViewDelegate?.updateListings?()
+						self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!, completion: {(listing) in
+							print("request added " + listingKey)
+							self.requestListings[listingKey] = listing
+							self.homeViewDelegate?.updateListings?()
+						})
 					}
-					
 				})
-				
 			})
-			
 		})
 	}
 	
@@ -472,16 +476,14 @@ class ListingManager : NSObject {
 				self.ref?.child(Keys.Listings.rawValue).queryOrderedByKey().queryEqual(toValue: listingKey).observeSingleEvent(of: .childAdded, with: { (listingSnapshot) in
 					
 					if let listingItem = listingSnapshot.value as? [String : Any] {
-						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!)
-						print("active added " + listingKey)
-						self.activeListings[listingKey] = newListing
-						self.homeViewDelegate?.updateListings?()
+						self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location!, completion: { (listing) in
+							print("active added " + listingKey)
+							self.activeListings[listingKey] = listing
+							self.homeViewDelegate?.updateListings?()
+						})
 					}
-					
 				})
-				
 			})
-			
 		})
 	}
 	

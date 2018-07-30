@@ -102,13 +102,19 @@ extension MapViewController : ListingManagerDelegate {
 		
 		for listing in currentListings {
 			let annotation = MKPointAnnotation()
-			annotation.title = "$" + listing.amount
-			annotation.subtitle = listing.listingDescription
-			annotation.coordinate = listing.location.coordinate
-			mapView.addAnnotation(annotation)
+			
+			if let amount = listing.amount {
+				annotation.title = "$" + amount
+				annotation.subtitle = listing.listingDescription
+			}
+			
+			if let coordinate = listing.location?.coordinate {
+				annotation.coordinate = coordinate
+				mapView.addAnnotation(annotation)
+			}
 		}
 		
-		if let coordinate = currentListings.first?.location.coordinate {
+		if let coordinate = currentListings.first?.location?.coordinate {
 			setMapViewRegion(forLocation: coordinate)
 		}
 	}

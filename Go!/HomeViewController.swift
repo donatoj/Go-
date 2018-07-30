@@ -87,12 +87,18 @@ class HomeViewController: UIViewController {
 			let listingItem = listingManager.currentListings[button.tag]
 			if (button.accessibilityIdentifier?.contains("requestButton"))! {
 				print("sender is request button")
-				let nextScene = segue.destination as! RequestsTableViewController
-				nextScene.key = listingItem.key
+				if let key = listingItem.key {
+					let nextScene = segue.destination as! RequestsTableViewController
+					nextScene.key = key
+				}
 			} else if (button.accessibilityIdentifier?.contains("usernameButton"))!{
 				print("sender is ui button")
 				let nextScene = segue.destination as! ProfileViewController
-				nextScene.uid = listingItem.uid
+				if let user = listingItem.user {
+					if let uid = user.uid {
+						nextScene.uid = uid
+					}
+				}
 			}
 		}
 		
@@ -120,10 +126,10 @@ class HomeViewController: UIViewController {
     @objc func onRequestPressed(_ sender: UIButton) {
         let listingItem = listingManager.currentListings[sender.tag]
 		
-		if listingItem.uid != currentUserId {
-			listingManager.updateRequests(forKey: listingItem.key, updateChild: !listingItem.requested)
-		} else {
-			performSegue(withIdentifier: "showRequests", sender: sender)
+		if listingItem.user?.uid != currentUserId {
+			if let key = listingItem.key, let requested = listingItem.requested {
+				listingManager.updateRequests(forKey: key, updateChild: !requested)
+			}
 		}
     }
 	
@@ -147,8 +153,12 @@ class HomeViewController: UIViewController {
 		let listing = listingManager.currentListings[indexPath.row]
 		let action = UIContextualAction(style: .destructive,
 										title: "Delete") { (contextAction: UIContextualAction, sourceView: UIView, completionHandler: (Bool) -> Void) in
-											self.listingManager.removeListing(forKey: listing.key)
-											completionHandler(true)
+											if let key = listing.key {
+												self.listingManager.removeListing(forKey: key)
+												completionHandler(true)
+											} else {
+												completionHandler(false)
+											}
 		}
 		action.backgroundColor = UIColor.red
 		return action
@@ -171,17 +181,26 @@ class HomeViewController: UIViewController {
 	
 	func contextualRequestAction(forRowAtIndexPath indexPath: IndexPath) -> UIContextualAction {
 		let listing = listingManager.currentListings[indexPath.row]
-		var title = listing.requested ? "Cancel Request" : "Request"
+		let title = listing.requested! ? "Cancel Request" : "Request"
 		let action = UIContextualAction(style: .normal,
 										title: title) { (contextAction: UIContextualAction, sourceView: UIView, completionHandler: (Bool) -> Void) in
 											
-											if listing.uid != self.currentUserId {
-												self.listingManager.updateRequests(forKey: listing.key, updateChild: !listing.requested)
+											if listing.user?.uid != self.currentUserId {
+												if let key = listing.key, let requested = listing.requested {
+													self.listingManager.updateRequests(forKey: key, updateChild: !requested)
+													completionHandler(true)
+												} else {
+													completionHandler(false)
+												}
+											} else {
+												completionHandler(false)
 											}
-											
-											completionHandler(true)
 		}
-		action.backgroundColor = listing.requested ? UIColor.red : UIColor.seafoam
+		
+		if let requested = listing.requested {
+			action.backgroundColor = requested ? UIColor.red : UIColor.seafoam
+		}
+		
 		return action
 	}
 	
@@ -270,39 +289,43 @@ extension HomeViewController : UITableViewDataSource {
         let listingItem = listingManager.currentListings[indexPath.row]
         cell.listing = listingItem
         // check for only items not from user
-        cell.userNameButton.setTitle(listingItem.userName, for: UIControlState.normal)
+		cell.userNameButton.setTitle(listingItem.user?.userName, for: UIControlState.normal)
         cell.userNameButton.tag = indexPath.row
         
         cell.descriptionLabel.text = listingItem.listingDescription
         
-        cell.profileImageView.image = listingItem.profilePhoto
+		cell.profileImageView.image = listingItem.user?.profilePhoto
         cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
         cell.profileImageView.clipsToBounds = true;
         
         cell.timeAgo.text = listingItem.timeAgoSinceDate(true)
-		cell.distance.text = listingItem.uid != currentUserId ? listingItem.getDistanceFromListing(userLocation: listingManager.userLocation) : ""
-        
-        cell.requestButton.setTitle("$" + listingItem.amount, for: UIControlState.normal)
-        cell.requestButton.layer.borderWidth = 1
-        cell.requestButton.layer.cornerRadius = 8
-        cell.requestButton.clipsToBounds = true
-        cell.requestButton.tag = indexPath.row
-        cell.requestButton.addTarget(self, action: #selector(onRequestPressed(_:)), for: .touchUpInside)
+		cell.distance.text = listingItem.user?.uid != currentUserId ? listingItem.getDistanceFromListing(userLocation: listingManager.userLocation) : ""
 		
-		if listingItem.uid == currentUserId {
+		if let amount = listingItem.amount {
+			cell.requestButton.setTitle("$" + amount, for: UIControlState.normal)
+			cell.requestButton.layer.borderWidth = 1
+			cell.requestButton.layer.cornerRadius = 8
+			cell.requestButton.clipsToBounds = true
+			cell.requestButton.tag = indexPath.row
+			cell.requestButton.addTarget(self, action: #selector(onRequestPressed(_:)), for: .touchUpInside)
+		}
+		
+		if listingItem.user?.uid == currentUserId {
 			cell.requestButton.backgroundColor = UIColor.blue
 			cell.requestButton.layer.borderColor = UIColor.white.cgColor
 			cell.requestButton.setTitleColor(UIColor.white, for: .normal)
 			cell.requestButton.isEnabled = false
 		} else {
-			if listingItem.requested {
-				cell.requestButton.backgroundColor = UIColor.seafoam
-				cell.requestButton.layer.borderColor = UIColor.seafoam.cgColor
-				cell.requestButton.setTitleColor(UIColor.white, for: .normal)
-			} else {
-				cell.requestButton.backgroundColor = UIColor.white
-				cell.requestButton.layer.borderColor = UIColor.seafoam.cgColor
-				cell.requestButton.setTitleColor(UIColor.seafoam, for: .normal)
+			if let requested = listingItem.requested {
+				if requested {
+					cell.requestButton.backgroundColor = UIColor.seafoam
+					cell.requestButton.layer.borderColor = UIColor.seafoam.cgColor
+					cell.requestButton.setTitleColor(UIColor.white, for: .normal)
+				} else {
+					cell.requestButton.backgroundColor = UIColor.white
+					cell.requestButton.layer.borderColor = UIColor.seafoam.cgColor
+					cell.requestButton.setTitleColor(UIColor.seafoam, for: .normal)
+				}
 			}
 		}
 		
@@ -350,20 +373,22 @@ extension HomeViewController : UITableViewDelegate {
 		var swipeConfig : UISwipeActionsConfiguration?
 		let listing = listingManager.currentListings[indexPath.row]
 		
-		if !listing.active {
-			if listing.uid != currentUserId {
-				let requestAction = self.contextualRequestAction(forRowAtIndexPath: indexPath)
-				swipeConfig = UISwipeActionsConfiguration(actions: [requestAction])
+		if let active = listing.active {
+			if !active {
+				if listing.user?.uid != currentUserId {
+					let requestAction = self.contextualRequestAction(forRowAtIndexPath: indexPath)
+					swipeConfig = UISwipeActionsConfiguration(actions: [requestAction])
+				} else {
+					let editAction = self.contextualEditAction(forRowAtIndexPath: indexPath)
+					let deleteAction = self.contextualDeleteAction(forRowAtIndexPath: indexPath)
+					swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction])
+				}
 			} else {
-				let editAction = self.contextualEditAction(forRowAtIndexPath: indexPath)
-				let deleteAction = self.contextualDeleteAction(forRowAtIndexPath: indexPath)
-				swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction])
+				let completeAction = self.contextualCompleteAction(forRowAtIndexPath: indexPath)
+				let cancelAction = self.contextualCancelAction(forRowAtIndexPath: indexPath)
+				swipeConfig?.performsFirstActionWithFullSwipe = false
+				swipeConfig = UISwipeActionsConfiguration(actions: [completeAction,cancelAction])
 			}
-		} else {
-			let completeAction = self.contextualCompleteAction(forRowAtIndexPath: indexPath)
-			let cancelAction = self.contextualCancelAction(forRowAtIndexPath: indexPath)
-			swipeConfig?.performsFirstActionWithFullSwipe = false
-			swipeConfig = UISwipeActionsConfiguration(actions: [completeAction,cancelAction])
 		}
 		
 		return swipeConfig

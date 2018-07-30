@@ -47,12 +47,14 @@ class ListingDetailTableViewController: UITableViewController {
 	}
 	
 	@IBAction func onRequestPressed(_ sender: Any) {
-		if listing.uid != currentUser {
-			ListingManager.sharedInstance.updateRequests(forKey: listing.key, updateChild: !listing.requested)
+		
+		if listing?.user?.uid != currentUser {
+			if let key = listing?.key, let requested = listing?.requested {
+				ListingManager.sharedInstance.updateRequests(forKey: key, updateChild: !requested)
+				dismiss(animated: true, completion: nil)
+			}
 		}
-		dismiss(animated: true, completion: nil)
 	}
-	
 	
 	@IBAction func onCompletePressed(_ sender: Any) {
 		
@@ -83,14 +85,14 @@ class ListingDetailTableViewController: UITableViewController {
     }
 	
 	override func viewDidAppear(_ animated: Bool) {
-		if listing.uid == currentUser {
-			ListingManager.sharedInstance.registerRequestsObserver(forKey: listing.key)
+		if listing.user?.uid == currentUser {
+			ListingManager.sharedInstance.registerRequestsObserver(forKey: listing.key!)
 		}
 	}
 	
 	override func viewDidDisappear(_ animated: Bool) {
-		if listing.uid == currentUser {
-			ListingManager.sharedInstance.removeRequestsObserver(forKey: listing.key)
+		if listing.user?.uid == currentUser {
+			ListingManager.sharedInstance.removeRequestsObserver(forKey: listing.key!)
 		}
 	}
 	
@@ -105,68 +107,79 @@ class ListingDetailTableViewController: UITableViewController {
 		self.tableView.tableFooterView = UIView()
 		gripperView.layer.cornerRadius = 2.5
 		
-		userImageView.image = listing.profilePhoto
+		userImageView.image = listing.user?.profilePhoto
 		userImageView.layer.cornerRadius = userImageView.frame.size.width / 2;
 		userImageView.clipsToBounds = true;
 		
-		userButton.setTitle(listing.userName, for: .normal)
+		userButton.setTitle(listing.user?.userName, for: .normal)
 		descriptionLabel.text = listing.listingDescription
-		amountLabel.text = "$" + listing.amount
-		timeAgoLabel.text = listing.timeAgoSinceDate(true)
-		distanceLabel.text = listing.uid  != currentUser ? listing.getDistanceFromListing(userLocation: ListingManager.sharedInstance.userLocation) : ""
 		
-		if !listing.active {
-			if listing.uid != currentUser {
-				if listing.requested {
-					requestButton.setTitle("Cancel Request", for: .normal)
-					requestButton.backgroundColor = UIColor.red
-					
-				} else {
-					requestButton.setTitle("Request", for: .normal)
-					requestButton.backgroundColor = UIColor.seafoam
-				}
-				
-				requestButton.layer.cornerRadius = 10
-				requestButton.clipsToBounds = true
-				
-				requestButton.isHidden = false
-				requestsCollectionView.isHidden = true
-			} else {
-				requestButton.isHidden = true
-				requestsCollectionView.isHidden = false
-			}
-			
-			completeButton.isHidden = true
-			completeButton.isEnabled = false
-			cancelButton.isHidden = true
-			cancelButton.isEnabled = false
-			approvedUserButton.isHidden = true
-			approvedUserButton.isEnabled = false
-			fulfilledLabel.isHidden = true
-		} else {
-			completeButton.isHidden = false
-			completeButton.isEnabled = true
-			cancelButton.isHidden = false
-			cancelButton.isEnabled = true
-			
-			completeButton.layer.cornerRadius = 10
-			completeButton.clipsToBounds = true
-			cancelButton.layer.cornerRadius = 10
-			cancelButton.clipsToBounds = true
-			
-			approvedUserButton.isHidden = false
-			approvedUserButton.isEnabled = true
-			approvedUserButton.setBackgroundImage(UIImage(named: "Profile"), for: .normal)
-			approvedUserButton.layer.cornerRadius = userImageView.frame.size.width / 2;
-			approvedUserButton.clipsToBounds = true;
-			
-			fulfilledLabel.isHidden = false
-			
-			requestButton.isHidden = true
-			requestButton.isEnabled = false
-			requestsCollectionView.isHidden = true
+		if let amount = listing.amount {
+			amountLabel.text = "$" + amount
 		}
 		
+		timeAgoLabel.text = listing.timeAgoSinceDate(true)
+		distanceLabel.text = listing.user?.uid  != currentUser ? listing.getDistanceFromListing(userLocation: ListingManager.sharedInstance.userLocation) : ""
+		
+		if let active = listing.active {
+			if !active {
+				if listing.user?.uid != currentUser {
+					if listing.requested! {
+						requestButton.setTitle("Cancel Request", for: .normal)
+						requestButton.backgroundColor = UIColor.red
+						
+					} else {
+						requestButton.setTitle("Request", for: .normal)
+						requestButton.backgroundColor = UIColor.seafoam
+					}
+					
+					requestButton.layer.cornerRadius = 10
+					requestButton.clipsToBounds = true
+					
+					requestButton.isHidden = false
+					requestsCollectionView.isHidden = true
+				} else {
+					requestButton.isHidden = true
+					requestsCollectionView.isHidden = false
+				}
+				
+				completeButton.isHidden = true
+				completeButton.isEnabled = false
+				cancelButton.isHidden = true
+				cancelButton.isEnabled = false
+				approvedUserButton.isHidden = true
+				approvedUserButton.isEnabled = false
+				fulfilledLabel.isHidden = true
+			} else {
+				completeButton.isHidden = false
+				completeButton.isEnabled = true
+				cancelButton.isHidden = false
+				cancelButton.isEnabled = true
+				
+				completeButton.layer.cornerRadius = 10
+				completeButton.clipsToBounds = true
+				cancelButton.layer.cornerRadius = 10
+				cancelButton.clipsToBounds = true
+				
+				if let approvedUser = listing.approvedUser {
+					FirebaseUser(uid: approvedUser, completion: { (firebaseUser) in
+						self.approvedUserButton.setBackgroundImage(firebaseUser.profilePhoto, for: .normal)
+						print("finished setting approved user photo")
+						
+						self.approvedUserButton.isHidden = false
+						self.approvedUserButton.isEnabled = true
+						self.approvedUserButton.layer.cornerRadius = self.userImageView.frame.size.width / 2;
+						self.approvedUserButton.clipsToBounds = true;
+					})
+				}
+				
+				fulfilledLabel.isHidden = false
+				
+				requestButton.isHidden = true
+				requestButton.isEnabled = false
+				requestsCollectionView.isHidden = true
+			}
+		}
 	}
 	
 	@objc fileprivate func onUserButtonPressed(_ sender: UIButton) {
@@ -254,7 +267,9 @@ class ListingDetailTableViewController: UITableViewController {
 			if (button.accessibilityIdentifier?.contains("usernameButton"))!{
 				print("sender is ui button")
 				let nextScene = segue.destination as! ProfileViewController
-				nextScene.uid = listing.uid
+				if let uid = listing.user?.uid {
+					nextScene.uid = uid
+				}
 			}
 		}
     }

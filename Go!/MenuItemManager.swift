@@ -26,7 +26,7 @@ struct MenuItemManager {
 			//"Direct",
 			"Requested",
 			"My Listings",
-			"To Do"
+			"Go!"
 		]
 		
 		FilterImages = [

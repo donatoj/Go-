@@ -12,57 +12,48 @@ import CoreLocation
 
 class Listing : NSObject {
     // MARK: - Members
-    let userName: String
-    let uid: String
-    let listingDescription: String
-    let amount: String
-    let photoURL: String
-    let datePosted: String
-    let latitude: CLLocationDegrees
-    let longitude: CLLocationDegrees
-    let key: String
-	let profilePhoto: UIImage?
-    var requested: Bool
-	var active: Bool
-    
-    var location: CLLocation {
-        return CLLocation(latitude: self.latitude, longitude: self.longitude)
-    }
+	var user: FirebaseUser?
+	var key: String?
+	var listingDescription: String?
+	var amount: String?
+    var datePosted: String?
+    var latitude: CLLocationDegrees?
+    var longitude: CLLocationDegrees?
+    var requested: Bool?
+	var active: Bool?
+	var approvedUser: String?
+	var location: CLLocation?
     
 	// MARK: - Initialization
     
-	init(userName: String, uid: String, description: String, amount: String, photoURL: String, datePosted: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, key: String, requested: Bool, active: Bool) {
-        
-        self.userName = userName
-        self.uid = uid
-        self.listingDescription = description
-        self.amount = amount
-        self.photoURL = photoURL
-        self.datePosted = datePosted
-        self.latitude = latitude
-        self.longitude = longitude
-        self.key = key
-        self.requested = requested
-		self.active = active
-        
-        let url = URL(string: photoURL)
-        let data = try? Data(contentsOf: url!)
-		if let data = data {
-			self.profilePhoto = UIImage(data: data)
-		} else {
-			self.profilePhoto = UIImage(named: "Profile")
-		}
+	init(uid: String, description: String, amount: String, datePosted: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, key: String, requested: Bool, active: Bool, approvedUser: String?, completion: @escaping (Listing) -> Void) {
+		super.init()
 		
+		self.listingDescription = description
+		self.amount = amount
+		self.datePosted = datePosted
+		self.latitude = latitude
+		self.longitude = longitude
+		self.key = key
+		self.requested = requested
+		self.active = active
+		self.approvedUser = approvedUser
+		self.location = CLLocation(latitude: latitude, longitude: longitude)
+		
+		self.user = FirebaseUser(uid: uid, completion: { (firebaseUser) in
+			completion(self)
+		})
     }
 	
 	// MARK: - Methods
     
     func distance(to location: CLLocation) -> CLLocationDistance {
-        return location.distance(from: self.location)
+        return location.distance(from: location)
     }
     
     func getDistanceFromListing(userLocation : CLLocation) -> String {
-        
+		guard let latitude = self.latitude, let longitude = self.longitude else {return ""}
+		
         let listingCoordinates = CLLocation(latitude: latitude, longitude: longitude)
         let distanceInMeters = listingCoordinates.distance(from: userLocation)
         let distanceInMiles = distanceInMeters/1609.344
@@ -73,7 +64,8 @@ class Listing : NSObject {
     }
     
     func timeAgoSinceDate() -> Int? {
-        
+		guard let datePosted = self.datePosted else {return nil}
+		
         let calendar = NSCalendar.current
         let unitFlags: Set<Calendar.Component> = [.minute, .hour, .day, .weekOfYear, .month, .year, .second]
         let now = Date()
@@ -88,6 +80,8 @@ class Listing : NSObject {
     }
 
     func timeAgoSinceDate(_ numericDates:Bool = false) -> String {
+		guard let datePosted = self.datePosted else {return ""}
+		
         let calendar = NSCalendar.current
         let unitFlags: Set<Calendar.Component> = [.minute, .hour, .day, .weekOfYear, .month, .year, .second]
         let now = Date()

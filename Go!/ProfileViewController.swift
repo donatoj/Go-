@@ -38,7 +38,6 @@ class ProfileViewController: UIViewController {
         
         let user = Auth.auth().currentUser
         
-        let implementfromFollowingDatasource : String
         if !following {
             
             following = true
@@ -105,7 +104,6 @@ class ProfileViewController: UIViewController {
     func getOtherUserData() {
         
         print("UID is other")
-        let considerimplementingUserDataSource : String
         
         // get reference to database
         ref = Database.database().reference()

@@ -15,6 +15,7 @@
 		172BEA3F20FA92BC0036D5A6 /* UIView+constrainToParent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172BEA3B20FA92BC0036D5A6 /* UIView+constrainToParent.swift */; };
 		172BEA4220FA98FD0036D5A6 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172BEA4120FA98FD0036D5A6 /* MapViewController.swift */; };
 		172C1B621F67B923001826CE /* ActiveDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172C1B611F67B923001826CE /* ActiveDetailViewController.swift */; };
+		173E89B2210EE1D200F22482 /* FirebaseUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173E89B1210EE1D200F22482 /* FirebaseUser.swift */; };
 		174D37A1210D10A2008BC2AB /* RequestsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174D37A0210D10A2008BC2AB /* RequestsCollectionViewCell.swift */; };
 		17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */; };
 		175CFCF420FC1E5C00600970 /* ListingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175CFCF320FC1E5C00600970 /* ListingManager.swift */; };
@@ -51,6 +52,7 @@
 		172BEA3B20FA92BC0036D5A6 /* UIView+constrainToParent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+constrainToParent.swift"; sourceTree = "<group>"; };
 		172BEA4120FA98FD0036D5A6 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		172C1B611F67B923001826CE /* ActiveDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveDetailViewController.swift; sourceTree = "<group>"; };
+		173E89B1210EE1D200F22482 /* FirebaseUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUser.swift; sourceTree = "<group>"; };
 		174D37A0210D10A2008BC2AB /* RequestsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsCollectionViewCell.swift; sourceTree = "<group>"; };
 		17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		175CFCF320FC1E5C00600970 /* ListingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingManager.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				175CFCF320FC1E5C00600970 /* ListingManager.swift */,
 				17E4370F2101E26F00A67F37 /* MenuItem.swift */,
 				17E437112101E3BC00A67F37 /* MenuItemManager.swift */,
+				173E89B1210EE1D200F22482 /* FirebaseUser.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -137,7 +140,6 @@
 		172C1B5B1F627293001826CE /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				172C1B611F67B923001826CE /* ActiveDetailViewController.swift */,
 				177E6E891EC2E87C003F017E /* LoginViewController.swift */,
 				178296531ECC3877008C64BA /* HomeViewController.swift */,
 				17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */,
@@ -151,9 +153,17 @@
 			isa = PBXGroup;
 			children = (
 				17FEC1CA210C5A9C00423367 /* ListingDetailTableViewController.swift */,
-				175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */,
 			);
 			name = TableViewControllers;
+			sourceTree = "<group>";
+		};
+		174D37A2210EA20F008BC2AB /* Depracated */ = {
+			isa = PBXGroup;
+			children = (
+				172C1B611F67B923001826CE /* ActiveDetailViewController.swift */,
+				175F2E8C1F4ECA5600931A9B /* RequestsTableViewController.swift */,
+			);
+			name = Depracated;
 			sourceTree = "<group>";
 		};
 		176860381F28A131000D9AC8 /* Views */ = {
@@ -200,6 +210,7 @@
 				178296561ED16691008C64BA /* Storyboards */,
 				171BF0301F366F930048A222 /* Models */,
 				176860381F28A131000D9AC8 /* Views */,
+				174D37A2210EA20F008BC2AB /* Depracated */,
 				178296551ED16662008C64BA /* Controllers */,
 				172B9CE31F7E3F5F00C3AA74 /* Third Party Libraries */,
 				17C775B01F8C807F00826848 /* Extensions */,
@@ -428,6 +439,7 @@
 				175F2E8B1F47183300931A9B /* Keys.swift in Sources */,
 				172BEA3D20FA92BC0036D5A6 /* UIViewController+PulleyViewController.swift in Sources */,
 				172BEA4220FA98FD0036D5A6 /* MapViewController.swift in Sources */,
+				173E89B2210EE1D200F22482 /* FirebaseUser.swift in Sources */,
 				177B2E8B20FE26CE002CD443 /* MenuTableViewCell.swift in Sources */,
 				17C775B61F8C95F400826848 /* UIColor.swift in Sources */,
 				17587B1D1ED6CA0D00BEEE64 /* ProfileViewController.swift in Sources */,
