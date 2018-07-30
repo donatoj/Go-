@@ -28,6 +28,8 @@ class ListingDetailTableViewController: UITableViewController {
 	
 	@IBOutlet weak var descriptionLabel: UILabel!
 	
+	@IBOutlet weak var approvedUserButton: UIButton!
+	@IBOutlet weak var fulfilledLabel: UILabel!
 	// MARK: - Members
 	var listing : Listing! = nil
 	var currentUser : String?
@@ -59,6 +61,10 @@ class ListingDetailTableViewController: UITableViewController {
 	@IBAction func onCancelPressed(_ sender: Any) {
 		
 	}
+	
+	@IBAction func onApprovedUserPressed(_ sender: Any) {
+	}
+	
 	
 	// MARK: - ViewController Lifecycle
 	override func viewDidLoad() {
@@ -131,17 +137,33 @@ class ListingDetailTableViewController: UITableViewController {
 			}
 			
 			completeButton.isHidden = true
+			completeButton.isEnabled = false
 			cancelButton.isHidden = true
+			cancelButton.isEnabled = false
+			approvedUserButton.isHidden = true
+			approvedUserButton.isEnabled = false
+			fulfilledLabel.isHidden = true
 		} else {
 			completeButton.isHidden = false
+			completeButton.isEnabled = true
 			cancelButton.isHidden = false
+			cancelButton.isEnabled = true
 			
 			completeButton.layer.cornerRadius = 10
 			completeButton.clipsToBounds = true
 			cancelButton.layer.cornerRadius = 10
-			cancelButton.layer.cornerRadius = 10
+			cancelButton.clipsToBounds = true
+			
+			approvedUserButton.isHidden = false
+			approvedUserButton.isEnabled = true
+			approvedUserButton.setBackgroundImage(UIImage(named: "Profile"), for: .normal)
+			approvedUserButton.layer.cornerRadius = userImageView.frame.size.width / 2;
+			approvedUserButton.clipsToBounds = true;
+			
+			fulfilledLabel.isHidden = false
 			
 			requestButton.isHidden = true
+			requestButton.isEnabled = false
 			requestsCollectionView.isHidden = true
 		}
 		

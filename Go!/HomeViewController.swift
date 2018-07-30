@@ -290,19 +290,14 @@ extension HomeViewController : UITableViewDataSource {
         cell.requestButton.addTarget(self, action: #selector(onRequestPressed(_:)), for: .touchUpInside)
 		
 		if listingItem.uid == currentUserId {
-			cell.requestButton.setTitle(" View Requests ", for: UIControlState.normal)
-			cell.requestButton.backgroundColor = UIColor.white
-			cell.requestButton.layer.borderColor = UIColor.blue.cgColor
-			cell.requestButton.setTitleColor(UIColor.blue, for: .normal)
+			cell.requestButton.backgroundColor = UIColor.blue
+			cell.requestButton.layer.borderColor = UIColor.white.cgColor
+			cell.requestButton.setTitleColor(UIColor.white, for: .normal)
+			cell.requestButton.isEnabled = false
 		} else {
 			if listingItem.requested {
-				if menuItemsManager.FilterIndex == 4 {
-					cell.requestButton.backgroundColor = UIColor.red
-					cell.requestButton.layer.borderColor = UIColor.red.cgColor
-				} else {
-					cell.requestButton.backgroundColor = UIColor.seafoam
-					cell.requestButton.layer.borderColor = UIColor.seafoam.cgColor
-				}
+				cell.requestButton.backgroundColor = UIColor.seafoam
+				cell.requestButton.layer.borderColor = UIColor.seafoam.cgColor
 				cell.requestButton.setTitleColor(UIColor.white, for: .normal)
 			} else {
 				cell.requestButton.backgroundColor = UIColor.white
@@ -367,6 +362,7 @@ extension HomeViewController : UITableViewDelegate {
 		} else {
 			let completeAction = self.contextualCompleteAction(forRowAtIndexPath: indexPath)
 			let cancelAction = self.contextualCancelAction(forRowAtIndexPath: indexPath)
+			swipeConfig?.performsFirstActionWithFullSwipe = false
 			swipeConfig = UISwipeActionsConfiguration(actions: [completeAction,cancelAction])
 		}
 		

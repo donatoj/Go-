@@ -118,16 +118,12 @@ class ListingManager : NSObject {
 			setCurrentListings(followingistings)
 			break
 		case 3:
-			let needDirectListings : String
-			currentListings.removeAll()
-			break
-		case 4:
 			setCurrentListings(requestListings)
 			break
-		case 5:
+		case 4:
 			setCurrentListings(selfListings)
 			break
-		case 6:
+		case 5:
 			setCurrentListings(activeListings)
 			break
 		default:
@@ -271,8 +267,12 @@ class ListingManager : NSObject {
 				let listingKey = listingSnapshot.key
 				if let listingItem = listingSnapshot.value as? [String : Any] {
 					
+					let requests = listingItem["Requests"] as? [String: Bool]
+					let requested = requests?[(Auth.auth().currentUser?.uid)!] != nil
+					
 					if listingItem[Keys.UserID.rawValue] as? String != Auth.auth().currentUser?.uid
-						&& listingItem[Keys.Active.rawValue] as? Bool == false {
+						/*&& listingItem[Keys.Active.rawValue] as? Bool == false
+						&& !requested*/ {
 						let newListing = self.getNewListing(forKey: listingKey, withSnapshotValue: listingItem, location: location)
 						self.worldListings[listingKey] = newListing
 						print("World listing updated")

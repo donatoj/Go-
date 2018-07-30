@@ -23,7 +23,7 @@ struct MenuItemManager {
 			"Post",
 			"Nearby",
 			"Friends",
-			"Direct",
+			//"Direct",
 			"Requested",
 			"My Listings",
 			"To Do"
@@ -33,7 +33,7 @@ struct MenuItemManager {
 			UIImage(named: "Plus"),
 			UIImage(named: "NearMe"),
 			UIImage(named: "Group"),
-			UIImage(named: "DataTransfer"),
+			//UIImage(named: "DataTransfer"),
 			UIImage(named: "Invite"),
 			UIImage(named: "Sheets"),
 			UIImage(named: "Running")
