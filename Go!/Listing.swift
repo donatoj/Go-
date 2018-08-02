@@ -26,7 +26,7 @@ class Listing : NSObject {
     
 	// MARK: - Initialization
     
-	init(uid: String, description: String, amount: String, datePosted: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, key: String, requested: Bool, active: Bool, approvedUser: String?, completion: @escaping (Listing) -> Void) {
+	init(uid: String, description: String, amount: String, datePosted: String, latitude: CLLocationDegrees?, longitude: CLLocationDegrees?, key: String, requested: Bool, active: Bool, approvedUser: String?, completion: @escaping (Listing) -> Void) {
 		super.init()
 		
 		self.listingDescription = description
@@ -38,7 +38,10 @@ class Listing : NSObject {
 		self.requested = requested
 		self.active = active
 		self.approvedUser = approvedUser
-		self.location = CLLocation(latitude: latitude, longitude: longitude)
+		
+		if let latitude = latitude, let longitude = longitude {
+			self.location = CLLocation(latitude: latitude, longitude: longitude)
+		}
 		
 		self.user = FirebaseUser(uid: uid, completion: { (firebaseUser) in
 			completion(self)

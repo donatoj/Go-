@@ -187,7 +187,7 @@ class ListingDetailTableViewController: UITableViewController {
 		print("user selected " + userId)
 		
 		ListingManager.sharedInstance.updateApproved(listing: listing, forUserId: userId)
-		
+		dismiss(animated: true, completion: nil)
 	}
 
     // MARK: - Table view data source
