@@ -26,4 +26,11 @@ enum Keys: String {
     case Description = "Description"
     case Active = "Active"
 	case Approved = "Approved"
+	
+	case ReviewText = "ReviewText"
+	case Rating = "Rating"
+	case Reviewer = "Reviewer"
+	case Reviews = "Reviews"
+	case Complete = "Complete"
+	case History = "History"
 }

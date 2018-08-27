@@ -269,6 +269,33 @@ class ListingManager : NSObject {
 		ref?.child(Keys.Requests.rawValue).child((Auth.auth().currentUser?.uid)!).removeAllObservers()
 	}
 	
+	func leaveReview(forUser: String, review: String?, rating: Float)  {
+		var childUpdates = [String: Any]()
+		
+		if let review = review {
+			childUpdates[Keys.ReviewText.rawValue] = review
+		}
+		
+		childUpdates[Keys.Rating.rawValue] = rating
+		childUpdates[Keys.Reviewer.rawValue] = Auth.auth().currentUser?.uid
+		ref?.child(Keys.Users.rawValue).child(forUser).child(Keys.Reviews.rawValue).childByAutoId().setValue(childUpdates)
+	}
+	
+	func addToHistory(forListing : Listing?) {
+		var childUpdates = [String: Any]()
+		var historyUpdates = [String: Any]()
+		if let listing = forListing {
+			
+			if let key = listing.key {
+				historyUpdates[key] = true
+				childUpdates["/\(Keys.Listings.rawValue)/\(key)/\(Keys.Complete.rawValue)"] = true
+			}
+			childUpdates["/\(Keys.Users.rawValue)/\((Auth.auth().currentUser?.uid)!)/\(Keys.History.rawValue)"] = historyUpdates
+			
+			ref?.updateChildValues(childUpdates)
+		}
+	}
+	
 	
 	// MARK: - FireBase Listeners
 	fileprivate func registerGeoQueryKeyEntered() {

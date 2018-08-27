@@ -34,6 +34,8 @@
 		178296541ECC3877008C64BA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178296531ECC3877008C64BA /* HomeViewController.swift */; };
 		178296591ED17964008C64BA /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178296581ED17964008C64BA /* PostViewController.swift */; };
 		1796A3C71F936A5C0047B323 /* MainAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1796A3C61F936A5B0047B323 /* MainAPIClient.swift */; };
+		17B452992133A7BE00231B43 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B452982133A7BE00231B43 /* ReviewViewController.swift */; };
+		17B4529B2133B82500231B43 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B4529A2133B82500231B43 /* String.swift */; };
 		17C775B61F8C95F400826848 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C775B21F8C80B000826848 /* UIColor.swift */; };
 		17E437102101E26F00A67F37 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E4370F2101E26F00A67F37 /* MenuItem.swift */; };
 		17E437122101E3BC00A67F37 /* MenuItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E437112101E3BC00A67F37 /* MenuItemManager.swift */; };
@@ -73,6 +75,8 @@
 		178296531ECC3877008C64BA /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		178296581ED17964008C64BA /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		1796A3C61F936A5B0047B323 /* MainAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAPIClient.swift; sourceTree = "<group>"; };
+		17B452982133A7BE00231B43 /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
+		17B4529A2133B82500231B43 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		17C775B21F8C80B000826848 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		17E4370F2101E26F00A67F37 /* MenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
 		17E437112101E3BC00A67F37 /* MenuItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemManager.swift; sourceTree = "<group>"; };
@@ -140,6 +144,7 @@
 		172C1B5B1F627293001826CE /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				17B452982133A7BE00231B43 /* ReviewViewController.swift */,
 				177E6E891EC2E87C003F017E /* LoginViewController.swift */,
 				178296531ECC3877008C64BA /* HomeViewController.swift */,
 				17587B1C1ED6CA0D00BEEE64 /* ProfileViewController.swift */,
@@ -251,6 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				17C775B21F8C80B000826848 /* UIColor.swift */,
+				17B4529A2133B82500231B43 /* String.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -448,6 +454,7 @@
 				174D37A1210D10A2008BC2AB /* RequestsCollectionViewCell.swift in Sources */,
 				172BEA3E20FA92BC0036D5A6 /* PulleyViewController.swift in Sources */,
 				17E437122101E3BC00A67F37 /* MenuItemManager.swift in Sources */,
+				17B4529B2133B82500231B43 /* String.swift in Sources */,
 				172C1B621F67B923001826CE /* ActiveDetailViewController.swift in Sources */,
 				175F2E8D1F4ECA5600931A9B /* RequestsTableViewController.swift in Sources */,
 				172BEA3F20FA92BC0036D5A6 /* UIView+constrainToParent.swift in Sources */,
@@ -456,6 +463,7 @@
 				175CFCF420FC1E5C00600970 /* ListingManager.swift in Sources */,
 				176860371F28A126000D9AC8 /* ListingTableViewCell.swift in Sources */,
 				177B2EBA21004EF8002CD443 /* MenuCollectionViewCell.swift in Sources */,
+				17B452992133A7BE00231B43 /* ReviewViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
