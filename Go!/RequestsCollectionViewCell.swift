@@ -11,6 +11,5 @@ import UIKit
 class RequestsCollectionViewCell: UICollectionViewCell {
     
 	@IBOutlet weak var userButton: UIButton!
-	@IBOutlet weak var userLabel: UILabel!
 
 }

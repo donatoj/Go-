@@ -133,53 +133,70 @@ class ListingDetailTableViewController: UITableViewController {
 						requestButton.backgroundColor = UIColor.seafoam
 					}
 					
-					requestButton.layer.cornerRadius = 10
-					requestButton.clipsToBounds = true
-					
-					requestButton.isHidden = false
+					showRequestButton(show: true)
 					requestsCollectionView.isHidden = true
 				} else {
-					requestButton.isHidden = true
+					showRequestButton(show: false)
 					requestsCollectionView.isHidden = false
 				}
 				
-				completeButton.isHidden = true
-				completeButton.isEnabled = false
-				cancelButton.isHidden = true
-				cancelButton.isEnabled = false
-				approvedUserButton.isHidden = true
-				approvedUserButton.isEnabled = false
+				showCompletionButtons(show: false)
+				showApprovedUserButton(show: false, photo: nil)
 				fulfilledLabel.isHidden = true
 			} else {
-				completeButton.isHidden = false
-				completeButton.isEnabled = true
-				cancelButton.isHidden = false
-				cancelButton.isEnabled = true
-				
-				completeButton.layer.cornerRadius = 10
-				completeButton.clipsToBounds = true
-				cancelButton.layer.cornerRadius = 10
-				cancelButton.clipsToBounds = true
 				
 				if let approvedUser = listing.approvedUser {
-					FirebaseUser(uid: approvedUser, completion: { (firebaseUser) in
-						self.approvedUserButton.setBackgroundImage(firebaseUser.profilePhoto, for: .normal)
-						print("finished setting approved user photo")
+					if approvedUser == currentUser {
+						print("Approved user is the current user")
+						showCompletionButtons(show: true)
+						fulfilledLabel.isHidden = true
 						
-						self.approvedUserButton.isHidden = false
-						self.approvedUserButton.isEnabled = true
-						self.approvedUserButton.layer.cornerRadius = self.userImageView.frame.size.width / 2;
-						self.approvedUserButton.clipsToBounds = true;
-					})
+					} else {
+						print("approved user is not the current user")
+						showCompletionButtons(show: false)
+						fulfilledLabel.isHidden = false
+						
+						FirebaseUser(uid: approvedUser, completion: { (firebaseUser) in
+							self.approvedUserButton.setBackgroundImage(firebaseUser.profilePhoto, for: .normal)
+							self.showApprovedUserButton(show: true, photo: firebaseUser.profilePhoto)
+						})
+					}
 				}
-				
-				fulfilledLabel.isHidden = false
-				
-				requestButton.isHidden = true
-				requestButton.isEnabled = false
 				requestsCollectionView.isHidden = true
+				showRequestButton(show: false)				
 			}
 		}
+	}
+	
+	fileprivate func showCompletionButtons(show: Bool) {
+		completeButton.layer.cornerRadius = 10
+		completeButton.clipsToBounds = true
+		cancelButton.layer.cornerRadius = 10
+		cancelButton.clipsToBounds = true
+		
+		completeButton.isHidden = !show
+		completeButton.isEnabled = show
+		cancelButton.isHidden = !show
+		cancelButton.isEnabled = show
+	}
+	
+	fileprivate func showApprovedUserButton(show: Bool, photo: UIImage?) {
+		if let photo = photo {
+			self.approvedUserButton.setBackgroundImage(photo, for: .normal)
+			self.approvedUserButton.layer.cornerRadius = self.approvedUserButton.frame.size.width / 2;
+			self.approvedUserButton.clipsToBounds = true;
+		}
+
+		self.approvedUserButton.isHidden = !show
+		self.approvedUserButton.isEnabled = show
+		print("finished setting approved user photo")
+	}
+	
+	fileprivate func showRequestButton(show: Bool) {
+		requestButton.layer.cornerRadius = 10
+		requestButton.clipsToBounds = true
+		
+		requestButton.isHidden = !show
 	}
 	
 	@objc fileprivate func onUserButtonPressed(_ sender: UIButton) {
@@ -270,6 +287,9 @@ class ListingDetailTableViewController: UITableViewController {
 				if let uid = listing.user?.uid {
 					nextScene.uid = uid
 				}
+			} else if (button.accessibilityIdentifier?.contains("completeButton"))! {
+				let nextScene = segue.destination as! ReviewViewController
+				nextScene.listing = listing
 			}
 		}
     }
@@ -289,10 +309,10 @@ extension ListingDetailTableViewController : UICollectionViewDataSource {
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! RequestsCollectionViewCell
 		
-		cell.userLabel.text = ListingManager.sharedInstance.requestingUsers[indexPath.row]
+		//cell.userLabel.text = ListingManager.sharedInstance.requestingUsers[indexPath.row]
 		
 		cell.userButton.setBackgroundImage(ListingManager.sharedInstance.requestingUserPhotos[indexPath.row], for: UIControlState.normal)
-		cell.userButton.layer.cornerRadius = userImageView.frame.size.width / 2;
+		cell.userButton.layer.cornerRadius = cell.userButton.frame.size.width / 2;
 		cell.userButton.clipsToBounds = true;
 		cell.userButton.addTarget(self, action: #selector(onUserButtonPressed(_:)), for: UIControlEvents.touchUpInside)
 		cell.userButton.tag = indexPath.row
