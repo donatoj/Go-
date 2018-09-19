@@ -26,7 +26,7 @@ class RequestsTableViewController: UITableViewController {
         // get reference to database
         ref = Database.database().reference()
         
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 111
         tableView.tableFooterView = UIView()
 
@@ -97,7 +97,7 @@ class RequestsTableViewController: UITableViewController {
         ref?.child(Keys.Active.rawValue).updateChildValues(childUpdates)
 		
 		sender.backgroundColor = UIColor.darkGray
-		sender.setTitle("Approved", for: UIControlState.disabled)
+		sender.setTitle("Approved", for: UIControl.State.disabled)
         
     }
 

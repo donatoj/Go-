@@ -25,7 +25,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		profileTableView.rowHeight = UITableViewAutomaticDimension
+		profileTableView.rowHeight = UITableView.automaticDimension
 		profileTableView.estimatedRowHeight = 100
 		
         setUserData()
@@ -45,14 +45,14 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
 		
 		if following {
 			
-			followButton?.setTitle("Following", for: UIControlState.normal)
-			followButton?.setTitleColor(UIColor.white, for: UIControlState.normal)
+			followButton?.setTitle("Following", for: UIControl.State.normal)
+			followButton?.setTitleColor(UIColor.white, for: UIControl.State.normal)
 			followButton?.backgroundColor = UIColor.green
 			
 		} else {
 			
-			followButton?.setTitle("Follow", for: UIControlState.normal)
-			followButton?.setTitleColor(UIColor.green, for: UIControlState.normal)
+			followButton?.setTitle("Follow", for: UIControl.State.normal)
+			followButton?.setTitleColor(UIColor.green, for: UIControl.State.normal)
 			followButton?.backgroundColor = UIColor.white
 			
 		}

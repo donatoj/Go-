@@ -210,11 +210,11 @@ class ListingDetailTableViewController: UITableViewController {
     // MARK: - Table view data source
 	
 	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return UITableViewAutomaticDimension
+		return UITableView.automaticDimension
 	}
 	
 	override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-		return UITableViewAutomaticDimension
+		return UITableView.automaticDimension
 	}
 
 //    override func numberOfSections(in tableView: UITableView) -> Int {
@@ -311,10 +311,10 @@ extension ListingDetailTableViewController : UICollectionViewDataSource {
 		
 		//cell.userLabel.text = ListingManager.sharedInstance.requestingUsers[indexPath.row]
 		
-		cell.userButton.setBackgroundImage(ListingManager.sharedInstance.requestingUserPhotos[indexPath.row], for: UIControlState.normal)
+		cell.userButton.setBackgroundImage(ListingManager.sharedInstance.requestingUserPhotos[indexPath.row], for: UIControl.State.normal)
 		cell.userButton.layer.cornerRadius = cell.userButton.frame.size.width / 2;
 		cell.userButton.clipsToBounds = true;
-		cell.userButton.addTarget(self, action: #selector(onUserButtonPressed(_:)), for: UIControlEvents.touchUpInside)
+		cell.userButton.addTarget(self, action: #selector(onUserButtonPressed(_:)), for: UIControl.Event.touchUpInside)
 		cell.userButton.tag = indexPath.row
 		
 		return cell

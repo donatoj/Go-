@@ -40,7 +40,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         print("Home View did load")
         // Do any additional setup after loading the view.
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
 		
 		gripperView.layer.cornerRadius = 2.5
@@ -117,7 +117,7 @@ class HomeViewController: UIViewController {
 		searchController.delegate = self
 		searchController.searchBar.delegate = self
 		searchController.dimsBackgroundDuringPresentation = true
-		searchController.searchBar.searchBarStyle = UISearchBarStyle.minimal
+		searchController.searchBar.searchBarStyle = UISearchBar.Style.minimal
 		searchContainer.addSubview(searchController.searchBar)
 		
 		definesPresentationContext = true
@@ -252,16 +252,16 @@ extension HomeViewController: UICollectionViewDataSource {
 		cell.button.layer.cornerRadius = cell.button.frame.size.width / 2;
 		cell.button.clipsToBounds = true
 		cell.button.tag = indexPath.row
-		cell.button.addTarget(self, action: #selector(menuPressed(_:)), for: UIControlEvents.touchUpInside)
+		cell.button.addTarget(self, action: #selector(menuPressed(_:)), for: UIControl.Event.touchUpInside)
 		
 		let origImage = menuItemsManager.FilterImages[indexPath.row]
 		let tintedImage = origImage.withRenderingMode(.alwaysTemplate)
 		if indexPath.row == menuItemsManager.FilterIndex {
-			cell.button.setImage(tintedImage, for: UIControlState.normal)
+			cell.button.setImage(tintedImage, for: UIControl.State.normal)
 			cell.button.tintColor = UIColor.white
 			cell.button.backgroundColor = UIColor.seafoam
 		} else {
-			cell.button.setImage(tintedImage, for: UIControlState.normal)
+			cell.button.setImage(tintedImage, for: UIControl.State.normal)
 			cell.button.tintColor = UIColor.seafoam
 			cell.button.backgroundColor = UIColor.white
 		}
@@ -289,7 +289,7 @@ extension HomeViewController : UITableViewDataSource {
         let listingItem = listingManager.currentListings[indexPath.row]
         cell.listing = listingItem
         // check for only items not from user
-		cell.userNameButton.setTitle(listingItem.user?.userName, for: UIControlState.normal)
+		cell.userNameButton.setTitle(listingItem.user?.userName, for: UIControl.State.normal)
         cell.userNameButton.tag = indexPath.row
         
         cell.descriptionLabel.text = listingItem.listingDescription
@@ -302,7 +302,7 @@ extension HomeViewController : UITableViewDataSource {
 		cell.distance.text = listingItem.user?.uid != currentUserId ? listingItem.getDistanceFromListing(userLocation: listingManager.userLocation) : ""
 		
 		if let amount = listingItem.amount {
-			cell.requestButton.setTitle("$" + amount, for: UIControlState.normal)
+			cell.requestButton.setTitle("$" + amount, for: UIControl.State.normal)
 			cell.requestButton.layer.borderWidth = 1
 			cell.requestButton.layer.cornerRadius = 8
 			cell.requestButton.clipsToBounds = true
@@ -330,7 +330,7 @@ extension HomeViewController : UITableViewDataSource {
 		}
 		
         //cell.layer.cornerRadius = 10
-        cell.selectionStyle = UITableViewCellSelectionStyle.default
+        cell.selectionStyle = UITableViewCell.SelectionStyle.default
         
         return cell
     }

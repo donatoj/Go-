@@ -63,8 +63,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 		let latDelta: CLLocationDegrees = 0.05
 		let longDelta: CLLocationDegrees = 0.05
 		
-		let span: MKCoordinateSpan = MKCoordinateSpanMake(latDelta, longDelta)
-		let region: MKCoordinateRegion = MKCoordinateRegionMake(forLocation, span)
+		let span: MKCoordinateSpan = MKCoordinateSpan.init(latitudeDelta: latDelta, longitudeDelta: longDelta)
+		let region: MKCoordinateRegion = MKCoordinateRegion.init(center: forLocation, span: span)
 		
 		mapView.setRegion(region, animated: true)
 	}
@@ -73,9 +73,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 		let user = Auth.auth().currentUser
 		let url = user?.providerData[0].photoURL
 		if let data = try? Data(contentsOf: url!) {
-			profileButton.setImage(UIImage(data: data), for: UIControlState.normal)
+			profileButton.setImage(UIImage(data: data), for: UIControl.State.normal)
 		} else {
-			profileButton.setImage(UIImage(named: "Profile"), for: UIControlState.normal)
+			profileButton.setImage(UIImage(named: "Profile"), for: UIControl.State.normal)
 		}
 		profileButton.layer.borderWidth = 2
 		profileButton.layer.borderColor = UIColor.seafoam.cgColor
