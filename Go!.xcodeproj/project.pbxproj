@@ -36,6 +36,8 @@
 		1796A3C71F936A5C0047B323 /* MainAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1796A3C61F936A5B0047B323 /* MainAPIClient.swift */; };
 		17B452992133A7BE00231B43 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B452982133A7BE00231B43 /* ReviewViewController.swift */; };
 		17B4529B2133B82500231B43 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B4529A2133B82500231B43 /* String.swift */; };
+		17B4529D214F056200231B43 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B4529C214F056200231B43 /* ProfileTableViewCell.swift */; };
+		17B4529F214F057E00231B43 /* ReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B4529E214F057E00231B43 /* ReviewTableViewCell.swift */; };
 		17C775B61F8C95F400826848 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C775B21F8C80B000826848 /* UIColor.swift */; };
 		17E437102101E26F00A67F37 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E4370F2101E26F00A67F37 /* MenuItem.swift */; };
 		17E437122101E3BC00A67F37 /* MenuItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E437112101E3BC00A67F37 /* MenuItemManager.swift */; };
@@ -77,6 +79,8 @@
 		1796A3C61F936A5B0047B323 /* MainAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAPIClient.swift; sourceTree = "<group>"; };
 		17B452982133A7BE00231B43 /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
 		17B4529A2133B82500231B43 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		17B4529C214F056200231B43 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
+		17B4529E214F057E00231B43 /* ReviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTableViewCell.swift; sourceTree = "<group>"; };
 		17C775B21F8C80B000826848 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		17E4370F2101E26F00A67F37 /* MenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
 		17E437112101E3BC00A67F37 /* MenuItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemManager.swift; sourceTree = "<group>"; };
@@ -134,6 +138,7 @@
 		172C1B5A1F627279001826CE /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				17B452A0214F058A00231B43 /* Profile */,
 				175F2E8E1F4ECAF200931A9B /* RequestTableViewCell.swift */,
 				176860361F28A126000D9AC8 /* ListingTableViewCell.swift */,
 				177B2E8A20FE26CE002CD443 /* MenuTableViewCell.swift */,
@@ -250,6 +255,15 @@
 				177E6E991EC2E9A7003F017E /* GoogleService-Info.plist */,
 			);
 			name = Plists;
+			sourceTree = "<group>";
+		};
+		17B452A0214F058A00231B43 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				17B4529C214F056200231B43 /* ProfileTableViewCell.swift */,
+				17B4529E214F057E00231B43 /* ReviewTableViewCell.swift */,
+			);
+			name = Profile;
 			sourceTree = "<group>";
 		};
 		17C775B01F8C807F00826848 /* Extensions */ = {
@@ -443,6 +457,7 @@
 				171BF02E1F366F520048A222 /* Listing.swift in Sources */,
 				177E6E8A1EC2E87C003F017E /* LoginViewController.swift in Sources */,
 				175F2E8B1F47183300931A9B /* Keys.swift in Sources */,
+				17B4529F214F057E00231B43 /* ReviewTableViewCell.swift in Sources */,
 				172BEA3D20FA92BC0036D5A6 /* UIViewController+PulleyViewController.swift in Sources */,
 				172BEA4220FA98FD0036D5A6 /* MapViewController.swift in Sources */,
 				173E89B2210EE1D200F22482 /* FirebaseUser.swift in Sources */,
@@ -458,6 +473,7 @@
 				172C1B621F67B923001826CE /* ActiveDetailViewController.swift in Sources */,
 				175F2E8D1F4ECA5600931A9B /* RequestsTableViewController.swift in Sources */,
 				172BEA3F20FA92BC0036D5A6 /* UIView+constrainToParent.swift in Sources */,
+				17B4529D214F056200231B43 /* ProfileTableViewCell.swift in Sources */,
 				17E437102101E26F00A67F37 /* MenuItem.swift in Sources */,
 				175F2E8F1F4ECAF200931A9B /* RequestTableViewCell.swift in Sources */,
 				175CFCF420FC1E5C00600970 /* ListingManager.swift in Sources */,

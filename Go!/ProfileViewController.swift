@@ -11,136 +11,24 @@ import FirebaseAuth
 import FBSDKLoginKit
 import FirebaseDatabase
 
-class ProfileViewController: UIViewController {
-        
-    @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var userNameLabel: UILabel!
-    @IBOutlet weak var followButton: UIButton!
-	@IBOutlet weak var exitButton: UIButton!
+class ProfileViewController: UIViewController, UITableViewDelegate {
 	
-    var ref : DatabaseReference?
-    var databaseHandle : DatabaseHandle?
-    
+	// MARK: - Outlets
+	@IBOutlet weak var profileTableView: UITableView!
+	
+	// MARK: - Members
+    var user : FirebaseUser?
     var uid: String = ""
-    
-    var following : Bool = false
-    
+	var followButton : UIButton?
+	
+	// MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUserData()
-    }
-    
-	@IBAction func onExitPressed(_ sender: Any) {
 		
-		presentingViewController?.dismiss(animated: true, completion: nil)
-	}
-	@IBAction func onFollowButtonPressed(_ sender: Any) {
-        
-        let user = Auth.auth().currentUser
-        
-        if !following {
-            
-            following = true
-            let childUpdates = ["/\((user?.uid)!)/\(Keys.Following.rawValue)/\(uid)" : true,
-                                "/\(uid)/\(Keys.Followers.rawValue)/\((user?.uid)!)" : true]
-            self.ref?.child(Keys.Users.rawValue).updateChildValues(childUpdates)
-        } else {
-            
-            following = false
-            
-            let childUpdates = ["/\((user?.uid)!)/\(Keys.Following.rawValue)/\(uid)" : NSNull(),
-                                "/\(uid)/\(Keys.Followers.rawValue)/\((user?.uid)!)" : NSNull()]
-            
-            
-            self.ref?.child(Keys.Users.rawValue).updateChildValues(childUpdates)
-        }
-        
-        updateFollowButton()
-    }
-    
-    func updateFollowButton() {
-       
-        if following {
-            
-            followButton.setTitle("Following", for: UIControlState.normal)
-            followButton.setTitleColor(UIColor.white, for: UIControlState.normal)
-            followButton.backgroundColor = UIColor.green
-            
-        } else {
-            
-            followButton.setTitle("Follow", for: UIControlState.normal)
-            followButton.setTitleColor(UIColor.green, for: UIControlState.normal)
-            followButton.backgroundColor = UIColor.white
-            
-        }
-        
-    }
-
-    func setUserData() {
-        // not from UI button
-        if uid == "" || uid == Auth.auth().currentUser?.uid{
-            getCurrentUserData()
-        } else {
-            getOtherUserData()
-        }
-    }
-    
-    func getCurrentUserData() {
-        
-        print("UID is self")
-        
-        let user = Auth.auth().currentUser
-        userNameLabel.text = user?.displayName
-
-		let urlCallTooSlowUseCaching : String
-        let url = (user?.providerData[0].photoURL)!
-        setUserProfilePhoto(url: url)
-
-        // allow logout
-        showFBLoginButton()
-        followButton.isHidden = true
-    }
-    
-    func getOtherUserData() {
-        
-        print("UID is other")
-        
-        // get reference to database
-        ref = Database.database().reference()
-
-        ref?.child(Keys.Users.rawValue).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
-            
-            let value = snapshot.value as? [String : AnyObject]
-            
-            self.userNameLabel.text = value?[Keys.Username.rawValue] as? String
-            
-            if let urlString = value?[Keys.ProfileURL.rawValue] as? String {
-                if let url = URL(string: urlString) {
-                    self.setUserProfilePhoto(url: url)
-                    self.followButton.isHidden = false
-                }
-            }
-            
-            if let followers = value?[Keys.Followers.rawValue] as? [String : Any] {
-                
-                if followers[(Auth.auth().currentUser?.uid)!] != nil {
-                    self.following = true
-                } else {
-                    self.following = false
-                }
-                
-                self.updateFollowButton()
-            }
-            
-        })
-    }
-    
-    func setUserProfilePhoto(url : URL) {
-        if let data = try? Data(contentsOf: url) {
-            profileImageView.image = UIImage(data: data)
-            profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;
-            profileImageView.clipsToBounds = true;
-        }
+		profileTableView.rowHeight = UITableViewAutomaticDimension
+		profileTableView.estimatedRowHeight = 100
+		
+        setUserData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -151,7 +39,55 @@ class ProfileViewController: UIViewController {
     deinit {
         print("ProfileViewController Deinitialized")
     }
-    
+	
+	// MARK: - Private Methods
+	fileprivate func updateFollowButton(_ following : Bool) {
+		
+		if following {
+			
+			followButton?.setTitle("Following", for: UIControlState.normal)
+			followButton?.setTitleColor(UIColor.white, for: UIControlState.normal)
+			followButton?.backgroundColor = UIColor.green
+			
+		} else {
+			
+			followButton?.setTitle("Follow", for: UIControlState.normal)
+			followButton?.setTitleColor(UIColor.green, for: UIControlState.normal)
+			followButton?.backgroundColor = UIColor.white
+			
+		}
+	}
+	
+	fileprivate func setUserData() {
+		if uid == "" {
+			uid = (ListingManager.sharedInstance.currentUser?.uid)!
+		}
+		
+		if uid != ListingManager.sharedInstance.currentUser?.uid
+		{
+			ListingManager.sharedInstance.getFollowingStatus(uid: uid) { (following) in
+				self.updateFollowButton(following)
+			}
+		}
+		
+		FirebaseUser(uid: uid, completion: { (firebaseUser) in
+			self.user = firebaseUser
+			self.profileTableView.reloadData()
+		})
+		
+	}
+	
+	// MARK: - Actions
+	@objc func onExitPressed(_ sender: Any) {
+		presentingViewController?.dismiss(animated: true, completion: nil)
+	}
+	
+	@objc func onFollowButtonPressed(_ sender: Any) {
+		ListingManager.sharedInstance.getFollowingStatus(uid: (self.user?.uid)!) { (following) in
+			ListingManager.sharedInstance.followUser(following: following, uid: (self.user?.uid)!)
+			self.updateFollowButton(!following)
+		}
+	}
 
     /*
     // MARK: - Navigation
@@ -165,14 +101,51 @@ class ProfileViewController: UIViewController {
 
 }
 
+// MARK: - Table View extensions
+extension ProfileViewController : UITableViewDataSource {
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return 1
+	}
+	
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		
+		if indexPath.row == 0 {
+			let cell = tableView.dequeueReusableCell(withIdentifier: "profileCell", for: indexPath) as! ProfileTableViewCell
+			
+			cell.profileImageView.image = self.user?.profilePhoto
+			cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.width / 2;
+			cell.profileImageView.clipsToBounds = true;
+			
+			cell.profileUserName.text = self.user?.userName
+			
+			self.followButton = cell.followButton
+			if self.user?.uid == ListingManager.sharedInstance.currentUser?.uid {
+				showFBLoginButton(atCell: cell)
+				cell.followButton.isHidden = true
+				
+			} else {
+				cell.followButton.isHidden = false
+			}
+			cell.followButton.addTarget(self, action: #selector(onFollowButtonPressed(_:)), for: .touchUpInside)
+			cell.exitButton.addTarget(self, action: #selector(onExitPressed(_:)), for: .touchUpInside)
+			
+			return cell
+		} else {
+			let cell = UITableViewCell()
+			return cell
+		}
+	}
+}
+
+// MARK: - Facebook login extension
 extension ProfileViewController : FBSDKLoginButtonDelegate {
     
-    func showFBLoginButton() {
+	func showFBLoginButton(atCell : ProfileTableViewCell) {
         let loginButton = FBSDKLoginButton()
-        loginButton.center = self.view.center
+        loginButton.center = atCell.followButton.center
         loginButton.readPermissions = ["public_profile", "email", "user_friends"]
         loginButton.delegate = self
-        self.view.addSubview(loginButton)
+        atCell.addSubview(loginButton)
     }
     
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
