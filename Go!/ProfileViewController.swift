@@ -131,7 +131,7 @@ extension ProfileViewController : UITableViewDataSource {
 			
 			return cell
 		} else {
-			let cell = UITableViewCell()
+			let cell = tableView.dequeueReusableCell(withIdentifier: "reviewCell", for: indexPath) as! ReviewTableViewCell
 			
 			// FIXME: fill in reviews
 			
