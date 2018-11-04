@@ -224,8 +224,8 @@
 				178296551ED16662008C64BA /* Controllers */,
 				172B9CE31F7E3F5F00C3AA74 /* Third Party Libraries */,
 				17C775B01F8C807F00826848 /* Extensions */,
-				178296571ED166B5008C64BA /* Plists */,
 				177E6E8E1EC2E87C003F017E /* Assets.xcassets */,
+				178296571ED166B5008C64BA /* Plists */,
 			);
 			path = "Go!";
 			sourceTree = "<group>";

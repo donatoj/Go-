@@ -38,20 +38,20 @@ class ActiveDetailViewController: UIViewController {
         
         paymentContext.delegate = self
         paymentContext.hostViewController = self
-        let fixHardCodedAmount : String
-        print("***ACtive detail view did load \(approvedId)")
+        // FIXME: fix Hard Coded Amount
+        //print("***ACtive detail view did load \(approvedId)")
         ref?.child("Stripe").child(approvedId).child("accountId").observeSingleEvent(of: .value) { (snapshot) in
-            print("approved acct id \(snapshot.value)")
+            //print("approved acct id \(snapshot.value)")
             self.approvedAccountId = snapshot.value as? String
         }
         
         ref?.child("Stripe").child(posterId).child("customerId").observeSingleEvent(of: .value) { (snapshot) in
-            print("poster acct id \(snapshot.value)")
+            //print("poster acct id \(snapshot.value)")
             self.posterCustomerId = snapshot.value as? String
         }
         
         ref?.child(Keys.Listings.rawValue).child(listingKey).child(Keys.Amount.rawValue).observeSingleEvent(of: .value) { (snapshot) in
-            print("payment amount \(snapshot.value)")
+            //print("payment amount \(snapshot.value)")
             self.paymentContext.paymentAmount = Int(snapshot.value as! String)! * 100
         }
         

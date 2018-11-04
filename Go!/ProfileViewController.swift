@@ -132,6 +132,9 @@ extension ProfileViewController : UITableViewDataSource {
 			return cell
 		} else {
 			let cell = UITableViewCell()
+			
+			// FIXME: fill in reviews
+			
 			return cell
 		}
 	}

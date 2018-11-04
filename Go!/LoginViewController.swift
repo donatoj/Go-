@@ -73,8 +73,7 @@ extension LoginViewController : FBSDKLoginButtonDelegate {
             print("login error \(error.localizedDescription)")
         } else {
             print("login successful")
-            
-            let handlePermissionsOrCancelled : String
+			// FIXME: handle Permissions Or Cancelled
             
             let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
             

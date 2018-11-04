@@ -87,7 +87,6 @@ class ListingManager : NSObject {
 							 active: withSnapshotValue[Keys.Active.rawValue] as! Bool,
 							 approvedUser: withSnapshotValue[Keys.Approved.rawValue] as! String?,
 							 completion: { (listing) in
-							
 								completion(listing)
 							}
 		)
@@ -417,7 +416,7 @@ class ListingManager : NSObject {
 	}
 	
 	fileprivate func registerUserPostRemoved() {
-		let removeActiveListingsIfapplicable : String
+		// FIXME: remove Active Listings If applicable
 		ref?.child(Keys.Listings.rawValue).observe(.childRemoved, with: { (listingSnapshot) in
 			
 			print("Listing removed " + listingSnapshot.key)

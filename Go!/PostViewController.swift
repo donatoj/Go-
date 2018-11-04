@@ -49,7 +49,7 @@ class PostViewController: UIViewController {
 			geoFire = GeoFire(firebaseRef: geoFireRef!)
             geoFire?.setLocation(getUserLocation(), forKey: key)
             
-            let checkfornullfieldsandcreatealertwithactivitybar : String
+            // FIXME: check for null fields and create alert with activity bar
             
             postDict[Keys.Username.rawValue] = Auth.auth().currentUser?.displayName
             postDict[Keys.UserID.rawValue] = Auth.auth().currentUser?.uid
@@ -72,7 +72,7 @@ class PostViewController: UIViewController {
             presentingViewController?.dismiss(animated: true, completion: nil)
             
         } else {
-            let keyFailed: String
+            // FIXME: key Failed
         }
     }
 	
