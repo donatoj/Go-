@@ -77,27 +77,48 @@ extension LoginViewController : FBSDKLoginButtonDelegate {
             
             let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
             
-            Auth.auth().signIn(with: credential, completion: { (user : User?, error :Error?) in
-                
-                if error != nil {
-                    if let error = error {
-                        print("firebase credential error \(error.localizedDescription)  ")
-                        
-                    }
-                } else {
-                    
-                    print("user name \(String(describing: user!.displayName))")
-                    print("user email \(String(describing: user!.email))")
-                    
-                    var userDict = [String : String]()
-                    userDict["Username"] = user?.displayName
-                    userDict["ProfileURL"] = user?.providerData[0].photoURL?.absoluteString
-                    
-                    self.ref?.child("Users").child((user?.uid)!).updateChildValues(userDict)
-                    
-                    self.performSegue(withIdentifier: "showMain", sender: self)
-                }
-            })
+//            Auth.auth().signIn(with: credential, completion: { (user : User?, error :Error?) in
+//
+//                if error != nil {
+//                    if let error = error {
+//                        print("firebase credential error \(error.localizedDescription)  ")
+//
+//                    }
+//                } else {
+//
+//                    print("user name \(String(describing: user!.displayName))")
+//                    print("user email \(String(describing: user!.email))")
+//
+//                    var userDict = [String : String]()
+//                    userDict["Username"] = user?.displayName
+//                    userDict["ProfileURL"] = user?.providerData[0].photoURL?.absoluteString
+//
+//                    self.ref?.child("Users").child((user?.uid)!).updateChildValues(userDict)
+//
+//                    self.performSegue(withIdentifier: "showMain", sender: self)
+//                }
+//            })
+			
+			Auth.auth().signInAndRetrieveData(with: credential) { (authDataResult, error) in
+				if error != nil {
+					if let error = error {
+						print("firebase credential error \(error.localizedDescription)  ")
+						
+					}
+				} else {
+					
+					print("user name \(String(describing: authDataResult?.user.displayName))")
+					print("user email \(String(describing: authDataResult?.user.email))")
+					
+					var userDict = [String : String]()
+					userDict["Username"] = authDataResult?.user.displayName
+					userDict["ProfileURL"] = authDataResult?.user.providerData[0].photoURL?.absoluteString
+					
+					self.ref?.child("Users").child((authDataResult?.user.uid)!).updateChildValues(userDict)
+					
+					self.performSegue(withIdentifier: "showMain", sender: self)
+				}
+			}
         }
     }
     
