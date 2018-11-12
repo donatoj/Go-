@@ -34,6 +34,7 @@
 		178296541ECC3877008C64BA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178296531ECC3877008C64BA /* HomeViewController.swift */; };
 		178296591ED17964008C64BA /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178296581ED17964008C64BA /* PostViewController.swift */; };
 		1796A3C71F936A5C0047B323 /* MainAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1796A3C61F936A5B0047B323 /* MainAPIClient.swift */; };
+		17A04CB2218F868E00E56C79 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A04CB1218F868E00E56C79 /* Review.swift */; };
 		17B452992133A7BE00231B43 /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B452982133A7BE00231B43 /* ReviewViewController.swift */; };
 		17B4529B2133B82500231B43 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B4529A2133B82500231B43 /* String.swift */; };
 		17B4529D214F056200231B43 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B4529C214F056200231B43 /* ProfileTableViewCell.swift */; };
@@ -77,6 +78,7 @@
 		178296531ECC3877008C64BA /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		178296581ED17964008C64BA /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		1796A3C61F936A5B0047B323 /* MainAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAPIClient.swift; sourceTree = "<group>"; };
+		17A04CB1218F868E00E56C79 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		17B452982133A7BE00231B43 /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
 		17B4529A2133B82500231B43 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		17B4529C214F056200231B43 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				17E4370F2101E26F00A67F37 /* MenuItem.swift */,
 				17E437112101E3BC00A67F37 /* MenuItemManager.swift */,
 				173E89B1210EE1D200F22482 /* FirebaseUser.swift */,
+				17A04CB1218F868E00E56C79 /* Review.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -457,6 +460,7 @@
 				172BEA3F20FA92BC0036D5A6 /* UIView+constrainToParent.swift in Sources */,
 				17B4529D214F056200231B43 /* ProfileTableViewCell.swift in Sources */,
 				17E437102101E26F00A67F37 /* MenuItem.swift in Sources */,
+				17A04CB2218F868E00E56C79 /* Review.swift in Sources */,
 				175F2E8F1F4ECAF200931A9B /* RequestTableViewCell.swift in Sources */,
 				175CFCF420FC1E5C00600970 /* ListingManager.swift in Sources */,
 				176860371F28A126000D9AC8 /* ListingTableViewCell.swift in Sources */,

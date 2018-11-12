@@ -51,6 +51,9 @@ class ListingManager : NSObject {
 	var requestingUserPhotos = [UIImage]()
 	var requestingUserIDs = [String]()
 	
+	// MARK: - Reviews
+	var reviews = [Review]()
+	
 	// MARK: - Limits
 	var listingLimit = 5
 	fileprivate let distanceLimit = 2000.0
@@ -256,6 +259,7 @@ class ListingManager : NSObject {
 		registerActiveAdded()
 		registerActiveRemoved()
 		
+		registerReviewsAdded()
 	}
 	
 	func removeAllObservers() {
@@ -294,6 +298,14 @@ class ListingManager : NSObject {
 			
 			ref?.updateChildValues(childUpdates)
 		}
+	}
+	
+	func registerReviewsAdded() {
+		ref?.child(Keys.Users.rawValue).child((currentUser?.uid)!).child(Keys.Reviews.rawValue).observe(DataEventType.childAdded, with: { (snapshot) in
+			let value = snapshot.value as? [String : AnyObject]
+			let review = Review(reviewer: value?["Reviewer"] as! String, reviewText: value?["ReviewText"] as! String, rating: value?["Rating"] as! Double)
+			self.reviews.append(review)
+		})
 	}
 	
 	func followUser(following : Bool, uid : String)

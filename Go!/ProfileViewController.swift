@@ -104,7 +104,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
 // MARK: - Table View extensions
 extension ProfileViewController : UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 1
+		return ListingManager.sharedInstance.reviews.count + 1
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -132,8 +132,16 @@ extension ProfileViewController : UITableViewDataSource {
 			return cell
 		} else {
 			let cell = tableView.dequeueReusableCell(withIdentifier: "reviewCell", for: indexPath) as! ReviewTableViewCell
+			let percentFormatter = NumberFormatter()
+			percentFormatter.numberStyle = NumberFormatter.Style.percent
+			percentFormatter.multiplier = 100
 			
-			// FIXME: fill in reviews
+			cell.reviewerUserName.text = ListingManager.sharedInstance.reviews[indexPath.row - 1].reviewer
+			cell.reviewerRating.text = percentFormatter.string(from: NSNumber(floatLiteral: ListingManager.sharedInstance.reviews[indexPath.row - 1].rating!))
+			cell.reviewLabel.text = ListingManager.sharedInstance.reviews[indexPath.row - 1].reviewText
+			cell.reviewerImageView.image = ListingManager.sharedInstance.reviews[indexPath.row - 1].reviewerImage
+			cell.reviewerImageView.layer.cornerRadius = cell.reviewerImageView.frame.size.width / 2;
+			cell.reviewerImageView.clipsToBounds = true
 			
 			return cell
 		}
